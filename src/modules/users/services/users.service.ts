@@ -8,11 +8,13 @@ import { PartialUserDto } from '../dtos/partial-user-dto';
 import { Database } from 'src/modules/database/database';
 import { UserRepository } from '../repositories/user.repository';
 import { UserDataRepository } from '../repositories/user-data.repository';
+import * as bcrypt from 'bcrypt';
+import { SALTS_OR_ROUNDS } from 'src/common/constants/salts-or-rounds.constants';
 
 export class UserService {
   constructor(
     @Inject('DATA_SOURCE')
-    private readonly dataSouce: Database,
+    private readonly dataSource: DataSource,
     private readonly userRepository: UserRepository,
     private readonly userDataRepository: UserDataRepository,
   ) {}
@@ -40,18 +42,17 @@ export class UserService {
   async createUser(createUserDto: CreateUserDto): Promise<PartialUserDto> {
     const user = new User(createUserDto);
 
-    const response = await this.dataSouce
-      .getConnection()
-      .transaction(async (manager) => {
-        const createdUser = manager.getRepository(User).save(user);
+    user.password = await bcrypt.hash(user.password, SALTS_OR_ROUNDS);
 
-        const createdUserData = manager
-          .getRepository(UserData)
-          .save(user.userData);
+    const response = await this.dataSource.transaction(async (manager) => {
+      const createdUserData = await manager
+        .getRepository(UserData)
+        .save(user.userData);
+      const createdUser = await manager.getRepository(User).save(user);
 
-        return { createdUser, createdUserData };
-      });
+      return { createdUser, createdUserData };
+    });
 
-    return (await response.createdUser).mapToPartialUserDto();
+    return response.createdUser.mapToPartialUserDto();
   }
 }

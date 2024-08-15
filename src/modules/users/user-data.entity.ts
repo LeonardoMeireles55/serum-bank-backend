@@ -5,7 +5,6 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
 } from 'typeorm';
-import { Expose } from 'class-transformer';
 import { ProfissionalPositionEnum } from './enums/profissional-position.enum';
 
 @Entity({ name: 'users_data' })
@@ -20,10 +19,8 @@ export class UserData {
   profissionalPosition: string;
 
   @CreateDateColumn({ name: 'created_at' })
-  @Expose({ name: 'created_at' })
   createdAt?: Date;
 
   @UpdateDateColumn({ name: 'updated_at', nullable: true })
-  @Expose({ name: 'updated_at' })
   updatedAt?: Date;
 }

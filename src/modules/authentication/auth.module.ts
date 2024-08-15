@@ -13,9 +13,11 @@ import { User } from '../users/user.entity';
 import { AppConfigModule } from 'src/app-config/app-config.module';
 import { AppConfigService } from 'src/app-config/app-config.service';
 import { DatabaseModule } from '../database/database.module';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
+    DatabaseModule,
     AppConfigModule,
     UsersModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -27,7 +29,6 @@ import { DatabaseModule } from '../database/database.module';
         signOptions: { expiresIn: config.jwtExpiresIn },
       }),
     }),
-    DatabaseModule,
   ],
   controllers: [AuthController],
   providers: [

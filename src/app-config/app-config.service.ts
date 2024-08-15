@@ -10,7 +10,7 @@ export class AppConfigService {
   }
 
   get appPort(): number {
-    return this.config.get<number>('PORT');
+    return this.config.get<number>('APP_PORT');
   }
 
   get dbHost(): string {
@@ -54,6 +54,7 @@ export class AppConfigService {
   }
 
   get jwtSecret(): string {
+    console.log();
     return this.config.get<string>('JWT_SECRET');
   }
 }

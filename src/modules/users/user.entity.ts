@@ -18,17 +18,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @OneToOne(() => UserData, (userData) => userData.id, {
-    cascade: false,
-    eager: false,
-    nullable: false,
-  })
-  @JoinColumn({ name: 'users_data_id' })
-  @Expose({ name: 'users_data' })
-  userData: UserData;
-
   @Column({ name: 'type_access', enum: AccessEnum, default: AccessEnum.CLIENT })
-  @Expose({ name: 'type_access' })
   typeAccess: AccessEnum;
 
   @Column({ unique: true })
@@ -37,24 +27,35 @@ export class User {
   @Column()
   password: string;
 
+  @OneToOne(() => UserData, (userData) => userData.id, {
+    cascade: true,
+    eager: false,
+    nullable: false,
+  })
+  @JoinColumn({ name: 'users_data_id' })
+  userData: UserData;
+
   @CreateDateColumn({ name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
-  @Expose({ name: 'created_at' })
   createdAt?: Date;
 
   @UpdateDateColumn({ name: 'updated_at', nullable: true })
-  @Expose({ name: 'updated_at' })
   updatedAt?: Date;
 
   mapToPartialUserDto(): PartialUserDto {
-    return plainToClass(PartialUserDto, this);
+    const partialUser = new PartialUserDto(
+      this.email,
+      this.userData.phone,
+      this.userData.profissionalPosition,
+    );
+    return partialUser;
   }
 
   constructor(createUserDto?: CreateUserDto) {
     if (createUserDto) {
-      this.userData = new UserData();
-      this.userData.phone = createUserDto.phone;
       this.email = createUserDto.email;
       this.password = createUserDto.password;
+      this.userData = new UserData();
+      this.userData.phone = createUserDto.phone;
       this.userData.profissionalPosition = createUserDto.profissionalPosition;
     }
   }

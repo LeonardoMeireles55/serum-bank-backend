@@ -1,15 +1,15 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { Repository } from 'typeorm';
-import { UnauthorizedException } from '@nestjs/common';
+import { DataSource, Repository } from 'typeorm';
+import { Inject, UnauthorizedException } from '@nestjs/common';
 import { AppConfigService } from 'src/app-config/app-config.service';
 import { User } from 'src/modules/users/user.entity';
 
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    @Inject('DATA_SOURCE')
+    private readonly dataSource: DataSource,
     private readonly appConfigService: AppConfigService,
   ) {
     super({
@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any): Promise<User> {
     const { sub } = payload;
-    const user: User = await this.userRepository.findOne({
+    const user: User = await this.dataSource.getRepository(User).findOne({
       select: ['id', 'password', 'typeAccess'],
       where: { id: sub },
     });
