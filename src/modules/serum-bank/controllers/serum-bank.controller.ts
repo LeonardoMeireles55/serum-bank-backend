@@ -1,19 +1,32 @@
 import {
   Body,
   Controller,
-  Delete,
+  DefaultValuePipe,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
-  Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CreateSerumBankDto } from '../dtos/create-serum-bank.dto';
 import { SerumBank } from '../entities/serum-bank.entity';
 import { SerumBankService } from '../services/serum-bank.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiResponseProperty,
+  ApiTags,
+} from '@nestjs/swagger';
 import { RolesGuard } from 'src/modules/authentication/guards/role.guard';
 import { Public } from 'src/common/decorators/is-public.decorator';
+import { PartialSerumBankDto } from '../dtos/partial-serum-bank.dto';
+import { FullSerumBankDto } from '../dtos/full-serum-bank.dto';
+import { DefaultPaginationResponseDto } from 'src/common/dtos/default-pagination-response.dto';
 
 @ApiTags('Serum-bank')
 @ApiBearerAuth()
@@ -22,18 +35,36 @@ import { Public } from 'src/common/decorators/is-public.decorator';
 export class SerumBankController {
   constructor(private readonly serumBankService: SerumBankService) {}
 
-  //   @Post()
-  //   async create(
-  //     @Body() createSerumBankDto: CreateSerumBankDto,
-  //   ): Promise<SerumBank> {
-  //     return this.serumBankService.create(createSerumBankDto);
-  //   }
+  @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({ type: PartialSerumBankDto })
+  @Public()
+  @Post()
+  async create(
+    @Body() createSerumBankDto: CreateSerumBankDto,
+  ): Promise<Partial<PartialSerumBankDto>> {
+    return this.serumBankService.createSerumBank(createSerumBankDto);
+  }
 
-  //   @Get()
-  //   async findAll(): Promise<SerumBank[]> {
-  //     return this.serumBankService.findAll();
-  //   }
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ type: DefaultPaginationResponseDto })
+  @ApiQuery({ name: 'page', required: false })
+  @Public()
+  @Get('find-all')
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
+  ): Promise<DefaultPaginationResponseDto> {
+    const response = await this.serumBankService.findAllSerumBank(page);
 
+    return new DefaultPaginationResponseDto(
+      response.SerumBanks,
+      page,
+      response.total,
+      true,
+    );
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ type: FullSerumBankDto })
   @Public()
   @Get(':bar_code')
   async findOneSerumBankByCode(

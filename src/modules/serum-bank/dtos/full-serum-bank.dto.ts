@@ -1,12 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
-export class CreateSerumBankDto {
-  constructor(serumBankCode: string, capacity: number) {
-    this.serumBankCode = serumBankCode;
-    this.capacity = capacity;
-  }
-
+export class FullSerumBankDto {
   @ApiProperty()
   @IsNotEmpty()
   serumBankCode: string;
@@ -14,4 +9,10 @@ export class CreateSerumBankDto {
   @ApiProperty()
   @IsNotEmpty()
   capacity: number;
+
+  @ApiProperty()
+  createdAt?: Date;
+
+  @ApiProperty()
+  updatedAt?: Date;
 }

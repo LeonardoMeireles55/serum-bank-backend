@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -11,7 +12,7 @@ export class Sample {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'sample_code' })
+  @Column({ name: 'sample_code', unique: true })
   sampleCode: string;
 
   @Column({

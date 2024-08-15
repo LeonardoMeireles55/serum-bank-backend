@@ -18,5 +18,6 @@ export class SamplePosition {
   sampleId: Sample;
 
   @ManyToOne(() => SerumBank, (serumBank) => serumBank.id)
+  @JoinColumn({ name: 'serum_bank_id' })
   serumBankId: SerumBank;
 }
