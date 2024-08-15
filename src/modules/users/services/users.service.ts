@@ -1,21 +1,19 @@
 import { User } from '../user.entity';
 import { ConflictException, Inject, NotFoundException } from '@nestjs/common';
-import { DataSource } from 'typeorm';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UserData } from '../user-data.entity';
 import { PartialUserDto } from '../dtos/partial-user-dto';
 import { UserRepository } from '../repositories/user.repository';
-import { UserDataRepository } from '../repositories/user-data.repository';
 import * as bcrypt from 'bcrypt';
 import { SALTS_OR_ROUNDS } from 'src/common/constants/salts-or-rounds.constants';
 import { UpdateUserDto } from '../dtos/update-user.dto';
+import { Database } from 'src/modules/database/database';
 
 export class UserService {
   constructor(
-    @Inject('DATA_SOURCE')
-    private readonly dataSource: DataSource,
+    private readonly dataSource: Database,
+    @Inject(UserRepository)
     private readonly userRepository: UserRepository,
-    private readonly userDataRepository: UserDataRepository,
   ) {}
 
   async existByUserId(id: number): Promise<boolean> {
@@ -43,14 +41,16 @@ export class UserService {
 
     user.password = await bcrypt.hash(user.password, SALTS_OR_ROUNDS);
 
-    const response = await this.dataSource.transaction(async (manager) => {
-      const createdUserData = await manager
-        .getRepository(UserData)
-        .save(user.userData);
-      const createdUser = await manager.getRepository(User).save(user);
+    const response = await this.dataSource
+      .getConnection()
+      .transaction(async (manager) => {
+        const createdUserData = await manager
+          .getRepository(UserData)
+          .save(user.userData);
+        const createdUser = await manager.getRepository(User).save(user);
 
-      return { createdUser, createdUserData };
-    });
+        return { createdUser, createdUserData };
+      });
 
     return response.createdUser.mapToPartialUserDto();
   }

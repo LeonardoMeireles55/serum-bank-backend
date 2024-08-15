@@ -28,7 +28,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
     }
 
     response.status(status).json({
-      response: false,
+      body: request.body,
+      params: request.params,
+      query: request.query,
       message: message,
       status: false,
     });
