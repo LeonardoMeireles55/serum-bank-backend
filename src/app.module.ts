@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { UsersModule } from './modules/users/user.module';
 import { DatabaseModule } from './modules/database/database.module';
 import { AppConfigModule } from './app-config/app-config.module';
 import { SerumBankModule } from './modules/serum-bank/serum-bank.module';
 import { AuthModule } from './modules/authentication/auth.module';
+import { MigrationService } from './common/providers/migration.provider';
 
 @Module({
   imports: [
@@ -14,6 +15,12 @@ import { AuthModule } from './modules/authentication/auth.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [MigrationService],
 })
-export class AppModule {}
+export class AppModule implements OnModuleInit {
+  constructor(private migrationService: MigrationService) {}
+
+  async onModuleInit() {
+    await this.migrationService.onModuleInit();
+  }
+}

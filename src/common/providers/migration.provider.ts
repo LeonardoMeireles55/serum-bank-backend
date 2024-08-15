@@ -1,13 +1,14 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { Database } from 'src/modules/database/database';
 import { DataSource } from 'typeorm';
 
 @Injectable()
 export class MigrationService implements OnModuleInit {
-  constructor(private dataSource: DataSource) {}
+  constructor(private readonly dataSource: Database) {}
 
   async onModuleInit() {
     console.log('Running migrations...');
-    await this.dataSource.runMigrations();
+    await this.dataSource.getConnection().runMigrations();
     console.log('Migrations complete.');
   }
 }

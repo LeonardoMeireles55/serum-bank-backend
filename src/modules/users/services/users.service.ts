@@ -1,15 +1,14 @@
-import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user.entity';
-import { Inject } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { ConflictException, Inject, NotFoundException } from '@nestjs/common';
+import { DataSource } from 'typeorm';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UserData } from '../user-data.entity';
 import { PartialUserDto } from '../dtos/partial-user-dto';
-import { Database } from 'src/modules/database/database';
 import { UserRepository } from '../repositories/user.repository';
 import { UserDataRepository } from '../repositories/user-data.repository';
 import * as bcrypt from 'bcrypt';
 import { SALTS_OR_ROUNDS } from 'src/common/constants/salts-or-rounds.constants';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 
 export class UserService {
   constructor(
@@ -54,5 +53,39 @@ export class UserService {
     });
 
     return response.createdUser.mapToPartialUserDto();
+  }
+
+  async changePassword(
+    email: string,
+    oldPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    const user = await this.findUserByEmail(email);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (!(await bcrypt.compare(oldPassword, user.password))) {
+      throw new ConflictException('Password is incorrect');
+    }
+
+    if (await bcrypt.compare(newPassword, user.password)) {
+      throw new ConflictException('Password is the same as the current one');
+    }
+
+    user.password = await bcrypt.hash(newPassword, SALTS_OR_ROUNDS);
+    await this.userRepository.save(user);
+  }
+
+  async updateUser(id: number, userDto: UpdateUserDto): Promise<User> {
+    const user = await this.findUserById(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    Object.assign(user, userDto);
+
+    return this.userRepository.save(user);
   }
 }

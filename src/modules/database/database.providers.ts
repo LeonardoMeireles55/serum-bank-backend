@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
 export const databaseProviders = [
@@ -16,6 +15,8 @@ export const databaseProviders = [
         synchronize: true,
         logging: true,
         dropSchema: true,
+        migrations: [`${__dirname}../../../migrations/{.ts,*.js}`],
+        migrationsRun: false,
       });
 
       return dataSource.initialize();
