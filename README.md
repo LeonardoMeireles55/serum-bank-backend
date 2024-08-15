@@ -1,4 +1,4 @@
-# api-insy
+# serum-bank api
 
 ### Tecnologias
 
