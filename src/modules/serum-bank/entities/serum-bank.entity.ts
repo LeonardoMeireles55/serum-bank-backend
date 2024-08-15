@@ -26,9 +26,6 @@ export class SerumBank {
   @Column({ name: 'capacity', default: 100 })
   capacity: number;
 
-  @Column({ name: 'used_positions', default: 0 })
-  usedPositions: number;
-
   @CreateDateColumn({ name: 'created_at' })
   @Exclude()
   createdAt?: Date;

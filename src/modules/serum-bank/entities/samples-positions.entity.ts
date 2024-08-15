@@ -1,4 +1,5 @@
 import {
+  Column,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -13,11 +14,14 @@ export class SamplePosition {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Sample, (sample) => sample.id)
+  @OneToOne(() => Sample, (sample) => sample.id, { eager: true })
   @JoinColumn({ name: 'sample_id' })
-  sampleId: Sample;
+  sampleId: Sample | number;
 
-  @ManyToOne(() => SerumBank, (serumBank) => serumBank.id)
+  @ManyToOne(() => SerumBank, (serumBank) => serumBank.id, { eager: true })
   @JoinColumn({ name: 'serum_bank_id' })
   serumBankId: SerumBank;
+
+  @Column()
+  position: number;
 }

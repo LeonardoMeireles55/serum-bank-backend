@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { SampleTypeEnum } from '../enums/sample-type.enum';
 
 @Entity({ name: 'samples' })
 export class Sample {
@@ -17,8 +18,8 @@ export class Sample {
 
   @Column({
     name: 'sample_type',
-    enum: ['blood', 'serum', 'plasma'],
-    default: 'serum',
+    enum: SampleTypeEnum,
+    default: SampleTypeEnum.SERUM,
   })
   sampleType: string;
 
