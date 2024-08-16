@@ -16,11 +16,11 @@ export class SamplePosition {
 
   @OneToOne(() => Sample, (sample) => sample.id, { eager: true })
   @JoinColumn({ name: 'sample_id' })
-  sampleId: Sample | number;
+  sample: Sample;
 
   @ManyToOne(() => SerumBank, (serumBank) => serumBank.id, { eager: true })
   @JoinColumn({ name: 'serum_bank_id' })
-  serumBankId: SerumBank;
+  serumBank: SerumBank;
 
   @Column()
   position: number;

@@ -4,7 +4,6 @@ import { SerumBank } from '../entities/serum-bank.entity';
 import { CreateSerumBankDto } from '../dtos/create-serum-bank.dto';
 import { PartialSerumBankDto } from '../dtos/partial-serum-bank.dto';
 import { UpdateSerumBankDto } from '../dtos/update-serum-bank.dto';
-import { FullSerumBankDto } from '../dtos/full-serum-bank.dto';
 import { Database } from 'src/modules/database/database';
 import { TransactionalSerumBankDto } from '../dtos/transactional-serum-bank.dto';
 import { Sample } from '../entities/samples.entity';
@@ -43,16 +42,18 @@ export class SerumBankService {
         const samplesPositions = new SamplePosition();
 
         sample.sampleCode = transactionalSerumBankDto.sampleBarCode;
-        console.log(transactionalSerumBankDto.sampleBarCode);
         sample.sampleType = transactionalSerumBankDto.sampleType;
 
         const createdSample = await manager.getRepository(Sample).save(sample);
+        const availablePosition = await this.getAvaliablePosition(
+          transactionalSerumBankDto.serumBankCode,
+        );
 
-        samplesPositions.sampleId = createdSample;
-        samplesPositions.serumBankId = serumBank;
-        samplesPositions.position = serumBank.capacity;
+        samplesPositions.sample = createdSample;
+        samplesPositions.serumBank = serumBank;
+        samplesPositions.position = availablePosition;
 
-        serumBank.capacity--;
+        serumBank.availableCapacity--;
 
         const createdSamplePositions = manager
           .getRepository(SamplePosition)
@@ -68,18 +69,82 @@ export class SerumBankService {
     return response;
   }
 
+  async getUsedPositions(serumBankCode: string): Promise<number[]> {
+    const serumBank = await this.serumBankRepository.findOne({
+      where: { serumBankCode },
+    });
+
+    const usedPositions = await this.samplesPositionsRepository.query(
+      `SELECT position FROM samples_positions WHERE serum_bank_id = ${serumBank.id}`,
+    );
+
+    return usedPositions.map((item: any) => item.position);
+  }
+
+  async getAvaliablePosition(serumBankCode: string): Promise<number> {
+    const serumBank = await this.serumBankRepository.findOne({
+      where: { serumBankCode },
+    });
+
+    const capacity = serumBank.capacity;
+
+    const usedPositions = await this.getUsedPositions(serumBankCode);
+
+    const allPositions = Array.from({ length: capacity }, (_, index) => index);
+
+    const availablePositions = allPositions.filter(
+      (position) => !usedPositions.includes(position),
+    );
+
+    console.log(availablePositions);
+
+    const availablePosition =
+      availablePositions.length > 0 ? availablePositions[0] : -1;
+
+    console.log(availablePosition);
+    return availablePosition;
+  }
+
+  async getAllSamplesFromSerumBank(code: string): Promise<SamplePosition[]> {
+    if (!code) {
+      throw new HttpException('Bad Request', 400);
+    }
+    const serumBank = await this.serumBankRepository.findOne({
+      select: ['id'],
+      where: { serumBankCode: code },
+    });
+
+    const samplePositions = await this.samplesPositionsRepository
+      .createQueryBuilder('samples_positions')
+      .innerJoinAndSelect('samples_positions.sample', 'sample')
+      .select(['sample.sampleCode', 'samples_positions.position'])
+      .where('samples_positions.serum_bank_id = :serumBankId', {
+        serumBankId: serumBank.id,
+      })
+      .getMany();
+
+    return samplePositions;
+  }
+
   async findSamplePosition(code: string): Promise<PositionSampleDto> {
     const sample = await this.samplesRepository.findOneBy({ sampleCode: code });
-    console.log(sample);
-    const position = await this.samplesPositionsRepository.findOneBy({
-      sampleId: sample.id,
-    });
-    console.log(position);
 
-    return new PositionSampleDto(
-      position.position,
-      position.serumBankId.serumBankCode,
+    const position = await this.samplesPositionsRepository.query(
+      `SELECT position, serum_bank_id FROM samples_positions WHERE sample_id = ${sample.id}`,
     );
+
+    const serumBank = await this.serumBankRepository.findOne({
+      where: { id: position[0].serum_bank_id },
+    });
+
+    const positionSampleDto = new PositionSampleDto(
+      position[0].position,
+      serumBank.serumBankCode,
+    );
+
+    console.log(positionSampleDto);
+
+    return positionSampleDto;
   }
 
   async existsSerumBankByCode(code: string): Promise<boolean> {

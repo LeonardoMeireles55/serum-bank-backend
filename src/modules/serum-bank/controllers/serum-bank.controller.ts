@@ -43,7 +43,7 @@ export class SerumBankController {
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({ type: PartialSerumBankDto })
   @Public()
-  @Post()
+  @Post('create-serum-bank')
   async create(
     @Body() createSerumBankDto: CreateSerumBankDto,
   ): Promise<Partial<PartialSerumBankDto>> {
@@ -53,8 +53,8 @@ export class SerumBankController {
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({ type: TransactionalSerumBankDto })
   @Public()
-  @Post('bandeijar')
-  async bandeijar(
+  @Post('routine-transactional-serum-bank')
+  async routineTransactional(
     @Body() transactionalSerumBankDto: TransactionalSerumBankDto,
   ): Promise<SamplePosition> {
     return this.serumBankService.transactionalSerumBankRoutine(
@@ -66,8 +66,8 @@ export class SerumBankController {
   @ApiResponse({ type: DefaultPaginationResponseDto })
   @ApiQuery({ name: 'page', required: false })
   @Public()
-  @Get('getAllSerumBanks')
-  async findAll(
+  @Get('serum-banks')
+  async getAllSerumBanks(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
   ): Promise<DefaultPaginationResponseDto> {
     const response = await this.serumBankService.findAllSerumBank(page);
@@ -84,8 +84,8 @@ export class SerumBankController {
   @ApiResponse({ type: PositionSampleDto })
   @Public()
   @ApiQuery({ name: 'sample_code', required: true })
-  @Get('findOneSamplePositionByBarCode')
-  async findOneSamplePositionByBarCode(
+  @Get('sample-position-barcode')
+  async getSamplePositionByBarCode(
     @Query('sample_code') sample_code: string,
   ): Promise<PositionSampleDto> {
     console.log(sample_code);
@@ -96,16 +96,25 @@ export class SerumBankController {
   @ApiResponse({ type: FullSerumBankDto })
   @ApiQuery({ name: 'bar_code', required: true })
   @Public()
-  @Get('findOneSerumBankByCode')
-  async findOneSerumBankByCode(
-    @Query('bar_code') bar_code: string,
-  ): Promise<SerumBank> {
-    return await this.serumBankService.getSerumBankByCode(bar_code);
+  @Get('serum-bank-by-code')
+  async getSerumBankByCode(@Query('code') code: string): Promise<SerumBank> {
+    return await this.serumBankService.getSerumBankByCode(code);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ type: [SamplePosition] })
+  @ApiQuery({ name: 'bank_code', required: true })
+  @Public()
+  @Get('samples-from-serum-bank')
+  async getAllSamplesPositionFromSerumBank(
+    @Query('bankCode') bankCode: string,
+  ): Promise<SamplePosition[]> {
+    return await this.serumBankService.getAllSamplesFromSerumBank(bankCode);
   }
 
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: FullSerumBankDto })
-  @Put('update_serum_bank')
+  @Put('update-serum-bank')
   async updateSerumBankByCode(
     @Body() updateSerumBankDto: UpdateSerumBankDto,
   ): Promise<SerumBank> {

@@ -1,6 +1,6 @@
-# serum-bank api
+# Serum-Bank API
 
-### Tecnologias
+### Technologies
 
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)
@@ -9,23 +9,23 @@
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
 
-### Descrição
+### Description
 
-RESTful API que permite o acesso de rotas privadas e públicas para aplicativo web openSerumBank.
+This project is a serum bank management system developed with the NestJS framework and TypeORM. The system is responsible for managing and processing serum samples in a database, including the creation, updating, and querying of information about serums and their positions.
 
-### Passos para rodar o projeto:
+### Steps to Run the Project:
 
-#### Instale as dependencias
+#### Dependencies
 
-abra o terminal e rode os comandos:
+Open the terminal and run the following command:
 
 ```bash
 npm install
 ```
 
-#### Criando variaveis de ambiete
+#### Environment
 
-Crie um arquivo .env na raiz do projeto seguindo o template abaixo:
+Create a .env file in the root of the project following the template below:
 
 #### Email Configuration
 
@@ -52,34 +52,34 @@ Crie um arquivo .env na raiz do projeto seguindo o template abaixo:
 - JWT_SECRET=secretKey
 - JWT_EXPIRES_IN=1800s
 
-#### Comando para rodar testes
+#### Command to Run Tests
 
 ```bash
 npx jest
 ```
 
-#### Comandos para rodar o projeto
+#### Commands to Run the Project
 
-abra o terminal e rode esses comandos:
+Open the terminal and run these commands:
 
-- subir container com banco de dados
+- Start the database container
 
 ```bash
 docker compose up
 ```
 
-- rodar aplicação nestjs
+- Run the NestJS application
 
 ```bash
 npm run start
 ```
 
-#### Usuario padrão
+#### Default User
 
 - email: admin@admin.com
-- senha: admin
+- password: admin
 
-#### Documentação
+#### Documentation
 
 Para vizualizar documentaçao das rotas acesse:
 
