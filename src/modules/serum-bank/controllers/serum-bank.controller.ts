@@ -5,7 +5,6 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Param,
   ParseIntPipe,
   Post,
   Put,
@@ -15,14 +14,7 @@ import {
 import { CreateSerumBankDto } from '../dtos/create-serum-bank.dto';
 import { SerumBank } from '../entities/serum-bank.entity';
 import { SerumBankService } from '../services/serum-bank.service';
-import {
-  ApiBearerAuth,
-  ApiParam,
-  ApiQuery,
-  ApiResponse,
-  ApiResponseProperty,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from 'src/modules/authentication/guards/role.guard';
 import { Public } from 'src/common/decorators/is-public.decorator';
 import { PartialSerumBankDto } from '../dtos/partial-serum-bank.dto';
@@ -83,6 +75,17 @@ export class SerumBankController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: PositionSampleDto })
   @Public()
+  @ApiQuery({ name: 'bank_code', required: true })
+  @Get('avaliables-positions-bank')
+  async getAvaliablePositionsBySerumBankCode(
+    @Query('bank_code') bank_code: string,
+  ): Promise<number[]> {
+    return await this.serumBankService.getAllAvaliablePositions(bank_code);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ type: PositionSampleDto })
+  @Public()
   @ApiQuery({ name: 'sample_code', required: true })
   @Get('sample-position-barcode')
   async getSamplePositionByBarCode(
@@ -94,7 +97,7 @@ export class SerumBankController {
 
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: FullSerumBankDto })
-  @ApiQuery({ name: 'bar_code', required: true })
+  @ApiQuery({ name: 'code', required: true })
   @Public()
   @Get('serum-bank-by-code')
   async getSerumBankByCode(@Query('code') code: string): Promise<SerumBank> {
@@ -107,7 +110,7 @@ export class SerumBankController {
   @Public()
   @Get('samples-from-serum-bank')
   async getAllSamplesPositionFromSerumBank(
-    @Query('bankCode') bankCode: string,
+    @Query('bank_code') bankCode: string,
   ): Promise<SamplePosition[]> {
     return await this.serumBankService.getAllSamplesFromSerumBank(bankCode);
   }

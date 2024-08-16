@@ -18,7 +18,9 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .addBearerAuth()
     .setTitle('Serum-Bank API')
-    .setDescription('toDo')
+    .setDescription(
+      'This project is a serum bank management system developed with the NestJS framework and TypeORM. The system is responsible for managing and processing serum samples in a database, including the creation, updating, and querying of information about serums and their positions.',
+    )
     .setVersion('1.0')
     .build();
 

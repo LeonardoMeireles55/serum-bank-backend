@@ -96,13 +96,28 @@ export class SerumBankService {
       (position) => !usedPositions.includes(position),
     );
 
-    console.log(availablePositions);
-
     const availablePosition =
       availablePositions.length > 0 ? availablePositions[0] : -1;
 
-    console.log(availablePosition);
     return availablePosition;
+  }
+
+  async getAllAvaliablePositions(serumBankCode: string): Promise<number[]> {
+    const serumBank = await this.serumBankRepository.findOne({
+      where: { serumBankCode },
+    });
+
+    const capacity = serumBank.capacity;
+
+    const usedPositions = await this.getUsedPositions(serumBankCode);
+
+    const allPositions = Array.from({ length: capacity }, (_, index) => index);
+
+    const availablePositions = allPositions.filter(
+      (position) => !usedPositions.includes(position),
+    );
+
+    return availablePositions;
   }
 
   async getAllSamplesFromSerumBank(code: string): Promise<SamplePosition[]> {
