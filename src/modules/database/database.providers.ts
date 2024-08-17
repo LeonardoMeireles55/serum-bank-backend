@@ -1,20 +1,22 @@
+import { AppConfigService } from 'src/app-config/app-config.service';
 import { DataSource } from 'typeorm';
 
 export const databaseProviders = [
   {
     provide: 'DATA_SOURCE',
-    useFactory: async () => {
+    inject: [AppConfigService],
+    useFactory: async (config: AppConfigService) => {
       const dataSource = new DataSource({
         type: 'postgres',
-        host: 'localhost',
-        port: 5432,
-        username: 'root',
-        password: 'root',
-        database: 'postgres',
+        host: config.dbHost,
+        port: config.dbPort,
+        username: config.dbUsername,
+        password: config.dbPassword,
+        database: config.dbDatabase,
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        synchronize: true,
-        logging: true,
-        dropSchema: true,
+        synchronize: config.nodeEnv === 'development' ? true : false,
+        logging: config.nodeEnv === 'development' ? true : false,
+        dropSchema: config.nodeEnv === 'development' ? true : false,
         migrations: [`${__dirname}../../../migrations/{.ts,*.js}`],
         migrationsRun: false,
       });
