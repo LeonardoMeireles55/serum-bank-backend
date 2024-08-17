@@ -109,12 +109,17 @@ export class SerumBankService {
 
   async getUsedPositions(serumBankCode: string): Promise<number[]> {
     const serumBank = await this.serumBankRepository.findOne({
+      select: ['id'],
       where: { serumBankCode },
     });
 
-    const usedPositions = await this.samplesPositionsRepository.query(
-      `SELECT position FROM samples_positions WHERE serum_bank_id = ${serumBank.id}`,
-    );
+    const usedPositions = await this.samplesPositionsRepository
+      .createQueryBuilder('samples_positions')
+      .select(['samples_positions.position'])
+      .where('samples_positions.serum_bank_id = :serumBankId', {
+        serumBankId: serumBank.id,
+      })
+      .getMany();
 
     return usedPositions.map((item: any) => item.position);
   }
@@ -198,8 +203,8 @@ export class SerumBankService {
       `SELECT position, serum_bank_id FROM samples_positions WHERE sample_id = ${sample.id}`,
     );
 
-    const serumBank = await this.serumBankRepository.findOne({
-      where: { id: position[0].serum_bank_id },
+    const serumBank = await this.serumBankRepository.findOneBy({
+      id: position[0].serum_bank_id,
     });
 
     if (!serumBank) {
@@ -210,8 +215,6 @@ export class SerumBankService {
       position[0].position,
       serumBank.serumBankCode,
     );
-
-    console.log(positionSampleDto);
 
     return positionSampleDto;
   }

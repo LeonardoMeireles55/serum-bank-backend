@@ -147,6 +147,9 @@
             `http://localhost:3000/api/sample-position-barcode?sample_code=${sampleCode}`,
           );
           if (!response.ok) {
+            if (response.status == 404) {
+              throw new Error('amostra nao encontrada');
+            }
             throw new Error('Erro ao buscar a posição da amostra.');
           }
 

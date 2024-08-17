@@ -92,8 +92,9 @@ export class SerumBankController {
   async getSamplePositionByBarCode(
     @Query('sample_code') sample_code: string,
   ): Promise<PositionSampleDto> {
-    console.log(sample_code);
-    return await this.serumBankService.findSamplePosition(sample_code);
+    const pos = await this.serumBankService.findSamplePosition(sample_code);
+    console.log(pos);
+    return pos;
   }
 
   @HttpCode(HttpStatus.OK)
