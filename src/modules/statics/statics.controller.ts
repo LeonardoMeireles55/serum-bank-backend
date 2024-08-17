@@ -2,7 +2,9 @@ import { Controller, Get, HttpCode, HttpStatus, Res } from '@nestjs/common';
 import { join } from 'path';
 import { Public } from 'src/common/decorators/is-public.decorator';
 import { type Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Statics')
 @Controller('statics')
 export class StaticsController {
   @Public()

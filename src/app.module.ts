@@ -7,7 +7,7 @@ import { AuthModule } from './modules/authentication/auth.module';
 import { MigrationService } from './common/providers/migration.provider';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { AppConfigService } from './app-config/app-config.service';
-import { StaticsModule } from './statics/statics.module';
+import { StaticsModule } from './modules/statics/statics.module';
 
 @Module({
   imports: [
