@@ -12,11 +12,12 @@ import { UsersModule } from '../users/user.module';
 import { AppConfigModule } from 'src/app-config/app-config.module';
 import { AppConfigService } from 'src/app-config/app-config.service';
 import { DatabaseModule } from '../database/database.module';
-import { MailerService } from '@nestjs-modules/mailer';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
     DatabaseModule,
+    MailerModule,
     AppConfigModule,
     UsersModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),

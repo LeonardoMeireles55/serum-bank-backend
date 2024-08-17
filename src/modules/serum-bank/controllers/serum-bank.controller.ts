@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Query,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { CreateSerumBankDto } from '../dtos/create-serum-bank.dto';

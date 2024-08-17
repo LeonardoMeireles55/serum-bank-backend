@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ALOCAÇÃO DE AMOSTRAS</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f7fa;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+      }
+
+      h1 {
+        color: #2c3e50;
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #34495e;
+      }
+
+      .input-group select,
+      .input-group input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccd1d9;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+
+      .input-group input:focus,
+      .input-group select:focus {
+        border-color: #3498db;
+        outline: none;
+      }
+
+      .btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+        margin-top: 10px;
+      }
+
+      .btn:hover {
+        background-color: #0056b3;
+      }
+
+      .result {
+        margin-top: 30px;
+      }
+
+      .positions {
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 10px;
+      }
+
+      .position {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        background-color: #ecf0f1;
+        border-radius: 8px;
+        font-weight: bold;
+        color: #34495e;
+        transition:
+          background-color 0.3s ease,
+          transform 0.3s ease;
+      }
+
+      .position:hover {
+        transform: translateY(-3px);
+      }
+
+      .occupied {
+        background-color: #e74c3c;
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ALOCAÇÃO DE AMOSTRAS</h1>
+    <div class="container">
+      <div class="input-group">
+        <label for="sampleBarCode">PEDIDO DA AMOSTRA:</label>
+        <input type="text" id="sampleBarCode" placeholder="INSIRA O PEDIDO" />
+      </div>
+
+      <div class="input-group">
+        <label for="sampleType">TIPO DA AMOSTRA:</label>
+        <select id="sampleType">
+          <option value="SERUM">SORO</option>
+          <option value="PLASMA">PLASMA</option>
+          <option value="BLOOD">SANGUE</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="serumBankSelect">SELECIONE A BANDEJA:</label>
+        <select id="serumBankSelect">
+          <!-- Opções serão carregadas aqui -->
+        </select>
+      </div>
+
+      <button class="btn" onclick="submitSample()">ALOCAR</button>
+
+      <div class="result" id="result">
+        <!-- Resultado da operação será exibido aqui -->
+      </div>
+
+      <div class="positions" id="positions">
+        <!-- Posições da bandeja serão exibidas aqui -->
+      </div>
+    </div>
+
+    <script>
+      async function loadSerumBanks() {
+        try {
+          const response = await fetch('http://localhost:3000/api/serum-banks');
+          if (!response.ok) {
+            throw new Error('Erro ao carregar os bancos de soro.');
+          }
+
+          const data = await response.json();
+          const serumBanks = data.response;
+          const serumBankSelect = document.getElementById('serumBankSelect');
+
+          serumBanks.forEach((bank) => {
+            const option = document.createElement('option');
+            option.value = bank.serumBankCode;
+            option.textContent = bank.serumBankCode;
+            serumBankSelect.appendChild(option);
+          });
+        } catch (error) {
+          document.getElementById('result').innerHTML =
+            `<p>Erro: ${error.message}</p>`;
+        }
+      }
+
+      async function submitSample() {
+        const serumBankCode = document.getElementById('serumBankSelect').value;
+        const sampleBarCode = document.getElementById('sampleBarCode').value;
+        const sampleType = document.getElementById('sampleType').value;
+        const resultDiv = document.getElementById('result');
+
+        if (!serumBankCode || !sampleBarCode || !sampleType) {
+          resultDiv.innerHTML = '<p>Por favor, preencha todos os campos.</p>';
+          return;
+        }
+
+        const data = {
+          serumBankCode,
+          sampleBarCode,
+          sampleType,
+        };
+
+        try {
+          const response = await fetch(
+            'http://localhost:3000/api/transactional-routine-serum-bank',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            },
+          );
+
+          if (!response.ok) {
+            if (response.status == 409) {
+              throw new Error('A amostra já foi bandejada.');
+            }
+            throw new Error('Erro ao bandejar a amostra.');
+          }
+
+          const result = await response.json();
+          resultDiv.innerHTML = `<p>Amostra bandejada com sucesso na posição ${result.position}.</p>`;
+          renderPositions(result.position);
+        } catch (error) {
+          resultDiv.innerHTML = `<p>Erro: ${error.message}</p>`;
+        }
+      }
+
+      async function renderPositions(occupiedPosition) {
+        const positionsDiv = document.getElementById('positions');
+        positionsDiv.innerHTML = ''; // Limpa posições anteriores
+
+        for (let i = 0; i < 100; i++) {
+          const positionDiv = document.createElement('div');
+          positionDiv.className = 'position';
+          positionDiv.textContent = i;
+
+          if (i === occupiedPosition) {
+            positionDiv.classList.add('occupied');
+          }
+
+          positionsDiv.appendChild(positionDiv);
+        }
+      }
+
+      // Carrega os bancos de soro ao carregar a página
+      window.onload = loadSerumBanks;
+    </script>
+  </body>
+</html>

@@ -37,11 +37,18 @@ export class SerumBankService {
     }
   }
 
+  private async existSampleBySampleCode(code: string): Promise<boolean> {
+    return await this.samplesRepository.existsBy({ sampleCode: code });
+  }
+
   private async createSample(
     sampleCode: string,
     sampleType: string,
     manager: any,
   ): Promise<Sample> {
+    if (await this.existSampleBySampleCode(sampleCode)) {
+      throw new HttpException('Sample already exists', 409);
+    }
     const sample = new Sample();
     sample.sampleCode = sampleCode;
     sample.sampleType = sampleType;
@@ -233,11 +240,13 @@ export class SerumBankService {
     page: number,
   ): Promise<{ SerumBanks: SerumBank[]; total: number }> {
     const [data, total] = await this.serumBankRepository.findAndCount({
+      order: { serumBankCode: 'ASC' },
       skip: (page - 1) * 10,
       take: 10,
     });
     return { SerumBanks: data, total };
   }
+
   async getSerumBankByCode(code: string): Promise<SerumBank> {
     if (!(await this.existsSerumBankByCode(code))) {
       throw new HttpException('Serum bank not found', 404);

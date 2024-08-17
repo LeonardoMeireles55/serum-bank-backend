@@ -16,10 +16,6 @@ export class SerumBank {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @ManyToOne(() => User, (user) => user.id)
-  // @JoinColumn({ name: 'user_id' })
-  // userId: User;
-
   @Column({ name: 'serum_bank_code', unique: true })
   serumBankCode: string;
 

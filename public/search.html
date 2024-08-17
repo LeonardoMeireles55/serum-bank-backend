@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PESQUISA DE AMOSTRAS</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f7fa;
+        margin: 0;
+        padding: 10px;
+        color: #333;
+      }
+
+      h1 {
+        color: #2c3e50;
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+
+      .container {
+        max-width: 550px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .input-group {
+        margin-bottom: 15px;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #34495e;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccd1d9;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 0.9rem;
+        transition: border-color 0.3s ease;
+      }
+
+      .input-group input:focus {
+        border-color: #3498db;
+        outline: none;
+      }
+
+      .btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+        margin-top: 10px;
+      }
+
+      .btn:hover {
+        background-color: #0056b3;
+      }
+
+      .result {
+        margin-top: 20px;
+      }
+
+      .serumBankCode {
+        font-size: 1.1rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 15px;
+        color: #555;
+      }
+
+      .positions-grid {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 5px;
+      }
+
+      .position {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: #ecf0f1;
+        border-radius: 6px;
+        font-weight: bold;
+        color: #34495e;
+        transition:
+          background-color 0.3s ease,
+          transform 0.3s ease;
+      }
+
+      .position:hover {
+        transform: translateY(-2px);
+        background-color: #bdc3c7;
+      }
+
+      .occupied {
+        background-color: #e74c3c;
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>PESQUISA DE AMOSTRAS</h1>
+    <div class="container">
+      <div class="input-group">
+        <label for="sampleCode">INSIRA O PEDIDO DA AMOSTRA:</label>
+        <input type="text" id="sampleCode" placeholder="PEDIDO" />
+      </div>
+      <button class="btn" onclick="fetchSamplePosition()">VERIFICAR</button>
+
+      <div class="result" id="result">
+        <!-- O código da bandeja e a bandeja com posições de 0 a 99 serão exibidos aqui -->
+      </div>
+    </div>
+
+    <script>
+      async function fetchSamplePosition() {
+        const sampleCode = document.getElementById('sampleCode').value;
+        const resultDiv = document.getElementById('result');
+
+        if (!sampleCode) {
+          resultDiv.innerHTML =
+            '<p>Por favor, insira o código de barras da amostra.</p>';
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `http://localhost:3000/api/sample-position-barcode?sample_code=${sampleCode}`,
+          );
+          if (!response.ok) {
+            throw new Error('Erro ao buscar a posição da amostra.');
+          }
+
+          const positionData = await response.json();
+          renderPositions(positionData);
+        } catch (error) {
+          resultDiv.innerHTML = `<p>Erro: ${error.message}</p>`;
+        }
+      }
+
+      function renderPositions(occupiedPosition) {
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = ''; // Limpa resultados anteriores
+
+        // Adiciona o código da bandeja
+        const serumBankCodeDiv = document.createElement('div');
+        serumBankCodeDiv.className = 'serumBankCode';
+        serumBankCodeDiv.textContent = `BANDEJA: ${occupiedPosition.serumBankCode}`;
+        resultDiv.appendChild(serumBankCodeDiv);
+
+        // Adiciona a bandeja de posições
+        const positionsGrid = document.createElement('div');
+        positionsGrid.className = 'positions-grid';
+        for (let i = 0; i < 100; i++) {
+          const positionDiv = document.createElement('div');
+          positionDiv.className = 'position';
+          positionDiv.textContent = i;
+
+          if (i === occupiedPosition.position) {
+            positionDiv.classList.add('occupied');
+          }
+
+          positionsGrid.appendChild(positionDiv);
+        }
+
+        resultDiv.appendChild(positionsGrid);
+      }
+    </script>
+  </body>
+</html>

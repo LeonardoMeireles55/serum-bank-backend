@@ -5,6 +5,9 @@ import { AppConfigModule } from './app-config/app-config.module';
 import { SerumBankModule } from './modules/serum-bank/serum-bank.module';
 import { AuthModule } from './modules/authentication/auth.module';
 import { MigrationService } from './common/providers/migration.provider';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { AppConfigService } from './app-config/app-config.service';
+import { StaticsModule } from './statics/statics.module';
 
 @Module({
   imports: [
@@ -13,6 +16,22 @@ import { MigrationService } from './common/providers/migration.provider';
     SerumBankModule,
     DatabaseModule,
     AuthModule,
+    MailerModule.forRootAsync({
+      imports: [AppConfigModule],
+      inject: [AppConfigService],
+      useFactory: async (config: AppConfigService) => ({
+        transport: {
+          host: config.emailHost,
+          port: 587,
+          secure: false,
+          auth: {
+            user: config.emailUser,
+            pass: config.emailPass,
+          },
+        },
+      }),
+    }),
+    StaticsModule,
   ],
   controllers: [],
   providers: [MigrationService],

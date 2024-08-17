@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOROTECA</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f7fa;
+        margin: 0;
+        padding: 10px;
+        color: #333;
+      }
+
+      h1 {
+        color: #2c3e50;
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+
+      .container {
+        max-width: 550px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .input-group {
+        margin-bottom: 15px;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #34495e;
+      }
+
+      .input-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccd1d9;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 0.9rem;
+        transition: border-color 0.3s ease;
+      }
+
+      .input-group select:focus {
+        border-color: #3498db;
+        outline: none;
+      }
+
+      .result {
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 5px;
+      }
+
+      .position {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: #e74c3c;
+        border-radius: 6px;
+        font-weight: bold;
+        color: #ffffff;
+        transition:
+          background-color 0.3s ease,
+          transform 0.3s ease;
+      }
+
+      .position:hover {
+        transform: translateY(-2px);
+      }
+
+      .occupied {
+        background-color: #ecf0f1;
+        color: #34495e;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>SOROTECA</h1>
+    <div class="container">
+      <div class="input-group">
+        <label for="bankSelect">SELECIONE A BANDEJA:</label>
+        <select id="bankSelect" onchange="fetchAvailablePositions()">
+          <!-- Opções de bancos serão carregadas aqui -->
+        </select>
+      </div>
+
+      <div class="result" id="result">
+        <!-- As posições serão exibidas aqui -->
+      </div>
+    </div>
+
+    <script>
+      async function loadSerumBanks() {
+        try {
+          const response = await fetch('http://localhost:3000/api/serum-banks');
+          if (!response.ok) {
+            throw new Error('Erro ao carregar os bancos de soro.');
+          }
+
+          const data = await response.json();
+          const serumBanks = data.response;
+          const bankSelect = document.getElementById('bankSelect');
+
+          serumBanks.forEach((bank) => {
+            const option = document.createElement('option');
+            option.value = bank.serumBankCode;
+            option.textContent = bank.serumBankCode;
+            bankSelect.appendChild(option);
+          });
+
+          if (serumBanks.length > 0) {
+            fetchAvailablePositions();
+          }
+        } catch (error) {
+          document.getElementById('result').innerHTML =
+            `<p>Erro: ${error.message}</p>`;
+        }
+      }
+
+      async function fetchAvailablePositions() {
+        const bankCode = document.getElementById('bankSelect').value;
+        const resultDiv = document.getElementById('result');
+
+        if (!bankCode) {
+          resultDiv.innerHTML = '<p>Por favor, selecione um banco de soro.</p>';
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `http://localhost:3000/api/availables-positions-bank?bank_code=${bankCode}`,
+          );
+          if (!response.ok) {
+            throw new Error('Erro ao obter as posições disponíveis.');
+          }
+
+          const occupiedPositions = await response.json();
+          renderPositions(occupiedPositions);
+        } catch (error) {
+          resultDiv.innerHTML = `<p>Erro: ${error.message}</p>`;
+        }
+      }
+
+      function renderPositions(occupiedPositions) {
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = ''; // Limpa os resultados anteriores
+
+        for (let i = 0; i < 100; i++) {
+          const positionDiv = document.createElement('div');
+          positionDiv.className = 'position';
+          positionDiv.textContent = i;
+
+          if (occupiedPositions.includes(i)) {
+            positionDiv.classList.add('occupied');
+          }
+
+          resultDiv.appendChild(positionDiv);
+        }
+      }
+
+      window.onload = loadSerumBanks;
+    </script>
+  </body>
+</html>
