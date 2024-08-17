@@ -117,6 +117,10 @@ export class SerumBankService {
       where: { serumBankCode },
     });
 
+    if (!serumBank) {
+      throw new HttpException('Serum bank not found', 404);
+    }
+
     const capacity = serumBank.capacity;
 
     const usedPositions = await this.getUsedPositions(serumBankCode);
@@ -137,6 +141,10 @@ export class SerumBankService {
     const serumBank = await this.serumBankRepository.findOne({
       where: { serumBankCode },
     });
+
+    if (!serumBank) {
+      throw new HttpException('Serum bank not found', 404);
+    }
 
     const capacity = serumBank.capacity;
 
@@ -175,6 +183,10 @@ export class SerumBankService {
   async findSamplePosition(code: string): Promise<PositionSampleDto> {
     const sample = await this.samplesRepository.findOneBy({ sampleCode: code });
 
+    if (!sample) {
+      throw new HttpException('Sample not found', 404);
+    }
+
     const position = await this.samplesPositionsRepository.query(
       `SELECT position, serum_bank_id FROM samples_positions WHERE sample_id = ${sample.id}`,
     );
@@ -182,6 +194,10 @@ export class SerumBankService {
     const serumBank = await this.serumBankRepository.findOne({
       where: { id: position[0].serum_bank_id },
     });
+
+    if (!serumBank) {
+      throw new HttpException('Serum bank not found', 404);
+    }
 
     const positionSampleDto = new PositionSampleDto(
       position[0].position,
