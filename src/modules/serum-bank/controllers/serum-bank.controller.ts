@@ -45,8 +45,8 @@ export class SerumBankController {
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({ type: TransactionalSerumBankDto })
   @Public()
-  @Post('routine-transactional-serum-bank')
-  async routineTransactional(
+  @Post('transactional-routine-serum-bank')
+  async transactionalRoutineSerumBank(
     @Body() transactionalSerumBankDto: TransactionalSerumBankDto,
   ): Promise<SamplePosition> {
     return this.serumBankService.transactionalSerumBankRoutine(
@@ -76,11 +76,11 @@ export class SerumBankController {
   @ApiResponse({ type: PositionSampleDto })
   @Public()
   @ApiQuery({ name: 'bank_code', required: true })
-  @Get('avaliables-positions-bank')
-  async getAvaliablePositionsBySerumBankCode(
+  @Get('availables-positions-bank')
+  async getAvailablePositionsBySerumBankCode(
     @Query('bank_code') bank_code: string,
   ): Promise<number[]> {
-    return await this.serumBankService.getAllAvaliablePositions(bank_code);
+    return await this.serumBankService.getAllAvailablePositions(bank_code);
   }
 
   @HttpCode(HttpStatus.OK)

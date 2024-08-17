@@ -23,50 +23,81 @@ export class SerumBankService {
     private readonly dataSource: Database,
   ) {}
 
+  private async findSerumBankByCodeOrThrow(code: string): Promise<SerumBank> {
+    const serumBank = await this.getSerumBankByCode(code);
+    if (!serumBank) {
+      throw new HttpException('Serum bank not found', 404);
+    }
+    return serumBank;
+  }
+
+  private ensureCapacity(serumBank: SerumBank): void {
+    if (serumBank.capacity < 1) {
+      throw new HttpException('Serum bank is full', 409);
+    }
+  }
+
+  private async createSample(
+    sampleCode: string,
+    sampleType: string,
+    manager: any,
+  ): Promise<Sample> {
+    const sample = new Sample();
+    sample.sampleCode = sampleCode;
+    sample.sampleType = sampleType;
+    return manager.getRepository(Sample).save(sample);
+  }
+
+  private async createSamplePosition(
+    sample: Sample,
+    serumBank: SerumBank,
+    position: number,
+    manager: any,
+  ): Promise<SamplePosition> {
+    const samplePosition = new SamplePosition();
+    samplePosition.sample = sample;
+    samplePosition.serumBank = serumBank;
+    samplePosition.position = position;
+    return manager.getRepository(SamplePosition).save(samplePosition);
+  }
+
+  private async decrementSerumBankCapacity(
+    serumBank: SerumBank,
+    manager: any,
+  ): Promise<void> {
+    serumBank.availableCapacity--;
+    await manager.getRepository(SerumBank).save(serumBank);
+  }
+
   async transactionalSerumBankRoutine(
-    transactionalSerumBankDto: TransactionalSerumBankDto,
-  ) {
-    const response = await this.dataSource
-      .getConnection()
-      .transaction(async (manager) => {
-        const serumBank = await this.getSerumBankByCode(
-          transactionalSerumBankDto.serumBankCode,
-        );
+    dto: TransactionalSerumBankDto,
+  ): Promise<SamplePosition> {
+    return this.dataSource.getConnection().transaction(async (manager) => {
+      const serumBank = await this.findSerumBankByCodeOrThrow(
+        dto.serumBankCode,
+      );
+      this.ensureCapacity(serumBank);
 
-        if (serumBank.capacity < 1) {
-          throw new HttpException('Serum bank is Full', 409);
-        }
+      const sample = await this.createSample(
+        dto.sampleBarCode,
+        dto.sampleType,
+        manager,
+      );
+      const availablePosition = await this.getAvailablePosition(
+        dto.serumBankCode,
+      );
 
-        const sample = new Sample();
+      const samplePosition = await this.createSamplePosition(
+        sample,
+        serumBank,
+        availablePosition,
+        manager,
+      );
 
-        const samplesPositions = new SamplePosition();
+      await this.decrementSerumBankCapacity(serumBank, manager);
 
-        sample.sampleCode = transactionalSerumBankDto.sampleBarCode;
-        sample.sampleType = transactionalSerumBankDto.sampleType;
-
-        const createdSample = await manager.getRepository(Sample).save(sample);
-        const availablePosition = await this.getAvaliablePosition(
-          transactionalSerumBankDto.serumBankCode,
-        );
-
-        samplesPositions.sample = createdSample;
-        samplesPositions.serumBank = serumBank;
-        samplesPositions.position = availablePosition;
-
-        serumBank.availableCapacity--;
-
-        const createdSamplePositions = manager
-          .getRepository(SamplePosition)
-          .save(samplesPositions);
-
-        const updatedSerumBank = await manager
-          .getRepository(SerumBank)
-          .save(serumBank);
-
-        return createdSamplePositions;
-      });
-
-    return response;
+      return samplePosition;
+    });
   }
 
   async getUsedPositions(serumBankCode: string): Promise<number[]> {
@@ -81,7 +112,7 @@ export class SerumBankService {
     return usedPositions.map((item: any) => item.position);
   }
 
-  async getAvaliablePosition(serumBankCode: string): Promise<number> {
+  async getAvailablePosition(serumBankCode: string): Promise<number> {
     const serumBank = await this.serumBankRepository.findOne({
       where: { serumBankCode },
     });
@@ -102,7 +133,7 @@ export class SerumBankService {
     return availablePosition;
   }
 
-  async getAllAvaliablePositions(serumBankCode: string): Promise<number[]> {
+  async getAllAvailablePositions(serumBankCode: string): Promise<number[]> {
     const serumBank = await this.serumBankRepository.findOne({
       where: { serumBankCode },
     });
