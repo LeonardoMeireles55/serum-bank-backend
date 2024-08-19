@@ -108,7 +108,6 @@
 
       .position:hover {
         transform: translateY(-2px);
-        background-color: #bdc3c7;
       }
 
       .occupied {
@@ -144,7 +143,7 @@
 
         try {
           const response = await fetch(
-            `http://localhost:3000/api/sample-position-barcode?sample_code=${sampleCode}`,
+            `http://localhost:3000/api/sample-position-barcode?sampleCode=${sampleCode}`,
           );
           if (!response.ok) {
             if (response.status == 404) {

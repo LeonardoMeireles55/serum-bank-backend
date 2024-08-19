@@ -76,21 +76,21 @@ export class SerumBankController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: PositionSampleDto })
   @Public()
-  @ApiQuery({ name: 'bank_code', required: true })
+  @ApiQuery({ name: 'bankCode', required: true })
   @Get('availables-positions-bank')
   async getAvailablePositionsBySerumBankCode(
-    @Query('bank_code') bank_code: string,
+    @Query('bankCode') bankCode: string,
   ): Promise<number[]> {
-    return await this.serumBankService.getAllAvailablePositions(bank_code);
+    return await this.serumBankService.getAllAvailablePositions(bankCode);
   }
 
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: PositionSampleDto })
   @Public()
-  @ApiQuery({ name: 'sample_code', required: true })
+  @ApiQuery({ name: 'sampleCode', required: true })
   @Get('sample-position-barcode')
   async getSamplePositionByBarCode(
-    @Query('sample_code') sample_code: string,
+    @Query('sampleCode') sample_code: string,
   ): Promise<PositionSampleDto> {
     const pos = await this.serumBankService.findSamplePosition(sample_code);
     console.log(pos);
@@ -108,11 +108,11 @@ export class SerumBankController {
 
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: [SamplePosition] })
-  @ApiQuery({ name: 'bank_code', required: true })
+  @ApiQuery({ name: 'bankCode', required: true })
   @Public()
   @Get('samples-from-serum-bank')
   async getAllSamplesPositionFromSerumBank(
-    @Query('bank_code') bankCode: string,
+    @Query('bankCode') bankCode: string,
   ): Promise<SamplePosition[]> {
     return await this.serumBankService.getAllSamplesFromSerumBank(bankCode);
   }

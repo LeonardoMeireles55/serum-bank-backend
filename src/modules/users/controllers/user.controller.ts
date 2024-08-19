@@ -30,7 +30,7 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   @Public()
   @ApiBody({ type: CreateUserDto })
-  @Post('register')
+  @Post('users')
   async registerUser(
     @Body() createUserDto: CreateUserDto,
   ): Promise<DefaultResponseDto> {
@@ -40,7 +40,7 @@ export class UserController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Put('user')
+  @Put('users')
   @Roles(AccessEnum.CLIENT, AccessEnum.ADMIN)
   async updateUserById(
     @Body() userDto: UpdateUserDto,

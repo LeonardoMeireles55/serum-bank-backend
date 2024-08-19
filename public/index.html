@@ -141,7 +141,7 @@
 
         try {
           const response = await fetch(
-            `http://localhost:3000/api/availables-positions-bank?bank_code=${bankCode}`,
+            `http://localhost:3000/api/availables-positions-bank?bankCode=${bankCode}`,
           );
           if (!response.ok) {
             throw new Error('Erro ao obter as posições disponíveis.');
