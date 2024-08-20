@@ -18,7 +18,7 @@ import { DefaultResponseDto } from 'src/common/dtos/default-response.dto';
 import { UserService } from 'src/modules/users/services/users.service';
 
 @ApiTags('Auth')
-@Controller('api')
+@Controller({ version: '1' })
 export class AuthController {
   constructor(
     private readonly authService: AuthService,

@@ -224,14 +224,15 @@ export class SerumBankService {
   }
 
   async updateSerumBankByCode(
+    serumBankCode: string,
     updateSerumBankDto: UpdateSerumBankDto,
   ): Promise<SerumBank> {
-    if (!(await this.existsSerumBankByCode(updateSerumBankDto.serumBankCode))) {
+    if (!(await this.existsSerumBankByCode(serumBankCode))) {
       throw new HttpException('Serum bank not found', 404);
     }
 
     const serumBank = await this.serumBankRepository.findOne({
-      where: { serumBankCode: updateSerumBankDto.serumBankCode },
+      where: { serumBankCode: serumBankCode },
     });
 
     Object.assign(serumBank, updateSerumBankDto);

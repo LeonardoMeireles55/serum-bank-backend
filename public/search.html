@@ -143,7 +143,7 @@
 
         try {
           const response = await fetch(
-            `http://localhost:3000/api/sample-position-barcode?sampleCode=${sampleCode}`,
+            `http://localhost:3000/v1/serum-banks/samples/${sampleCode}/position`,
           );
           if (!response.ok) {
             if (response.status == 404) {

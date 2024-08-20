@@ -5,11 +5,11 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   ParseIntPipe,
   Post,
   Put,
   Query,
-  Res,
   UseGuards,
 } from '@nestjs/common';
 import { CreateSerumBankDto } from '../dtos/create-serum-bank.dto';
@@ -26,45 +26,32 @@ import { TransactionalSerumBankDto } from '../dtos/transactional-serum-bank.dto'
 import { SamplePosition } from '../entities/samples-positions.entity';
 import { PositionSampleDto } from '../dtos/position-sample.dto';
 
-@ApiTags('Serum-bank')
+@ApiTags('Serum Banks')
 @ApiBearerAuth()
 @UseGuards(RolesGuard)
-@Controller('api')
+@Controller({ version: '1', path: 'serum-banks' })
 export class SerumBankController {
   constructor(private readonly serumBankService: SerumBankService) {}
 
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({ type: PartialSerumBankDto })
   @Public()
-  @Post('create-serum-bank')
+  @Post()
   async create(
     @Body() createSerumBankDto: CreateSerumBankDto,
   ): Promise<Partial<PartialSerumBankDto>> {
     return this.serumBankService.createSerumBank(createSerumBankDto);
   }
 
-  @HttpCode(HttpStatus.CREATED)
-  @ApiResponse({ type: TransactionalSerumBankDto })
-  @Public()
-  @Post('transactional-routine-serum-bank')
-  async transactionalRoutineSerumBank(
-    @Body() transactionalSerumBankDto: TransactionalSerumBankDto,
-  ): Promise<SamplePosition> {
-    return this.serumBankService.transactionalSerumBankRoutine(
-      transactionalSerumBankDto,
-    );
-  }
-
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: DefaultPaginationResponseDto })
   @ApiQuery({ name: 'page', required: false })
   @Public()
-  @Get('serum-banks')
+  @Get()
   async getAllSerumBanks(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
   ): Promise<DefaultPaginationResponseDto> {
     const response = await this.serumBankService.findAllSerumBank(page);
-
     return new DefaultPaginationResponseDto(
       response.SerumBanks,
       page,
@@ -74,60 +61,71 @@ export class SerumBankController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @ApiResponse({ type: PositionSampleDto })
-  @Public()
-  @ApiQuery({ name: 'bankCode', required: true })
-  @Get('availables-positions-bank')
-  async getAvailablePositionsBySerumBankCode(
-    @Query('bankCode') bankCode: string,
-  ): Promise<number[]> {
-    return await this.serumBankService.getAllAvailablePositions(bankCode);
-  }
-
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({ type: PositionSampleDto })
-  @Public()
-  @ApiQuery({ name: 'sampleCode', required: true })
-  @Get('sample-position-barcode')
-  async getSamplePositionByBarCode(
-    @Query('sampleCode') sample_code: string,
-  ): Promise<PositionSampleDto> {
-    const pos = await this.serumBankService.findSamplePosition(sample_code);
-    console.log(pos);
-    return pos;
-  }
-
-  @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: FullSerumBankDto })
-  @ApiQuery({ name: 'code', required: true })
   @Public()
-  @Get('serum-bank-by-code')
-  async getSerumBankByCode(@Query('code') code: string): Promise<SerumBank> {
-    return await this.serumBankService.getSerumBankByCode(code);
+  @Get(':code')
+  async getSerumBankByCode(@Param('code') code: string): Promise<SerumBank> {
+    return this.serumBankService.getSerumBankByCode(code);
   }
 
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: [SamplePosition] })
-  @ApiQuery({ name: 'bankCode', required: true })
   @Public()
-  @Get('samples-from-serum-bank')
+  @Get(':code/samples')
   async getAllSamplesPositionFromSerumBank(
-    @Query('bankCode') bankCode: string,
+    @Param('code') bankCode: string,
   ): Promise<SamplePosition[]> {
-    return await this.serumBankService.getAllSamplesFromSerumBank(bankCode);
+    return this.serumBankService.getAllSamplesFromSerumBank(bankCode);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ type: PositionSampleDto })
+  @Public()
+  @Get(':code/available-positions')
+  async getAvailablePositionsBySerumBankCode(
+    @Param('code') bankCode: string,
+  ): Promise<number[]> {
+    return this.serumBankService.getAllAvailablePositions(bankCode);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ type: PositionSampleDto })
+  @Public()
+  @Get('samples/:sampleCode/position')
+  async getSamplePositionByBarCode(
+    @Param('sampleCode') sampleCode: string,
+  ): Promise<PositionSampleDto> {
+    return this.serumBankService.findSamplePosition(sampleCode);
+  }
+
+  @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({ type: TransactionalSerumBankDto })
+  @Public()
+  @Post('transaction')
+  async transactionalRoutineSerumBank(
+    @Body() transactionalSerumBankDto: TransactionalSerumBankDto,
+  ): Promise<SamplePosition> {
+    return this.serumBankService.transactionalSerumBankRoutine(
+      transactionalSerumBankDto,
+    );
   }
 
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: FullSerumBankDto })
-  @Put('update-serum-bank')
+  @Put(':code')
   async updateSerumBankByCode(
+    @Param('code') code: string,
     @Body() updateSerumBankDto: UpdateSerumBankDto,
   ): Promise<SerumBank> {
-    return this.serumBankService.updateSerumBankByCode(updateSerumBankDto);
+    return this.serumBankService.updateSerumBankByCode(
+      code,
+      updateSerumBankDto,
+    );
   }
 
-  //   @Delete(':id')
-  //   async remove(@Param('id') id: string): Promise<void> {
-  //     return this.serumBankService.remove(id);
-  //   }
+  // @HttpCode(HttpStatus.NO_CONTENT)
+  // @Delete(':id')
+  // async remove(@Param('id') id: string): Promise<void> {
+  //   return this.serumBankService.remove(id);
+  // }
 }

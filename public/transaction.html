@@ -149,7 +149,7 @@
     <script>
       async function loadSerumBanks() {
         try {
-          const response = await fetch('http://localhost:3000/api/serum-banks');
+          const response = await fetch('http://localhost:3000/v1/serum-banks');
           if (!response.ok) {
             throw new Error('Erro ao carregar os bancos de soro.');
           }
@@ -189,7 +189,7 @@
 
         try {
           const response = await fetch(
-            'http://localhost:3000/api/transactional-routine-serum-bank',
+            'http://localhost:3000/v1/serum-banks/transaction',
             {
               method: 'POST',
               headers: {

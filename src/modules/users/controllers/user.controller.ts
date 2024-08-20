@@ -14,7 +14,6 @@ import { CreateUserDto } from '../dtos/create-user.dto';
 import { Public } from 'src/common/decorators/is-public.decorator';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from 'src/modules/authentication/guards/role.guard';
-import { PartialUserDto } from '../dtos/partial-user-dto';
 import { DefaultResponseDto } from 'src/common/dtos/default-response.dto';
 import { AccessEnum } from '../enums/acess.enum';
 import { Roles } from 'src/common/decorators/roles.decorator';
@@ -23,7 +22,7 @@ import { UpdateUserDto } from '../dtos/update-user.dto';
 @ApiTags('Users')
 @ApiBearerAuth()
 @UseGuards(RolesGuard)
-@Controller('api')
+@Controller({ version: '1' })
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

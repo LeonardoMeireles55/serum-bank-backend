@@ -106,7 +106,7 @@
     <script>
       async function loadSerumBanks() {
         try {
-          const response = await fetch('http://localhost:3000/api/serum-banks');
+          const response = await fetch('http://localhost:3000/v1/serum-banks');
           if (!response.ok) {
             throw new Error('Erro ao carregar os bancos de soro.');
           }
@@ -122,7 +122,7 @@
             bankSelect.appendChild(option);
           });
 
-          console.log(data.response.map((map) => map.createdAt));
+          //   console.log(data.response.map((map) => map.createdAt));
 
           if (serumBanks.length > 0) {
             fetchAvailablePositions();
@@ -144,7 +144,7 @@
 
         try {
           const response = await fetch(
-            `http://localhost:3000/api/availables-positions-bank?bankCode=${bankCode}`,
+            `http://localhost:3000/v1/serum-banks/${bankCode}/available-positions`,
           );
           if (!response.ok) {
             throw new Error('Erro ao obter as posições disponíveis.');

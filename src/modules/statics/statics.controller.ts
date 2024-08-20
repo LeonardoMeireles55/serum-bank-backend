@@ -5,7 +5,7 @@ import { type Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Statics')
-@Controller('statics')
+@Controller({ version: '1' })
 export class StaticsController {
   @Public()
   @HttpCode(HttpStatus.OK)
