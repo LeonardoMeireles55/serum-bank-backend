@@ -11,6 +11,7 @@ import {
   Put,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateSerumBankDto } from '../dtos/create-serum-bank.dto';
 import { SerumBank } from '../entities/serum-bank.entity';
@@ -25,6 +26,7 @@ import { UpdateSerumBankDto } from '../dtos/update-serum-bank.dto';
 import { TransactionalSerumBankDto } from '../dtos/transactional-serum-bank.dto';
 import { SamplePosition } from '../entities/samples-positions.entity';
 import { PositionSampleDto } from '../dtos/position-sample.dto';
+import { HateoasInterceptor } from 'src/common/interceptors/hateos.interceptors';
 
 @ApiTags('Serum Banks')
 @ApiBearerAuth()
@@ -36,6 +38,7 @@ export class SerumBankController {
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({ type: PartialSerumBankDto })
   @Public()
+  @UseInterceptors(HateoasInterceptor)
   @Post()
   async create(
     @Body() createSerumBankDto: CreateSerumBankDto,
@@ -47,6 +50,7 @@ export class SerumBankController {
   @ApiResponse({ type: DefaultPaginationResponseDto })
   @ApiQuery({ name: 'page', required: false })
   @Public()
+  @UseInterceptors(HateoasInterceptor)
   @Get()
   async getAllSerumBanks(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,

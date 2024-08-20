@@ -180,6 +180,10 @@ export class SerumBankService {
       where: { serumBankCode: code },
     });
 
+    if (!serumBank) {
+      throw new HttpException('Not found', 404);
+    }
+
     const samplePositions = await this.samplesPositionsRepository
       .createQueryBuilder('samples_positions')
       .innerJoinAndSelect('samples_positions.sample', 'sample')
