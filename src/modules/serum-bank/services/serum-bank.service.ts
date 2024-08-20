@@ -243,9 +243,9 @@ export class SerumBankService {
     page: number,
   ): Promise<{ SerumBanks: SerumBank[]; total: number }> {
     const [data, total] = await this.serumBankRepository.findAndCount({
-      order: { serumBankCode: 'ASC' },
+      // order: { serumBankCode: 'ASC' },
       skip: (page - 1) * 10,
-      take: 10,
+      take: 20,
     });
     return { SerumBanks: data, total };
   }

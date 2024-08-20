@@ -95,6 +95,7 @@
         <select id="bankSelect" onchange="fetchAvailablePositions()">
           <!-- Opções de bancos serão carregadas aqui -->
         </select>
+        <p id="infos-banks"></p>
       </div>
 
       <div class="result" id="result">
@@ -120,6 +121,8 @@
             option.textContent = bank.serumBankCode;
             bankSelect.appendChild(option);
           });
+
+          console.log(data.response.map((map) => map.createdAt));
 
           if (serumBanks.length > 0) {
             fetchAvailablePositions();
