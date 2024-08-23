@@ -21,55 +21,42 @@
       }
 
       .container {
-        max-width: 550px;
-        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+      }
+
+      .bank-container {
         background-color: #ffffff;
-        padding: 15px;
+        padding: 20px;
         border-radius: 8px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        min-width: 180px;
       }
 
-      .input-group {
-        margin-bottom: 15px;
-      }
-
-      .input-group label {
-        display: block;
-        margin-bottom: 6px;
-        font-weight: 600;
+      .bank-container h2 {
+        text-align: center;
         color: #34495e;
+        font-size: 1rem;
+        margin-bottom: 10px;
       }
 
-      .input-group select {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccd1d9;
-        border-radius: 6px;
-        box-sizing: border-box;
-        font-size: 0.9rem;
-        transition: border-color 0.3s ease;
-      }
-
-      .input-group select:focus {
-        border-color: #3498db;
-        outline: none;
-      }
-
-      .result {
-        margin-top: 20px;
+      .positions {
         display: grid;
         grid-template-columns: repeat(10, 1fr);
-        gap: 5px;
+        gap: 4px;
       }
 
       .position {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
+        width: 20px;
+        height: 20px;
         background-color: #e74c3c;
-        border-radius: 6px;
+        border-radius: 4px;
+        font-size: 0.7rem;
         font-weight: bold;
         color: #ffffff;
         transition:
@@ -79,7 +66,6 @@
 
       .position:hover {
         transform: translateY(-2px);
-        cursor: pointer;
       }
 
       .occupied {
@@ -90,63 +76,34 @@
   </head>
   <body>
     <h1>SOROTECA</h1>
-    <div class="container">
-      <div class="input-group">
-        <label for="bankSelect">SELECIONE A BANDEJA:</label>
-        <select id="bankSelect" onchange="fetchAvailablePositions()">
-          <!-- Opções de bancos serão carregadas aqui -->
-        </select>
-        <p id="infos-banks"></p>
-      </div>
-
-      <div class="result" id="result">
-        <!-- As posições serão exibidas aqui -->
-      </div>
+    <div class="container" id="container">
+      <!-- As bandejas serão renderizadas aqui -->
     </div>
 
     <script>
       async function loadSerumBanks() {
         try {
-          const response = await fetch('http://localhost/v1/serum-banks');
+          const response = await fetch('http://localhost:3000/v1/serum-banks');
           if (!response.ok) {
             throw new Error('Erro ao carregar os bancos de soro.');
           }
 
           const data = await response.json();
           const serumBanks = data.response;
-          const bankSelect = document.getElementById('bankSelect');
 
-          serumBanks.forEach((bank) => {
-            const option = document.createElement('option');
-            option.value = bank.serumBankCode;
-            option.textContent = bank.serumBankCode;
-            bankSelect.appendChild(option);
+          serumBanks.forEach( async (bank) => {
+            await fetchAvailablePositions(bank.serumBankCode, bank);
           });
-
-          //   console.log(data.response.map((map) => map.createdAt));
-
-          if (serumBanks.length > 0) {
-            fetchAvailablePositions();
-          }
         } catch (error) {
-          document.getElementById('result').innerHTML =
+          document.getElementById('container').innerHTML =
             `<p>Erro: ${error.message}</p>`;
         }
       }
 
-      async function fetchAvailablePositions() {
-        const bankCode = document.getElementById('bankSelect').value;
-        const resultDiv = document.getElementById('result');
-
-        if (!bankCode) {
-          resultDiv.innerHTML = '<p>Por favor, selecione um banco de soro.</p>';
-          return;
-        }
-
+      async function fetchAvailablePositions(bankCode, bank) {
         try {
           const response = await fetch(
             `http://localhost:3000/v1/serum-banks/${bankCode}/available-positions`,
-            
           );
 
           const samples = await fetch(
@@ -158,38 +115,54 @@
             const code = sample.sample.sampleCode;
                 return code.slice(0, -2); // Remove os dois últimos caracteres
                 });
+
           if (!response.ok) {
-            throw new Error('Erro ao obter as posições disponíveis.');
+            throw new Error(`Erro ao obter as posições da bandeja ${bankCode}.`);
           }
 
           const occupiedPositions = await response.json();
-          renderPositions(occupiedPositions, samplesCodes);
+          await renderBank(bankCode, occupiedPositions, samplesCodes);
         } catch (error) {
-          resultDiv.innerHTML = `<p>Erro: ${error.message}</p>`;
+          document.getElementById('container').innerHTML +=
+            `<p>Erro: ${error.message}</p>`;
         }
       }
-
-      function redirectPage(url) {
+      
+    function redirectPage(url) {
         window.location.href = url;
     }
 
-      function renderPositions(occupiedPositions, samples) {
-        const resultDiv = document.getElementById('result');
-        resultDiv.innerHTML = ''; // Limpa os resultados anteriores
+      async function renderBank(bankCode, occupiedPositions, samples) {
+        const container = document.getElementById('container');
+
+        const bankContainer = document.createElement('div');
+        bankContainer.className = 'bank-container';
+
+        const bankTitle = document.createElement('h2');
+        bankTitle.textContent = bankCode;
+        bankContainer.appendChild(bankTitle);
+
+        const positionsDiv = document.createElement('div');
+        positionsDiv.className = 'positions';
 
         for (let i = 0; i < 100; i++) {
           const positionDiv = document.createElement('div');
           positionDiv.className = 'position';
           positionDiv.textContent = i;
           positionDiv.title = samples[i]
-          positionDiv.addEventListener('click', () => redirectPage('http://*****/MatrixNet/app/rastreabilidade/' + samples[i]));
+          positionDiv.addEventListener('click', () => redirectPage('http://****/MatrixNet/app/rastreabilidade/' + samples[i]));
+          
+
 
           if (occupiedPositions.includes(i)) {
             positionDiv.classList.add('occupied');
           }
 
-          resultDiv.appendChild(positionDiv);
+          positionsDiv.appendChild(positionDiv);
         }
+
+        bankContainer.appendChild(positionsDiv);
+        container.appendChild(bankContainer);
       }
 
       window.onload = loadSerumBanks;

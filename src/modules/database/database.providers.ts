@@ -7,16 +7,16 @@ export const databaseProviders = [
     inject: [AppConfigService],
     useFactory: async (config: AppConfigService) => {
       const dataSource = new DataSource({
-        type: 'postgres',
-        host: config.dbHost,
-        port: config.dbPort,
-        username: config.dbUsername,
-        password: config.dbPassword,
+        type: 'sqlite',
+        // host: config.dbHost,
+        // port: config.dbPort,
+        // username: config.dbUsername,
+        // password: config.dbPassword,
         database: config.dbDatabase,
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: config.nodeEnv === 'development' ? true : false,
         logging: config.nodeEnv === 'development' ? true : false,
-        dropSchema: config.nodeEnv === 'development' ? true : false,
+        dropSchema: config.nodeEnv === 'development' ? false : false,
         migrations: [`${__dirname}../../../migrations/{.ts,*.js}`],
         migrationsRun: false,
       });

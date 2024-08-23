@@ -35,6 +35,19 @@ import { HateoasInterceptor } from 'src/common/interceptors/hateos.interceptors'
 export class SerumBankController {
   constructor(private readonly serumBankService: SerumBankService) {}
 
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ type: [SamplePosition] })
+  @Public()
+  @Get('samples')
+  @ApiResponse({ type: [SamplePosition] })
+  @ApiQuery({ name: 'id', type: Number, required: true })
+  async getAllSamplesPositionFromSerumBank2(
+    @Query('id', ParseIntPipe) id: number,
+  ): Promise<SamplePosition[]> {
+    console.log(id)
+    return this.serumBankService.getAllSamplesFromSerumBankById(id);
+  }
+
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({ type: PartialSerumBankDto })
   @Public()
@@ -75,12 +88,15 @@ export class SerumBankController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: [SamplePosition] })
   @Public()
-  @Get(':code/samples')
+ @Get(':code/samples')
   async getAllSamplesPositionFromSerumBank(
     @Param('code') bankCode: string,
   ): Promise<SamplePosition[]> {
     return this.serumBankService.getAllSamplesFromSerumBank(bankCode);
   }
+
+  
+
 
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: PositionSampleDto })

@@ -122,9 +122,9 @@
       <div class="input-group">
         <label for="sampleType">TIPO DA AMOSTRA:</label>
         <select id="sampleType">
-          <option value="SERUM">SORO</option>
-          <option value="PLASMA">PLASMA</option>
-          <option value="BLOOD">SANGUE</option>
+          <option value="serum">SORO</option>
+          <option value="plasma">PLASMA</option>
+          <option value="blood">SANGUE</option>
         </select>
       </div>
 
@@ -147,9 +147,15 @@
     </div>
 
     <script>
+      document.getElementById('sampleBarCode').addEventListener('input', function () {
+  const sampleBarCode = this.value;
+  if (sampleBarCode.length === 11) {
+    submitSample();
+  }
+});
       async function loadSerumBanks() {
         try {
-          const response = await fetch('http://localhost:3000/v1/serum-banks');
+          const response = await fetch('http://10.111.0.214:3000/v1/serum-banks');
           if (!response.ok) {
             throw new Error('Erro ao carregar os bancos de soro.');
           }
@@ -171,10 +177,11 @@
       }
 
       async function submitSample() {
-        const serumBankCode = document.getElementById('serumBankSelect').value;
+        let serumBankCode = document.getElementById('serumBankSelect').value;
         const sampleBarCode = document.getElementById('sampleBarCode').value;
         const sampleType = document.getElementById('sampleType').value;
         const resultDiv = document.getElementById('result');
+        
 
         if (!serumBankCode || !sampleBarCode || !sampleType) {
           resultDiv.innerHTML = '<p>Por favor, preencha todos os campos.</p>';
@@ -198,6 +205,7 @@
               body: JSON.stringify(data),
             },
           );
+          document.getElementById('sampleBarCode').value = '';
 
           if (!response.ok) {
             if (response.status == 409) {

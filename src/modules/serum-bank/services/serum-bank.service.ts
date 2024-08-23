@@ -196,6 +196,31 @@ export class SerumBankService {
     return samplePositions;
   }
 
+  async getAllSamplesFromSerumBankById(id: number): Promise<SamplePosition[]> {
+    if (!id) {
+      throw new HttpException('Bad Request', 400);
+    }
+    const serumBank = await this.serumBankRepository.findOne({
+      select: ['id'],
+      where: { id },
+    });
+
+    if (!serumBank) {
+      throw new HttpException('Not found', 404);
+    }
+
+    const samplePositions = await this.samplesPositionsRepository
+      .createQueryBuilder('samples_positions')
+      .innerJoinAndSelect('samples_positions.sample', 'sample')
+      .select(['sample.sampleCode', 'samples_positions.position'])
+      .where('samples_positions.serum_bank_id = :serumBankId', {
+        serumBankId: serumBank.id,
+      })
+      .getMany();
+
+    return samplePositions;
+  }
+
   async findSamplePosition(code: string): Promise<PositionSampleDto> {
     const sample = await this.samplesRepository.findOneBy({ sampleCode: code });
 
@@ -248,7 +273,7 @@ export class SerumBankService {
     page: number,
   ): Promise<{ SerumBanks: SerumBank[]; total: number }> {
     const [data, total] = await this.serumBankRepository.findAndCount({
-      // order: { serumBankCode: 'ASC' },
+      order: { createdAt: 'ASC' },
       skip: (page - 1) * 10,
       take: 20,
     });
