@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   DefaultValuePipe,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -143,9 +144,10 @@ export class SerumBankController {
     );
   }
 
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // @Delete(':id')
-  // async remove(@Param('id') id: string): Promise<void> {
-  //   return this.serumBankService.remove(id);
-  // }
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Public()
+  @Delete('/samples/:sampleCode')
+  async remove(@Param('sampleCode') sampleCode: string): Promise<void> {
+    return this.serumBankService.removeSample(sampleCode);
+  }
 }

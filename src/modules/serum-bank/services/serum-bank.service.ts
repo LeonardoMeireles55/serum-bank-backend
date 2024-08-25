@@ -23,6 +23,41 @@ export class SerumBankService {
     private readonly dataSource: Database,
   ) {}
 
+  async removeSample(sampleCode: string): Promise<void> {
+    const sample = await this.samplesRepository.findOneBy({ sampleCode });
+    console.log(sample)
+
+    if (!sample) {
+      throw new HttpException('Sample not found', 404);
+    }
+
+    const samplePosition = await this.samplesPositionsRepository
+    .createQueryBuilder('samples_positions')
+    .innerJoinAndSelect('samples_positions.sample', 'sample')
+    .innerJoinAndSelect('samples_positions.serumBank', 'serum_bank') // Ensure serum_bank is joined
+    .where('sample.id = :sampleId', { sampleId: sample.id })
+    .getOne(); // Use getOne to get a single result
+
+    console.log(samplePosition)
+
+    if (!samplePosition) {
+      throw new HttpException('Sample position not found', 404);
+    }
+
+    return this.dataSource.getConnection().transaction(async (manager) => {
+      // Remove the sample position record
+      await manager.getRepository(SamplePosition).remove(samplePosition);
+
+      // Increase the available capacity of the serum bank
+      const serumBank = samplePosition.serumBank;
+      serumBank.availableCapacity++;
+      await manager.getRepository(SerumBank).save(serumBank);
+
+      // Optionally, remove the sample itself if no longer needed
+      await manager.getRepository(Sample).remove(sample);
+    });
+  }
+
   private async findSerumBankByCodeOrThrow(code: string): Promise<SerumBank> {
     const serumBank = await this.getSerumBankByCode(code);
     if (!serumBank) {

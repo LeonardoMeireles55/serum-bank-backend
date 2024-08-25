@@ -3,20 +3,20 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class PopulateSerumBanks1687390937162 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     const daysOfWeek = [
-      'SEGUNDA - 1',
-      'SEGUNDA - 2',
-      'TERÇA - 1',
-      'TERÇA - 2',
-      'QUARTA - 1',
-      'QUARTA - 2',
-      'QUINTA - 1',
-      'QUINTA - 2',
-      'SEXTA - 1',
-      'SEXTA - 2',
-      'SABADO - 1',
-      'SABADO - 2',
-      'DOMINGO - 1',
-      'DOMINGO - 2',
+      'DOMINGO-1',
+      'DOMINGO-2',
+      'SEGUNDA-1',
+      'SEGUNDA-2',
+      'TERÇA-1',
+      'TERÇA-2',
+      'QUARTA-1',
+      'QUARTA-2',
+      'QUINTA-1',
+      'QUINTA-2',
+      'SEXTA-1',
+      'SEXTA-2',
+      'SABADO-1',
+      'SABADO-2'
     ];
     for (let i = 0; i < daysOfWeek.length; i++) {
       await queryRunner.query(
@@ -28,20 +28,20 @@ export class PopulateSerumBanks1687390937162 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     const daysOfWeek = [
-      'SEGUNDA - 1',
-      'SEGUNDA - 2',
-      'TERÇA - 1',
-      'TERÇA - 2',
-      'QUARTA - 1',
-      'QUARTA - 2',
-      'QUINTA - 1',
-      'QUINTA - 2',
-      'SEXTA - 1',
-      'SEXTA - 2',
-      'SABADO - 1',
-      'SABADO - 2',
-      'DOMINGO - 1',
-      'DOMINGO - 2',
+      'DOMINGO-1',
+      'DOMINGO-2',
+      'SEGUNDA-1',
+      'SEGUNDA-2',
+      'TERÇA-1',
+      'TERÇA-2',
+      'QUARTA-1',
+      'QUARTA-2',
+      'QUINTA-1',
+      'QUINTA-2',
+      'SEXTA-1',
+      'SEXTA-2',
+      'SABADO-1',
+      'SABADO-2'
     ];
     for (let i = 0; i < daysOfWeek.length; i++) {
       await queryRunner.query(

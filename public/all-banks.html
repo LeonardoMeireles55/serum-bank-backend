@@ -66,6 +66,8 @@
 
       .position:hover {
         transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
       }
 
       .occupied {
@@ -128,8 +130,8 @@
         }
       }
       
-    function redirectPage(url) {
-        window.location.href = url;
+      function redirectPage(url) {
+        window.open(url, '_blank');
     }
 
       async function renderBank(bankCode, occupiedPositions, samples) {
