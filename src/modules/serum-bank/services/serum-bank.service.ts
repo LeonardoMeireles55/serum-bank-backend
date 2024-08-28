@@ -25,20 +25,18 @@ export class SerumBankService {
 
   async removeSample(sampleCode: string): Promise<void> {
     const sample = await this.samplesRepository.findOneBy({ sampleCode });
-    console.log(sample)
+    console.log(sample);
 
     if (!sample) {
       throw new HttpException('Sample not found', 404);
     }
 
     const samplePosition = await this.samplesPositionsRepository
-    .createQueryBuilder('samples_positions')
-    .innerJoinAndSelect('samples_positions.sample', 'sample')
-    .innerJoinAndSelect('samples_positions.serumBank', 'serum_bank') // Ensure serum_bank is joined
-    .where('sample.id = :sampleId', { sampleId: sample.id })
-    .getOne(); // Use getOne to get a single result
-
-    console.log(samplePosition)
+      .createQueryBuilder('samples_positions')
+      .innerJoinAndSelect('samples_positions.sample', 'sample')
+      .innerJoinAndSelect('samples_positions.serumBank', 'serum_bank')
+      .where('sample.id = :sampleId', { sampleId: sample.id })
+      .getOne();
 
     if (!samplePosition) {
       throw new HttpException('Sample position not found', 404);
@@ -240,6 +238,8 @@ export class SerumBankService {
       where: { id },
     });
 
+    console.log(serumBank);
+
     if (!serumBank) {
       throw new HttpException('Not found', 404);
     }
@@ -247,7 +247,11 @@ export class SerumBankService {
     const samplePositions = await this.samplesPositionsRepository
       .createQueryBuilder('samples_positions')
       .innerJoinAndSelect('samples_positions.sample', 'sample')
-      .select(['sample.sampleCode', 'samples_positions.position'])
+      .select([
+        'sample.sampleType',
+        'sample.sampleCode',
+        'samples_positions.position',
+      ])
       .where('samples_positions.serum_bank_id = :serumBankId', {
         serumBankId: serumBank.id,
       })

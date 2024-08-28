@@ -179,14 +179,16 @@
   </div>
 
   <script>
+
     function getCurrentDayIndex() {
       const today = new Date();
-      const dayOfWeek = today.getDay(); // Retorna 0 (Domingo) a 6 (Sábado)
+      let dayOfWeek = today.getDay();
       if (dayOfWeek != 0) {
         dayOfWeek = dayOfWeek * 2
       }
       return dayOfWeek
     }
+
     function redirectPage(url) {
       window.open(url, '_blank');
     }
@@ -212,8 +214,9 @@
           option.value = bank.serumBankCode;
           option.textContent = bank.serumBankCode;
           serumBankSelect.appendChild(option);
-          option.selected = getCurrentDayIndex()
         });
+
+        serumBankSelect.selectedIndex = getCurrentDayIndex()
 
 
 

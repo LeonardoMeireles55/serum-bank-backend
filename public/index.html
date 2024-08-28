@@ -144,7 +144,7 @@
   <script>
     function getCurrentDayIndex() {
       const today = new Date();
-      const dayOfWeek = today.getDay(); // Retorna 0 (Domingo) a 6 (Sábado)
+      let dayOfWeek = today.getDay(); // Retorna 0 (Domingo) a 6 (Sábado)
       if (dayOfWeek != 0) {
         dayOfWeek = dayOfWeek * 2
       }
@@ -164,13 +164,14 @@
 
 
         serumBanks.forEach((bank) => {
-          const option = document.createElement('option');
+          let option = document.createElement('option');
           option.value = bank.serumBankCode;
           option.textContent = bank.serumBankCode;
           bankSelect.appendChild(option);
-          option.selected = getCurrentDayIndex()
+
         });
 
+        bankSelect.selectedIndex = getCurrentDayIndex()
 
 
         if (serumBanks.length > 0) {
