@@ -147,15 +147,38 @@
     .menu a:hover {
       color: #3498db;
     }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      margin-top: 20px;
+      font-size: 0.8rem;
+      /* color: #7f8c8d;
+      background-color: #ecf0f1; */
+      /* border-top: 1px solid #ccd1d9; */
+      border-radius: 0 0 8px 8px;
+    }
+
+    footer a {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 
 <body>
   <h1>PESQUISA DE AMOSTRAS</h1>
   <div class="menu">
-    <a href="../v1/home">SOROTECA</a>
-    <a href="../v1/transaction">ALOCAÇÃO</a>
-    <a href="../v1/search">PESQUISA</a>
+    <div class="menu">
+      <a href="../v1/all-banks">GERAL</a>
+      <a href="../v1/home">SOROTECA</a>
+      <a href="../v1/transaction">ALOCAÇÃO</a>
+      <a href="../v1/search">PESQUISA</a>
+    </div>
   </div>
   <div class="container">
     <div class="input-group">
@@ -169,6 +192,9 @@
       <!-- O código da bandeja e a bandeja com posições de 0 a 99 serão exibidos aqui -->
     </div>
   </div>
+  <footer>
+    <p>&copy; 2024 Leonardo Meireles. Todos os direitos reservados.</p>
+  </footer>
 
   <script>
     function redirectPage(url) {
