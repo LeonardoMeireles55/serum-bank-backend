@@ -5,7 +5,7 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
 } from 'typeorm';
-import { ProfissionalPositionEnum } from './enums/profissional-position.enum';
+import { ProfessionalPositionEnum } from './enums/professional-position.enum';
 
 @Entity({ name: 'users_data' })
 export class UserData {
@@ -15,8 +15,8 @@ export class UserData {
   @Column({ length: 11 })
   phone: string;
 
-  @Column({ name: 'profissional_position', enum: ProfissionalPositionEnum })
-  profissionalPosition: string;
+  @Column({ name: 'professional_position', enum: ProfessionalPositionEnum })
+  professionalPosition: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt?: Date;

@@ -1,16 +1,12 @@
-services:
-  db:
-    image: postgres:16
-    restart: always
-    environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_DATABASE}
-      PGDATA: /var/lib/postgresql/data/db
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: 100M
-    ports:
-      - ${DB_PORT}:${DB_PORT}
+  version: 'latest'
+  services:
+    app:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - "3000:3000"
+      env_file:
+        - .env
+      volumes:
+        - .:/usr/src/app

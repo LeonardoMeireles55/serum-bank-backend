@@ -1,16 +1,16 @@
-import { HttpException, Inject } from '@nestjs/common';
-import { SerumBankRepository } from '../repositories/serum-bank.repository';
-import { SerumBank } from '../entities/serum-bank.entity';
-import { CreateSerumBankDto } from '../dtos/create-serum-bank.dto';
-import { PartialSerumBankDto } from '../dtos/partial-serum-bank.dto';
-import { UpdateSerumBankDto } from '../dtos/update-serum-bank.dto';
-import { Database } from 'src/modules/database/database';
-import { TransactionalSerumBankDto } from '../dtos/transactional-serum-bank.dto';
-import { Sample } from '../entities/samples.entity';
-import { SamplePosition } from '../entities/samples-positions.entity';
-import { SamplesRepository } from '../repositories/samples.repository';
-import { SamplesPositionRepository } from '../repositories/samples-position.repository';
-import { PositionSampleDto } from '../dtos/position-sample.dto';
+import { HttpException, Inject } from "@nestjs/common";
+import { SerumBankRepository } from "../repositories/serum-bank.repository";
+import { SerumBank } from "../entities/serum-bank.entity";
+import { CreateSerumBankDto } from "../dtos/create-serum-bank.dto";
+import { PartialSerumBankDto } from "../dtos/partial-serum-bank.dto";
+import { UpdateSerumBankDto } from "../dtos/update-serum-bank.dto";
+import { Database } from "src/modules/database/database";
+import { TransactionalSerumBankDto } from "../dtos/transactional-serum-bank.dto";
+import { Sample } from "../entities/samples.entity";
+import { SamplePosition } from "../entities/samples-positions.entity";
+import { SamplesRepository } from "../repositories/samples.repository";
+import { SamplesPositionRepository } from "../repositories/samples-position.repository";
+import { PositionSampleDto } from "../dtos/position-sample.dto";
 
 export class SerumBankService {
   constructor(
@@ -25,7 +25,6 @@ export class SerumBankService {
 
   async removeSample(sampleCode: string): Promise<void> {
     const sample = await this.samplesRepository.findOneBy({ sampleCode });
-    console.log(sample);
 
     if (!sample) {
       throw new HttpException('Sample not found', 404);
@@ -43,15 +42,12 @@ export class SerumBankService {
     }
 
     return this.dataSource.getConnection().transaction(async (manager) => {
-      // Remove the sample position record
       await manager.getRepository(SamplePosition).remove(samplePosition);
 
-      // Increase the available capacity of the serum bank
       const serumBank = samplePosition.serumBank;
       serumBank.availableCapacity++;
       await manager.getRepository(SerumBank).save(serumBank);
 
-      // Optionally, remove the sample itself if no longer needed
       await manager.getRepository(Sample).remove(sample);
     });
   }
@@ -240,7 +236,7 @@ export class SerumBankService {
       throw new HttpException('Not found', 404);
     }
 
-    const samplePositions = await this.samplesPositionsRepository
+    return await this.samplesPositionsRepository
       .createQueryBuilder('samples_positions')
       .innerJoinAndSelect('samples_positions.sample', 'sample')
       .select([
@@ -252,8 +248,6 @@ export class SerumBankService {
         serumBankId: serumBank.id,
       })
       .getMany();
-
-    return samplePositions;
   }
 
   async findSamplePosition(code: string): Promise<PositionSampleDto> {
@@ -275,12 +269,10 @@ export class SerumBankService {
       throw new HttpException('Serum bank not found', 404);
     }
 
-    const positionSampleDto = new PositionSampleDto(
+    return new PositionSampleDto(
       position[0].position,
       serumBank.serumBankCode,
     );
-
-    return positionSampleDto;
   }
 
   async existsSerumBankByCode(code: string): Promise<boolean> {

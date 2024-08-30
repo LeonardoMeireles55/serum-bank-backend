@@ -44,7 +44,7 @@ export class User {
     return new PartialUserDto(
       this.email,
       this.userData.phone,
-      this.userData.profissionalPosition,
+      this.userData.professionalPosition,
     );
   }
 
@@ -54,7 +54,7 @@ export class User {
       this.password = createUserDto.password;
       this.userData = new UserData();
       this.userData.phone = createUserDto.phone;
-      this.userData.profissionalPosition = createUserDto.professionalPosition;
+      this.userData.professionalPosition = createUserDto.professionalPosition;
     }
   }
 }

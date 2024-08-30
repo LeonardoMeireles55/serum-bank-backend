@@ -4,8 +4,8 @@ export class AddUserMigration1723723996229 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     // Insere um usuário na tabela UserData
     await queryRunner.query(`
-      INSERT INTO users_data (phone, profissional_position, created_at)
-      VALUES ('12345678901', 'laboratory_analist', CURRENT_TIMESTAMP);
+      INSERT INTO users_data (phone, professional_position, created_at)
+      VALUES ('12345678901', 'laboratory_analyst', CURRENT_TIMESTAMP);
     `);
 
     // Obtém o ID do UserData recém-criado

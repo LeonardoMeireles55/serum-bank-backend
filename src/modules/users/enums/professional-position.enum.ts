@@ -1,5 +1,5 @@
-export enum ProfissionalPositionEnum {
-  LABORATORY_ANALIST = 'laboratory_analist',
+export enum ProfessionalPositionEnum {
+  LABORATORY_ANALYST = 'laboratory_analyst',
   LABORATORY_TECHNICIAN = 'laboratory_technician',
   ADMINISTRATIVE_ASSISTANT = 'administrative_assistant',
 }
