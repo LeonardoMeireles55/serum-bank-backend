@@ -1,238 +1,334 @@
 <!doctype html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ALOCAÇÃO DE AMOSTRAS</title>
-    <style>
-      body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f5f7fa;
-        margin: 0;
-        padding: 20px;
-        color: #333;
-      }
 
-      h1 {
-        color: #2c3e50;
-        text-align: center;
-        font-size: 2.5rem;
-        margin-bottom: 30px;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <title>ALOCAÇÃO DE AMOSTRAS</title>
 
-      .container {
-        max-width: 550px;
-        margin: 0 auto;
-        background-color: #ffffff;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      }
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
 
-      .input-group {
-        margin-bottom: 20px;
-      }
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
 
-      .input-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #34495e;
-      }
+    .container {
+      max-width: 550px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-      .input-group select,
-      .input-group input {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #ccd1d9;
-        border-radius: 6px;
-        box-sizing: border-box;
-        font-size: 1rem;
-        transition: border-color 0.3s ease;
-      }
+    .input-group {
+      margin-bottom: 20px;
+    }
 
-      .input-group input:focus,
-      .input-group select:focus {
-        border-color: #3498db;
-        outline: none;
-      }
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #34495e;
+    }
 
-      .btn {
-        display: block;
-        width: 100%;
-        padding: 12px;
-        background-color: #ccd1d9;
-        color: #34495e;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 1rem;
-        transition: background-color 0.3s ease;
-        margin-top: 10px;
-      }
+    .input-group select,
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccd1d9;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
 
-      .btn:hover {
-        background-color: #e3e9f2;
-      }
+    .input-group input:focus,
+    .input-group select:focus {
+      border-color: #3498db;
+      outline: none;
+    }
 
-      .result {
-        margin-top: 30px;
-      }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background-color: #37639B;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+      margin-top: 10px;
+    }
 
-      .positions {
-        margin-top: 30px;
-        display: grid;
-        grid-template-columns: repeat(10, 1fr);
-        gap: 10px;
-      }
+    .btn:hover {
+      background-color: #467ec7;
+    }
 
-      .position {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        background-color: #ecf0f1;
-        border-radius: 8px;
-        font-weight: bold;
-        color: #34495e;
-        transition:
-          background-color 0.3s ease,
-          transform 0.3s ease;
-      }
+    .result {
+      margin-top: 30px;
+    }
 
-      .position:hover {
-        transform: translateY(-3px);
-      }
+    .positions {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 10px;
+    }
 
-      .occupied {
-        background-color: #e74c3c;
-        color: #ffffff;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>ALOCAÇÃO DE AMOSTRAS</h1>
-    <div class="container">
-      <div class="input-group">
-        <label for="sampleBarCode">PEDIDO DA AMOSTRA:</label>
-        <input type="text" id="sampleBarCode" placeholder="INSIRA O PEDIDO" />
-      </div>
+    .position {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: #ecf0f1;
+      border-radius: 8px;
+      font-weight: bold;
+      color: #34495e;
+      transition:
+        background-color 0.3s ease,
+        transform 0.3s ease;
+    }
 
-      <div class="input-group">
-        <label for="sampleType">TIPO DA AMOSTRA:</label>
-        <select id="sampleType">
-          <option value="SERUM">SORO</option>
-          <option value="PLASMA">PLASMA</option>
-          <option value="BLOOD">SANGUE</option>
-        </select>
-      </div>
+    .position:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
 
-      <div class="input-group">
-        <label for="serumBankSelect">SELECIONE A BANDEJA:</label>
-        <select id="serumBankSelect">
-          <!-- Opções serão carregadas aqui -->
-        </select>
-      </div>
+    .occupied {
+      background-color: #e74c3c;
+      color: #ffffff;
+    }
 
-      <button class="btn" onclick="submitSample()">ALOCAR</button>
+    /* Menu CSS */
+    .menu {
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
 
-      <div class="result" id="result">
-        <!-- Resultado da operação será exibido aqui -->
-      </div>
+    .menu a {
+      color: black;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
 
-      <div class="positions" id="positions">
-        <!-- Posições da bandeja serão exibidas aqui -->
-      </div>
+    .menu a:hover {
+      color: #3498db;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      margin-top: 20px;
+      font-size: 0.8rem;
+      /* color: #7f8c8d;
+      background-color: #ecf0f1; */
+      /* border-top: 1px solid #ccd1d9; */
+      border-radius: 0 0 8px 8px;
+    }
+
+    footer a {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>ALOCAÇÃO DE AMOSTRAS</h1>
+  <div class="menu">
+    <a href="../v1/all-banks">GERAL</a>
+    <a href="../v1/home">SOROTECA</a>
+    <a href="../v1/transaction">ALOCAÇÃO</a>
+    <a href="../v1/search">PESQUISA</a>
+  </div>
+  <div class="container">
+    <div class="input-group">
+      <label for="sampleBarCode">PEDIDO DA AMOSTRA:</label>
+      <input type="text" id="sampleBarCode" placeholder="INSIRA O PEDIDO" />
     </div>
 
-    <script>
-      async function loadSerumBanks() {
-        try {
-          const response = await fetch('http://localhost:3000/v1/serum-banks');
-          if (!response.ok) {
-            throw new Error('Erro ao carregar os bancos de soro.');
-          }
+    <div class="input-group">
+      <label for="sampleType">TIPO DA AMOSTRA:</label>
+      <select id="sampleType">
+        <option value="serum">SORO</option>
+        <option value="plasma">PLASMA</option>
+        <option value="blood">SANGUE</option>
+      </select>
+    </div>
 
-          const data = await response.json();
-          const serumBanks = data.response;
-          const serumBankSelect = document.getElementById('serumBankSelect');
+    <div class="input-group">
+      <label for="serumBankSelect">SELECIONE A BANDEJA:</label>
+      <select id="serumBankSelect">
+        <!-- Opções serão carregadas aqui -->
+      </select>
+    </div>
 
-          serumBanks.forEach((bank) => {
-            const option = document.createElement('option');
-            option.value = bank.serumBankCode;
-            option.textContent = bank.serumBankCode;
-            serumBankSelect.appendChild(option);
-          });
-        } catch (error) {
-          document.getElementById('result').innerHTML =
-            `<p>Erro: ${error.message}</p>`;
+    <button title="ALOCAR" class="btn" onclick="submitSample()"><i class="fas fa-box"></i></button>
+
+    <div class="result" id="result">
+      <!-- Resultado da operação será exibido aqui -->
+    </div>
+
+    <div class="positions" id="positions">
+      <!-- Posições da bandeja serão exibidas aqui -->
+    </div>
+  </div>
+  <footer>
+    <p>&copy; 2024 Leonardo Meireles. Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+
+    function getCurrentDayIndex() {
+      const today = new Date();
+      let dayOfWeek = today.getDay();
+      if (dayOfWeek != 0) {
+        dayOfWeek = dayOfWeek * 2
+      }
+      return dayOfWeek
+    }
+
+    function redirectPage(url) {
+      window.open(url, '_blank');
+    }
+    document.getElementById('sampleBarCode').addEventListener('input', function () {
+      const sampleBarCode = this.value;
+      if (sampleBarCode.length === 11) {
+        submitSample();
+      }
+    });
+    async function loadSerumBanks() {
+      try {
+        const response = await fetch('../v1/serum-banks');
+        if (!response.ok) {
+          throw new Error('Erro ao carregar os bancos de soro.');
         }
+
+        const data = await response.json();
+        const serumBanks = data.response;
+        const serumBankSelect = document.getElementById('serumBankSelect');
+
+        serumBanks.forEach((bank) => {
+          const option = document.createElement('option');
+          option.value = bank.serumBankCode;
+          option.textContent = bank.serumBankCode;
+          serumBankSelect.appendChild(option);
+        });
+
+        serumBankSelect.selectedIndex = getCurrentDayIndex()
+
+
+
+      } catch (error) {
+        document.getElementById('result').innerHTML =
+          `<p>Erro: ${error.message}</p>`;
+      }
+    }
+
+    async function submitSample() {
+      let serumBankCode = document.getElementById('serumBankSelect').value;
+      const sampleBarCode = document.getElementById('sampleBarCode').value;
+      const sampleType = document.getElementById('sampleType').value;
+      const resultDiv = document.getElementById('result');
+
+
+      if (!serumBankCode || !sampleBarCode || !sampleType) {
+        resultDiv.innerHTML = '<p>Por favor, preencha todos os campos.</p>';
+        return;
       }
 
-      async function submitSample() {
-        const serumBankCode = document.getElementById('serumBankSelect').value;
-        const sampleBarCode = document.getElementById('sampleBarCode').value;
-        const sampleType = document.getElementById('sampleType').value;
-        const resultDiv = document.getElementById('result');
+      const data = {
+        serumBankCode,
+        sampleBarCode,
+        sampleType,
+      };
 
-        if (!serumBankCode || !sampleBarCode || !sampleType) {
-          resultDiv.innerHTML = '<p>Por favor, preencha todos os campos.</p>';
-          return;
-        }
-
-        const data = {
-          serumBankCode,
-          sampleBarCode,
-          sampleType,
-        };
-
-        try {
-          const response = await fetch(
-            'http://localhost:3000/v1/serum-banks/transaction',
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(data),
+      try {
+        const response = await fetch(
+          '../v1/serum-banks/transaction',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
             },
-          );
+            body: JSON.stringify(data),
+          },
+        );
 
-          if (!response.ok) {
-            if (response.status == 409) {
-              throw new Error('A amostra já foi bandejada.');
-            }
-            throw new Error('Erro ao bandejar a amostra.');
+        const samples = await fetch(
+          `../v1/serum-banks/${data.serumBankCode}/samples`,
+        );
+
+        const samplesResponse = await samples.json()
+        const samplesCodes = samplesResponse.map((sample) => {
+          const code = sample.sample.sampleCode;
+          return code.slice(0, -2); // Remove os dois últimos caracteres
+        });
+
+        document.getElementById('sampleBarCode').value = '';
+
+        if (!response.ok) {
+          if (response.status == 409) {
+            throw new Error('A amostra já foi bandejada.');
           }
-
-          const result = await response.json();
-          resultDiv.innerHTML = `<p>Amostra bandejada com sucesso na posição ${result.position}.</p>`;
-          renderPositions(result.position);
-        } catch (error) {
-          resultDiv.innerHTML = `<p>Erro: ${error.message}</p>`;
+          throw new Error('Erro ao bandejar a amostra.');
         }
+
+        const result = await response.json();
+        resultDiv.innerHTML = `<p>Amostra bandejada com sucesso na posição ${result.position}.</p>`;
+        renderPositions(result.position, data.sampleBarCode);
+      } catch (error) {
+        resultDiv.innerHTML = `<p>Erro: ${error.message}</p>`;
       }
+    }
 
-      async function renderPositions(occupiedPosition) {
-        const positionsDiv = document.getElementById('positions');
-        positionsDiv.innerHTML = ''; // Limpa posições anteriores
+    async function renderPositions(occupiedPosition, samples) {
+      const positionsDiv = document.getElementById('positions');
+      positionsDiv.innerHTML = ''; // Limpa posições anteriores
 
-        for (let i = 0; i < 100; i++) {
-          const positionDiv = document.createElement('div');
-          positionDiv.className = 'position';
-          positionDiv.textContent = i;
+      for (let i = 0; i < 100; i++) {
+        const positionDiv = document.createElement('div');
+        positionDiv.className = 'position';
+        positionDiv.textContent = i;
 
-          if (i === occupiedPosition) {
-            positionDiv.classList.add('occupied');
-          }
-
-          positionsDiv.appendChild(positionDiv);
+        if (i === occupiedPosition) {
+          positionDiv.classList.add('occupied');
+          positionDiv.title = samples
+          positionDiv.addEventListener('click', () => redirectPage('http://192.168.57.187/MatrixNet/app/rastreabilidade/' + samples.slice(0, -2)));
         }
-      }
 
-      // Carrega os bancos de soro ao carregar a página
-      window.onload = loadSerumBanks;
-    </script>
-  </body>
+        positionsDiv.appendChild(positionDiv);
+      }
+    }
+
+    // Carrega os bancos de soro ao carregar a página
+    window.onload = loadSerumBanks;
+  </script>
+</body>
+
 </html>

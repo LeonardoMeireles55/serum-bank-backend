@@ -45,7 +45,7 @@ describe('AuthService', () => {
     email: 'user@example.com',
     password: 'StrongPassword123!',
     phone: '555-555-5555',
-    profissionalPosition: 'Laboratory Technician',
+    professionalPosition: 'Laboratory Technician',
   };
 
   const mockUser = new User(user);

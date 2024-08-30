@@ -28,6 +28,13 @@ export class StaticsController {
     return res.sendFile(join(`${process.cwd()}/public/transaction.html`));
   }
 
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Get('all-banks')
+  allBanksPage(@Res() res: Response) {
+    return res.sendFile(join(`${process.cwd()}/public/all-banks.html`));
+  }
+
   // @Public()
   // @HttpCode(HttpStatus.OK)
   // @Get('not-found-image')

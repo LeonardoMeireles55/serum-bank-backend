@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { ProfissionalPositionEnum } from '../enums/profissional-position.enum';
+import { ProfessionalPositionEnum } from '../enums/professional-position.enum';
 
 export class UpdateUserDto {
   constructor(phone: string, profissionalPosition: string) {
@@ -12,7 +12,7 @@ export class UpdateUserDto {
   @IsNotEmpty()
   phone: string;
 
-  @ApiProperty({ enum: ProfissionalPositionEnum })
+  @ApiProperty({ enum: ProfessionalPositionEnum })
   @IsNotEmpty()
   profissionalPosition: string;
 }

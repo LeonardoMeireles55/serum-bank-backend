@@ -42,7 +42,6 @@ export class HateoasInterceptor implements NestInterceptor {
         } else {
           const itemPath = this.getPath(routePath, data);
           if (data.serumBankCode) {
-            console.log(data.serumBankCode);
             return {
               ...data,
               _links: {

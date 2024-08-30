@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   DefaultValuePipe,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -34,6 +35,19 @@ import { HateoasInterceptor } from 'src/common/interceptors/hateos.interceptors'
 @Controller({ version: '1', path: 'serum-banks' })
 export class SerumBankController {
   constructor(private readonly serumBankService: SerumBankService) {}
+
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ type: [SamplePosition] })
+  @Public()
+  @Get('samples')
+  @ApiResponse({ type: [SamplePosition] })
+  @ApiQuery({ name: 'id', type: Number, required: true })
+  async getAllSamplesPositionFromSerumBank2(
+    @Query('id', ParseIntPipe) id: number,
+  ): Promise<SamplePosition[]> {
+    console.log(id);
+    return this.serumBankService.getAllSamplesFromSerumBankById(id);
+  }
 
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({ type: PartialSerumBankDto })
@@ -127,9 +141,10 @@ export class SerumBankController {
     );
   }
 
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // @Delete(':id')
-  // async remove(@Param('id') id: string): Promise<void> {
-  //   return this.serumBankService.remove(id);
-  // }
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Public()
+  @Delete('/samples/:sampleCode')
+  async remove(@Param('sampleCode') sampleCode: string): Promise<void> {
+    return this.serumBankService.removeSample(sampleCode);
+  }
 }
