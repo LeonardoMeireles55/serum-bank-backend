@@ -197,11 +197,7 @@ export class SerumBankService {
 
     const allPositions = Array.from({ length: capacity }, (_, index) => index);
 
-    const availablePositions = allPositions.filter(
-      (position) => !usedPositions.includes(position),
-    );
-
-    return availablePositions;
+    return allPositions.filter((position) => !usedPositions.includes(position));
   }
 
   async getAllSamplesFromSerumBank(code: string): Promise<SamplePosition[]> {

@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  HttpException,
   HttpStatus,
   Post,
   Request,
@@ -36,13 +37,7 @@ export class AuthController {
       signInDto.password,
     );
 
-    const response = new DefaultResponseDto(
-      token,
-      'User logged in successfully',
-      true,
-    );
-
-    return response;
+    return new DefaultResponseDto(token, 'User logged in successfully', true);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -56,17 +51,15 @@ export class AuthController {
       recoverPasswordDto.email,
     );
 
+    if (!user) {
+      throw new Error('User not found');
+    }
+
     const token = await this.authService.recoveryToken(
       recoverPasswordDto.email,
     );
 
-    const response = new DefaultResponseDto(
-      token,
-      'Token generated successfully',
-      true,
-    );
-
-    return response;
+    return new DefaultResponseDto(token, 'Token generated successfully', true);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -80,18 +73,20 @@ export class AuthController {
       recoverPasswordWithTokenDto.email,
     );
 
+    if (!user) {
+      throw new HttpException('User not found', 404);
+    }
+
     await this.authService.recoverPasswordWithToken(
       recoverPasswordWithTokenDto.email,
       recoverPasswordWithTokenDto.token,
       recoverPasswordWithTokenDto.new_password,
     );
-    const response = new DefaultResponseDto(
+    return new DefaultResponseDto(
       'Password changed successfully',
       'Password changed successfully',
       true,
     );
-
-    return response;
   }
 
   @ApiBearerAuth()

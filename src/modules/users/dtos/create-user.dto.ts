@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsNumber,
-  IsEmail,
-} from 'class-validator';
+import { IsNotEmpty, IsEmail } from 'class-validator';
 import { ProfissionalPositionEnum } from '../enums/profissional-position.enum';
 
 export class CreateUserDto {
@@ -26,5 +20,5 @@ export class CreateUserDto {
 
   @ApiProperty({ enum: ProfissionalPositionEnum })
   @IsNotEmpty()
-  profissionalPosition: string;
+  professionalPosition: string;
 }

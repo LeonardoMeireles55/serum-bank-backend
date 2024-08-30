@@ -35,7 +35,6 @@ export class StaticsController {
     return res.sendFile(join(`${process.cwd()}/public/all-banks.html`));
   }
 
-
   // @Public()
   // @HttpCode(HttpStatus.OK)
   // @Get('not-found-image')

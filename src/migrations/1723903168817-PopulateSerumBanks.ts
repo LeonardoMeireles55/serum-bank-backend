@@ -16,7 +16,7 @@ export class PopulateSerumBanks1687390937162 implements MigrationInterface {
       'SEXTA-1',
       'SEXTA-2',
       'SABADO-1',
-      'SABADO-2'
+      'SABADO-2',
     ];
     for (let i = 0; i < daysOfWeek.length; i++) {
       await queryRunner.query(
@@ -41,7 +41,7 @@ export class PopulateSerumBanks1687390937162 implements MigrationInterface {
       'SEXTA-1',
       'SEXTA-2',
       'SABADO-1',
-      'SABADO-2'
+      'SABADO-2',
     ];
     for (let i = 0; i < daysOfWeek.length; i++) {
       await queryRunner.query(
@@ -50,4 +50,3 @@ export class PopulateSerumBanks1687390937162 implements MigrationInterface {
     }
   }
 }
-

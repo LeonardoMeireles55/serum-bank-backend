@@ -6,6 +6,6 @@ export class TokenJwtDto {
   constructor(token: string, expiresIn: number, userId: number) {
     this.token = token;
     this.expires_in = expiresIn;
-    this.user_id = this.user_id;
+    this.user_id = userId;
   }
 }

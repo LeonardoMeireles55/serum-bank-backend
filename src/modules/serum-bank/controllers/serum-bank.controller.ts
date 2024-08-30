@@ -45,7 +45,7 @@ export class SerumBankController {
   async getAllSamplesPositionFromSerumBank2(
     @Query('id', ParseIntPipe) id: number,
   ): Promise<SamplePosition[]> {
-    console.log(id)
+    console.log(id);
     return this.serumBankService.getAllSamplesFromSerumBankById(id);
   }
 
@@ -89,15 +89,12 @@ export class SerumBankController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: [SamplePosition] })
   @Public()
- @Get(':code/samples')
+  @Get(':code/samples')
   async getAllSamplesPositionFromSerumBank(
     @Param('code') bankCode: string,
   ): Promise<SamplePosition[]> {
     return this.serumBankService.getAllSamplesFromSerumBank(bankCode);
   }
-
-  
-
 
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: PositionSampleDto })

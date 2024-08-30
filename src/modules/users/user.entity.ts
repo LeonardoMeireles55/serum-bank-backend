@@ -1,16 +1,16 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  OneToOne,
-  JoinColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { PartialUserDto } from './dtos/partial-user-dto';
-import { UserData } from './user-data.entity';
-import { AccessEnum } from './enums/acess.enum';
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from "typeorm";
+import { CreateUserDto } from "./dtos/create-user.dto";
+import { PartialUserDto } from "./dtos/partial-user-dto";
+import { UserData } from "./user-data.entity";
+import { AccessEnum } from "./enums/acess.enum";
 
 @Entity({ name: 'users' })
 export class User {
@@ -41,12 +41,11 @@ export class User {
   updatedAt?: Date;
 
   mapToPartialUserDto(): PartialUserDto {
-    const partialUser = new PartialUserDto(
+    return new PartialUserDto(
       this.email,
       this.userData.phone,
       this.userData.profissionalPosition,
     );
-    return partialUser;
   }
 
   constructor(createUserDto?: CreateUserDto) {
@@ -55,7 +54,7 @@ export class User {
       this.password = createUserDto.password;
       this.userData = new UserData();
       this.userData.phone = createUserDto.phone;
-      this.userData.profissionalPosition = createUserDto.profissionalPosition;
+      this.userData.profissionalPosition = createUserDto.professionalPosition;
     }
   }
 }
