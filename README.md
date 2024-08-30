@@ -87,10 +87,4 @@ To view the API documentation, access:
 http://localhost:3000/api#/
 ```
 #### Front-end example
-
-<div align="left">
-  <img width="350" alt="Screenshot 2024-08-17 at 14 27 23" src="https://github.com/user-attachments/assets/18fc76ff-bf17-40b1-a7e2-1b8c0757b447">
-  <img width="350" alt="Screenshot 2024-08-17 at 14 23 49" src="https://github.com/user-attachments/assets/3e3c31ed-059c-4d51-b8ad-21017e3ec6e0">
-  <img src="https://github.com/user-attachments/assets/dbd0d1cf-4efb-497e-ae42-ab9e72349267" alt="API Documentation Screenshot" width="350" />
-
-</div>
+![print](https://github.com/user-attachments/assets/65c3a756-cf86-43dd-9e0f-33a480a549ac)
