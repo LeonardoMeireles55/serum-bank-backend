@@ -62,7 +62,7 @@ npx jest
 
 Open the terminal and run these commands:
 
-- Start the database container
+- Run the NestJS application with docker
 
 ```bash
 docker compose up
