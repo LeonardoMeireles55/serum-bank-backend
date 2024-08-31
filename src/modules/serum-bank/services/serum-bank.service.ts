@@ -52,6 +52,44 @@ export class SerumBankService {
     });
   }
 
+  async removeAllSamplesFromSerumBank(serumBankCode: string): Promise<void> {
+    console.log(serumBankCode)
+    // Verifica se o serum bank existe
+    const serumBank = await this.findSerumBankByCodeOrThrow(serumBankCode);
+  
+    // Busca todas as posições de samples associadas ao serum bank
+    const samplePositions = await this.samplesPositionsRepository
+      .createQueryBuilder('samples_positions')
+      .innerJoinAndSelect('samples_positions.sample', 'sample')
+      .where('samples_positions.serum_bank_id = :serumBankId', {
+        serumBankId: serumBank.id,
+      })
+      .getMany();
+
+      
+  
+    if (samplePositions.length === 0) {
+      throw new HttpException('No samples found in this serum bank', 404);
+    }
+  
+    // Inicia a transação para remover os samples e atualizar o serum bank
+    return this.dataSource.getConnection().transaction(async (manager) => {
+      for (const samplePosition of samplePositions) {
+        // Remove a posição do sample
+        await manager.getRepository(SamplePosition).remove(samplePosition);
+  
+        // Remove o sample associado
+        await manager.getRepository(Sample).remove(samplePosition.sample);
+  
+        // Incrementa a capacidade disponível do serum bank
+        serumBank.availableCapacity++;
+      }
+  
+      // Atualiza o serum bank no banco de dados
+      await manager.getRepository(SerumBank).save(serumBank);
+    });
+  }
+
   private async findSerumBankByCodeOrThrow(code: string): Promise<SerumBank> {
     const serumBank = await this.getSerumBankByCode(code);
     if (!serumBank) {

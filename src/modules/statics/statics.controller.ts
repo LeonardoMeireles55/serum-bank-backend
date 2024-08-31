@@ -35,14 +35,14 @@ export class StaticsController {
     return res.sendFile(join(`${process.cwd()}/public/all-banks.html`));
   }
 
-  // @Public()
-  // @HttpCode(HttpStatus.OK)
-  // @Get('not-found-image')
-  // notFoundImage(@Res() res: Response) {
-  //   return res.sendFile(
-  //     join(
-  //       `${process.cwd()}/public/454060368_503915268838303_3864893242467067646_n.jpg`,
-  //     ),
-  //   );
-  // }
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Get('icon')
+  notFoundImage(@Res() res: Response) {
+    return res.sendFile(
+      join(
+        `${process.cwd()}/public/icons/lab.png`,
+      ),
+    );
+  }
 }

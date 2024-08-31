@@ -143,8 +143,18 @@ export class SerumBankController {
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Public()
+  @Delete('/samples/:serumBankCode/allSamples')
+  async removeAllSamples(@Param('serumBankCode') serumBankCode: string): Promise<void> {
+    console.log(serumBankCode)
+    return this.serumBankService.removeAllSamplesFromSerumBank(serumBankCode);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Public()
   @Delete('/samples/:sampleCode')
   async remove(@Param('sampleCode') sampleCode: string): Promise<void> {
     return this.serumBankService.removeSample(sampleCode);
   }
+
+
 }

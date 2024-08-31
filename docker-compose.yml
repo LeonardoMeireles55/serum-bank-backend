@@ -1,12 +1,23 @@
-  version: 'latest'
-  services:
-    app:
-      build:
-        context: .
-        dockerfile: Dockerfile
-      ports:
-        - "3000:3000"
-      env_file:
-        - .env
-      volumes:
-        - .:/usr/src/app
+version: 'latest'
+services:
+  serum-bank-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - nginx
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - serum-bank-api

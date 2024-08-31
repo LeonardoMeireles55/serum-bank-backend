@@ -1,20 +1,16 @@
-# Use a imagem Node.js mais recente como base
-FROM node:latest
+FROM node:latest-alpine
 
-# Copie os arquivos de configuração do npm
 COPY package*.json ./
 
-# Instale as dependências do projeto
-RUN npm install
+RUN npm install pm2 -g
 
-# Copie o restante do código do projeto
+RUN npm ci
+
 COPY . .
 
-# Execute o build do projeto
 RUN npm run build
 
-# Exponha a porta que o app irá usar
 EXPOSE 3000
 
-# Defina o comando para executar o app quando o contêiner iniciar
-CMD ["npm", "run", "start:prod"]
+# CMD ["npm", "run", "start:prod"]
+CMD ["pm2-runtime", "start", "ecosystem.config.js", "--name", "soroteca-app", "--watch"]

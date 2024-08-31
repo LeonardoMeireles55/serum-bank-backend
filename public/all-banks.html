@@ -4,226 +4,231 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../v1/icon" type="image/x-icon" />
   <title>SOROTECA</title>
   <style>
-      body {
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          background-color: #f5f7fa;
-          margin: 0;
-          padding: 10px;
-          color: #333;
-      }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 10px;
+      color: #333;
+    }
 
-      h1 {
-          color: #2c3e50;
-          text-align: center;
-          font-size: 2rem;
-          margin-bottom: 20px;
-      }
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
 
-      .container {
-          display: grid;
-          grid-template-columns: repeat(2, 550px); /* 2 colunas */
-          gap: 20px;
-          justify-content: center;
-          align-items: center; /* Alinha os bancos no topo */
-      }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(2, 550px);
+      /* 2 colunas */
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      /* Alinha os bancos no topo */
+    }
 
-      .bank-container {
-          background-color: #ffffff;
-          padding: 20px;
-          border-radius: 10px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
+    .bank-container {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-      .bank-container:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-      }
+    .bank-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
 
-      .bank-container h2 {
-          text-align: center;
-          color: #34495e;
-          font-size: 1.2rem;
-          margin-bottom: 15px;
-      }
+    .bank-container h2 {
+      text-align: center;
+      color: #34495e;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
 
-      .positions {
-          display: grid;
-          grid-template-columns: repeat(10, 1fr);
-          gap: 6px; /* Mais espaço entre as posições */
-          margin-top: 10px;
-          justify-items: center;
-      }
+    .positions {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 6px;
+      /* Mais espaço entre as posições */
+      margin-top: 10px;
+      justify-items: center;
+    }
 
-      .position {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 40px;
-          height: 40px;
-          background-color: #e74c3c;
-          border-radius: 50%; /* Torna as posições circulares */
-          font-size: 0.7rem;
-          font-weight: bold;
-          color: #ffffff;
-          transition: background-color 0.3s ease, transform 0.3s ease;
-      }
+    .position {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: #e74c3c;
+      border-radius: 50%;
+      /* Torna as posições circulares */
+      font-size: 0.7rem;
+      font-weight: bold;
+      color: #ffffff;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
 
-      .position:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-          cursor: pointer;
-          background-color: #467ec7;
-      }
+    .position:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      background-color: #467ec7;
+    }
 
-      .occupied {
-          background-color: #ecf0f1;
-          color: #34495e;
-      }
+    .occupied {
+      background-color: #ecf0f1;
+      color: #34495e;
+    }
 
-      .menu {
-          padding: 10px;
-          text-align: center;
-          margin-bottom: 20px;
-          border-radius: 8px;
-      }
+    .menu {
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
 
-      .menu a {
-          color: #2c3e50;
-          text-decoration: none;
-          margin: 0 15px;
-          font-size: 1rem;
-          font-weight: 500;
-          transition: color 0.3s ease;
-      }
+    .menu a {
+      color: #2c3e50;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
 
-      .menu a:hover {
-          color: #3498db;
-      }
+    .menu a:hover {
+      color: #3498db;
+    }
 
-      footer {
-          text-align: center;
-          padding: 10px;
-          margin-top: 30px;
-          font-size: 0.8rem;
-          color: #7f8c8d;
-      }
+    footer {
+      text-align: center;
+      padding: 10px;
+      margin-top: 30px;
+      font-size: 0.8rem;
+      color: #7f8c8d;
+    }
 
-      footer a {
-          color: #3498db;
-          text-decoration: none;
-      }
+    footer a {
+      color: #3498db;
+      text-decoration: none;
+    }
 
-      footer a:hover {
-          text-decoration: underline;
-      }
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 
 <body>
-<h1>SOROTECA</h1>
-<div class="menu">
-  <a href="../v1/all-banks">GERAL</a>
-  <a href="../v1/home">SOROTECA</a>
-  <a href="../v1/transaction">ALOCAÇÃO</a>
-  <a href="../v1/search">PESQUISA</a>
-</div>
-<div class="container" id="container">
-  <!-- As bandejas serão renderizadas aqui -->
-</div>
-<footer>
-  <p>&copy; 2024 Leonardo Meireles. Todos os direitos reservados.</p>
-</footer>
+  <h1>SOROTECA</h1>
+  <div class="menu">
+    <a href="../v1/all-banks">GERAL</a>
+    <a href="../v1/home">SOROTECA</a>
+    <a href="../v1/transaction">ALOCAÇÃO</a>
+    <a href="../v1/search">PESQUISA</a>
+  </div>
+  <div class="container" id="container">
+    <!-- As bandejas serão renderizadas aqui -->
+  </div>
+  <footer>
+    <p>&copy; 2024 Leonardo Meireles. Todos os direitos reservados.</p>
+  </footer>
 
-<script>
-  async function loadSerumBanks() {
-    try {
-      const response = await fetch('http://localhost:3000/v1/serum-banks');
-      if (!response.ok) {
-        throw new Error('Erro ao carregar os bancos de soro.');
+  <script>
+    async function loadSerumBanks() {
+      try {
+        const response = await fetch('../v1/serum-banks');
+        if (!response.ok) {
+          throw new Error('Erro ao carregar os bancos de soro.');
+        }
+
+        const data = await response.json();
+        const serumBanks = data.response;
+
+        serumBanks.forEach(async (bank) => {
+          await fetchAvailablePositions(bank.serumBankCode, bank);
+        });
+      } catch (error) {
+        document.getElementById('container').innerHTML =
+          `<p>Erro: ${error.message}</p>`;
       }
-
-      const data = await response.json();
-      const serumBanks = data.response;
-
-      serumBanks.forEach(async (bank) => {
-        await fetchAvailablePositions(bank.serumBankCode, bank);
-      });
-    } catch (error) {
-      document.getElementById('container').innerHTML =
-        `<p>Erro: ${error.message}</p>`;
     }
-  }
 
-  async function fetchAvailablePositions(bankCode, bank) {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/v1/serum-banks/${bankCode}/available-positions`,
-      );
+    async function fetchAvailablePositions(bankCode, bank) {
+      try {
+        const response = await fetch(
+          `../v1/serum-banks/${bankCode}/available-positions`,
+        );
 
-      const samples = await fetch(
-        `http://localhost:3000/v1/serum-banks/${bankCode}/samples`,
-      );
+        const samples = await fetch(
+          `../v1/serum-banks/${bankCode}/samples`,
+        );
 
-      const samplesResponse = await samples.json()
-      const samplesCodes = samplesResponse.map((sample) => {
-        const code = sample.sample.sampleCode;
-        return code.slice(0, -2);
-      });
+        const samplesResponse = await samples.json()
+        const samplesCodes = samplesResponse.map((sample) => {
+          const code = sample.sample.sampleCode;
+          return code.slice(0, -2);
+        });
 
-      if (!response.ok) {
-        throw new Error(`Erro ao obter as posições da bandeja ${bankCode}.`);
+        if (!response.ok) {
+          throw new Error(`Erro ao obter as posições da bandeja ${bankCode}.`);
+        }
+
+        const occupiedPositions = await response.json();
+        await renderBank(bankCode, occupiedPositions, samplesCodes);
+      } catch (error) {
+        document.getElementById('container').innerHTML +=
+          `<p>Erro: ${error.message}</p>`;
       }
-
-      const occupiedPositions = await response.json();
-      await renderBank(bankCode, occupiedPositions, samplesCodes);
-    } catch (error) {
-      document.getElementById('container').innerHTML +=
-        `<p>Erro: ${error.message}</p>`;
     }
-  }
 
-  function redirectPage(url) {
-    window.open(url, '_blank');
-  }
+    function redirectPage(url) {
+      window.open(url, '_blank');
+    }
 
-  async function renderBank(bankCode, occupiedPositions, samples) {
-    const container = document.getElementById('container');
+    async function renderBank(bankCode, occupiedPositions, samples) {
+      const container = document.getElementById('container');
 
-    const bankContainer = document.createElement('div');
-    bankContainer.className = 'bank-container';
+      const bankContainer = document.createElement('div');
+      bankContainer.className = 'bank-container';
 
-    const bankTitle = document.createElement('h2');
-    bankTitle.textContent = bankCode;
-    bankContainer.appendChild(bankTitle);
+      const bankTitle = document.createElement('h2');
+      bankTitle.textContent = bankCode;
+      bankContainer.appendChild(bankTitle);
 
-    const positionsDiv = document.createElement('div');
-    positionsDiv.className = 'positions';
+      const positionsDiv = document.createElement('div');
+      positionsDiv.className = 'positions';
 
-    for (let i = 0; i < 100; i++) {
-      const positionDiv = document.createElement('div');
-      positionDiv.className = 'position';
-      positionDiv.textContent = i;
-      if(samples[i] !== undefined) {
-        positionDiv.addEventListener('click', () => redirectPage('http://****/MatrixNet/app/rastreabilidade/' + samples[i]));
-        positionDiv.title = samples[i];
-      }
+      for (let i = 0; i < 100; i++) {
+        const positionDiv = document.createElement('div');
+        positionDiv.className = 'position';
+        positionDiv.textContent = i;
+        if (samples[i] !== undefined) {
+          positionDiv.addEventListener('click', () => redirectPage('http://****/MatrixNet/app/rastreabilidade/' + samples[i]));
+          positionDiv.title = samples[i];
+        }
 
         if (occupiedPositions.includes(i)) {
-        positionDiv.classList.add('occupied');
+          positionDiv.classList.add('occupied');
+        }
+
+        positionsDiv.appendChild(positionDiv);
       }
 
-      positionsDiv.appendChild(positionDiv);
+      bankContainer.appendChild(positionsDiv);
+      container.appendChild(bankContainer);
     }
 
-    bankContainer.appendChild(positionsDiv);
-    container.appendChild(bankContainer);
-  }
-
-  window.onload = loadSerumBanks;
-</script>
+    window.onload = loadSerumBanks;
+  </script>
 </body>
 
 </html>

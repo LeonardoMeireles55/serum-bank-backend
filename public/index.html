@@ -4,10 +4,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SOROTECA</title>
+  <link rel="icon" href="../v1/icon" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <title>SOROTECA</title>
   <style>
     body {
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      align-items: center;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f5f7fa;
       margin: 0;
@@ -42,45 +47,36 @@
       color: #34495e;
     }
 
-    #options {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-      color: #34495e;
+    .trash-button,
+    .refresh-button {
+      display: inline-block;
+      width: 49%;
+      padding: 10px;
+      gap: 2px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.3s ease;
+      text-align: center;
     }
 
     .trash-button {
       background-color: #e74c3c;
       color: #ffffff;
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      margin-top: 10px;
-      width: 100%;
-      transition: background-color 0.3s ease;
     }
 
     .trash-button:hover {
-      background-color: #d11e0a;
+      background-color: #fc614f;
     }
 
     .refresh-button {
-      background-color: #3498db;
+      background-color: #37639B;
       color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      margin-top: 10px;
-      width: 100%;
-      transition: background-color 0.3s ease;
     }
 
     .refresh-button:hover {
-      background-color: #2980b9;
+      background-color: #467ec7;
     }
 
     .input-group select {
@@ -90,6 +86,7 @@
       border-radius: 6px;
       box-sizing: border-box;
       font-size: 0.9rem;
+      margin-bottom: 10px;
       transition: border-color 0.3s ease;
     }
 
@@ -115,30 +112,21 @@
       border-radius: 6px;
       font-weight: bold;
       color: #ffffff;
-      transition:
-        background-color 0.3s ease,
-        transform 0.3s ease;
-    }
-
-    .position:focus {
-      outline: 2px solid #3498db;
-      outline-offset: 2px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      cursor: pointer;
     }
 
     .position:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
     }
 
-    .occupied {
+    .position.occupied {
       background-color: #ecf0f1;
       color: #34495e;
     }
 
-    /* Menu CSS */
     .menu {
-      padding: 10px;
       text-align: center;
       margin-bottom: 10px;
       border-radius: 8px;
@@ -157,16 +145,11 @@
       color: #3498db;
     }
 
-    /* Footer CSS */
     footer {
       text-align: center;
       padding: 10px;
       margin-top: 20px;
       font-size: 0.8rem;
-      /* color: #7f8c8d;
-      background-color: #ecf0f1; */
-      /* border-top: 1px solid #ccd1d9; */
-      border-radius: 0 0 8px 8px;
     }
 
     footer a {
@@ -177,13 +160,65 @@
     footer a:hover {
       text-decoration: underline;
     }
+
+    #confirmationModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 300px;
+      width: 100%;
+    }
+
+    .modal-content h2 {
+      margin-bottom: 10px;
+    }
+
+    .confirm-button,
+    .cancel-button {
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .confirm-button {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .confirm-button:hover {
+      background-color: #fc614f;
+    }
+
+    .cancel-button {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .cancel-button:hover {
+      background-color: #467ec7;
+    }
   </style>
 </head>
 
 <body>
   <!-- Menu de Navegação -->
-
-
   <h1>SOROTECA VIRTUAL</h1>
   <div class="menu">
     <a href="../v1/all-banks">GERAL</a>
@@ -191,68 +226,109 @@
     <a href="../v1/transaction">ALOCAÇÃO</a>
     <a href="../v1/search">PESQUISA</a>
   </div>
+
+  <div id="confirmationModal" style="display: none;">
+    <div class="modal-content">
+      <h2>Confirmação</h2>
+      <p>Tem certeza de que deseja excluir todas as amostras?</p>
+      <button class="confirm-button" onclick="confirmDelete()">Sim</button>
+      <button class="cancel-button" onclick="closeModal()">Não</button>
+    </div>
+  </div>
+
   <div class="container">
     <div class="input-group">
       <label for="bankSelect">SELECIONE A BANDEJA:</label>
-      <select id="bankSelect" onchange="fetchAvailablePositions()">
-        <!-- Opções de bancos serão carregadas aqui -->
-      </select>
-      <button class="refresh-button" onclick="refreshOptions()"><i class="fas fa-sync-alt"></i></button>
-      <button class="trash-button" onclick="refreshOptions()"><i class="fas fa-trash"></i></button>
+      <select id="bankSelect" onchange="fetchAvailablePositions()"></select>
+      <button class="refresh-button" onclick="refreshOptions()">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+      <button class="trash-button" onclick="deleteAllSamples(getSelectedBankCode())">
+        <i class="fas fa-trash"></i>
+      </button>
       <p id="infos-banks"></p>
     </div>
+
     <div class="result" id="result">
       <!-- As posições serão exibidas aqui -->
     </div>
   </div>
+
   <footer>
     <p>&copy; 2024 Leonardo Meireles. Todos os direitos reservados.</p>
   </footer>
 
   <script>
+    function getSelectedBankCode() {
+      const bankSelect = document.getElementById('bankSelect');
+      return bankSelect.value;
+    }
+
     function getCurrentDayIndex() {
       const today = new Date();
-      let dayOfWeek = today.getDay(); // Retorna 0 (Domingo) a 6 (Sábado)
-      if (dayOfWeek != 0) {
-        dayOfWeek = dayOfWeek * 2
-      }
-      return dayOfWeek
+      let dayOfWeek = today.getDay();
+      return dayOfWeek !== 0 ? dayOfWeek * 2 : dayOfWeek;
     }
 
     async function loadSerumBanks() {
       try {
         const response = await fetch('../v1/serum-banks');
-        if (!response.ok) {
-          throw new Error('Erro ao carregar os bancos de soro.');
-        }
+        if (!response.ok) throw new Error('Erro ao carregar os bancos de soro.');
 
-        const data = await response.json();
-        const serumBanks = data.response;
+        const { response: serumBanks } = await response.json();
         const bankSelect = document.getElementById('bankSelect');
 
-
-        serumBanks.forEach((bank) => {
-          let option = document.createElement('option');
+        serumBanks.forEach(bank => {
+          const option = document.createElement('option');
           option.value = bank.serumBankCode;
           option.textContent = bank.serumBankCode;
           bankSelect.appendChild(option);
-
         });
 
-        bankSelect.selectedIndex = getCurrentDayIndex()
-
-
-        if (serumBanks.length > 0) {
-          fetchAvailablePositions();
-        }
+        bankSelect.selectedIndex = getCurrentDayIndex();
+        if (serumBanks.length > 0) fetchAvailablePositions();
       } catch (error) {
-        document.getElementById('result').innerHTML =
-          `<p>Erro: ${error.message}</p>`;
+        document.getElementById('result').innerHTML = `<p>Erro: ${error.message}</p>`;
       }
     }
 
+    let selectedBankCodeForDelete;
+
+    function openModal() {
+      document.getElementById('confirmationModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('confirmationModal').style.display = 'none';
+    }
+
+    function deleteAllSamples(serumBankCode) {
+      selectedBankCodeForDelete = serumBankCode;
+      openModal();
+    }
+
+    async function confirmDelete() {
+      closeModal();
+
+      const url = `../v1/serum-banks/samples/${selectedBankCodeForDelete}/allSamples`;
+
+      try {
+        const response = await fetch(url, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (response.status === 204) {
+          refreshOptions();
+        } else {
+          console.error(`Failed to delete all samples. Status: ${response.status}`);
+        }
+      } catch (error) {
+        console.error('Error while deleting all samples:', error);
+      }
+    }
     async function fetchAvailablePositions() {
-      const bankCode = document.getElementById('bankSelect').value;
+      const bankCode = getSelectedBankCode();
       const resultDiv = document.getElementById('result');
 
       if (!bankCode) {
@@ -261,60 +337,47 @@
       }
 
       try {
-        const response = await fetch(
-          `../v1/serum-banks/${bankCode}/available-positions`,
-        );
+        const [positionsResponse, samplesResponse] = await Promise.all([
+          fetch(`../v1/serum-banks/${bankCode}/available-positions`),
+          fetch(`../v1/serum-banks/${bankCode}/samples`)
+        ]);
 
-        const samples = await fetch(
-          `../v1/serum-banks/${bankCode}/samples`,
-        );
+        if (!positionsResponse.ok) throw new Error('Erro ao obter as posições disponíveis.');
 
-        const samplesResponse = await samples.json();
-        const samplesCodes = samplesResponse.map((sample) => {
-          const code = sample.sample.sampleCode;
-          return code;
-        });
+        const occupiedPositions = await positionsResponse.json();
+        const samples = await samplesResponse.json();
+        const samplesCodes = samples.map(sample => sample.sample.sampleCode);
 
-
-
-        if (!response.ok) {
-          throw new Error('Erro ao obter as posições disponíveis.');
-        }
-
-        const occupiedPositions = await response.json();
         renderPositions(occupiedPositions, samplesCodes);
       } catch (error) {
         resultDiv.innerHTML = `<p>Erro: ${error.message}</p>`;
       }
     }
 
-    function redirectPage(url) {
-      window.open(url, '_blank');
-    }
-
     function renderPositions(occupiedPositions, samples) {
       const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = ''; // Limpa os resultados anteriores
+      resultDiv.innerHTML = '';
 
       for (let i = 0; i < 100; i++) {
         const positionDiv = document.createElement('div');
         positionDiv.className = 'position';
         positionDiv.textContent = i;
-        positionDiv.title = samples[i]
-
-        positionDiv.addEventListener('click', () => redirectPage('http://192.168.57.187/MatrixNet/app/rastreabilidade/' + samples[i].slice(0, -2)));
+        positionDiv.title = samples[i] || 'VAZIA';
 
         if (occupiedPositions.includes(i)) {
           positionDiv.classList.add('occupied');
-          positionDiv.title = 'VAZIA';
         }
+
+        positionDiv.addEventListener('click', () => {
+          if (samples[i]) window.open(`http://192.168.57.187/MatrixNet/app/rastreabilidade/${samples[i].slice(0, -2)}`, '_blank');
+        });
 
         resultDiv.appendChild(positionDiv);
       }
     }
 
     function refreshOptions() {
-      loadSerumBanks(); // Chama a função para recarregar as opções
+      loadSerumBanks();
     }
 
     window.onload = loadSerumBanks;
