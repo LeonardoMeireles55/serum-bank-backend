@@ -39,8 +39,6 @@ Create a .env file in the root of the project following the template below:
 - DB_PORT=5432
 - DB_USERNAME=root
 - DB_PASSWORD=root
-- DB_DATABASE=./db/sql
-- DB_DATABASE_TEST=./db/sql_test
 
 #### Node Environment
 
