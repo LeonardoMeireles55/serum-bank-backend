@@ -35,10 +35,10 @@ Create a .env file in the root of the project following the template below:
 
 #### Database Configuration
 
-- DB_HOST=localhost
-- DB_PORT=5432
 - DB_USERNAME=root
 - DB_PASSWORD=root
+- DB_DATABASE=SQL_LITE
+- DB_DATABASE_TEST=SQL_LITE_TEST
 
 #### Node Environment
 
@@ -85,4 +85,5 @@ To view the API documentation, access:
 http://localhost:3000/api#/
 ```
 #### Front-end example
+
 ![print](https://github.com/user-attachments/assets/65c3a756-cf86-43dd-9e0f-33a480a549ac)
