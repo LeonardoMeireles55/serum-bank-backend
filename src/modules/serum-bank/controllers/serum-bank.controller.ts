@@ -45,7 +45,6 @@ export class SerumBankController {
   async getAllSamplesPositionFromSerumBank2(
     @Query('id', ParseIntPipe) id: number,
   ): Promise<SamplePosition[]> {
-    console.log(id);
     return this.serumBankService.getAllSamplesFromSerumBankById(id);
   }
 
