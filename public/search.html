@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../v1/icon" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <title>PESQUISA DE AMOSTRAS</title>
   <style>
@@ -103,9 +104,7 @@
       border-radius: 6px;
       font-weight: bold;
       color: #34495e;
-      transition:
-        background-color 0.3s ease,
-        transform 0.3s ease;
+      transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
     .position:hover {
@@ -128,7 +127,6 @@
       color: #ffffff;
     }
 
-    /* Menu CSS */
     .menu {
       padding: 10px;
       text-align: center;
@@ -154,9 +152,6 @@
       padding: 10px;
       margin-top: 20px;
       font-size: 0.8rem;
-      /* color: #7f8c8d;
-      background-color: #ecf0f1; */
-      /* border-top: 1px solid #ccd1d9; */
       border-radius: 0 0 8px 8px;
     }
 
@@ -174,52 +169,48 @@
 <body>
   <h1>PESQUISA DE AMOSTRAS</h1>
   <div class="menu">
-    <div class="menu">
-      <a href="../v1/all-banks">GERAL</a>
-      <a href="../v1/home">SOROTECA</a>
-      <a href="../v1/transaction">ALOCAÇÃO</a>
-      <a href="../v1/search">PESQUISA</a>
-    </div>
+    <a href="../v1/all-banks">GERAL</a>
+    <a href="../v1/home">SOROTECA</a>
+    <a href="../v1/transaction">ALOCAÇÃO</a>
+    <a href="../v1/search">PESQUISA</a>
   </div>
+
   <div class="container">
     <div class="input-group">
       <label for="sampleCode">INSIRA O PEDIDO DA AMOSTRA:</label>
       <input type="text" id="sampleCode" placeholder="PEDIDO" />
     </div>
-    <button class="btn" onclick="fetchSamplePosition()"><i class="fas fa-search"></i> <!-- Ícone de lupa --></button>
-    <button id='delete-sample' class="btn" onclick="removeSample()"><i class="fas fa-trash"></i></button>
+    <button class="btn" onclick="fetchSamplePosition()">
+      <i class="fas fa-search"></i>
+    </button>
+    <button id="delete-sample" class="btn" onclick="removeSample()">
+      <i class="fas fa-trash"></i>
+    </button>
 
     <div class="result" id="result">
       <!-- O código da bandeja e a bandeja com posições de 0 a 99 serão exibidos aqui -->
     </div>
   </div>
+
   <footer>
     <p>&copy; 2024 Leonardo Meireles. Todos os direitos reservados.</p>
   </footer>
 
   <script>
-    function redirectPage(url) {
-      window.open(url, '_blank');
-    }
     async function fetchSamplePosition() {
-      const sampleCode = document.getElementById('sampleCode').value;
+      const sampleCode = document.getElementById('sampleCode').value.trim();
       const resultDiv = document.getElementById('result');
 
       if (!sampleCode) {
-        resultDiv.innerHTML =
-          '<p>Por favor, insira o código de barras da amostra.</p>';
+        resultDiv.innerHTML = '<p>Por favor, insira o código de barras da amostra.</p>';
         return;
       }
 
       try {
-        const response = await fetch(
-          `../v1/serum-banks/samples/${sampleCode}/position`,
-        );
+        const response = await fetch(`../v1/serum-banks/samples/${sampleCode}/position`);
         if (!response.ok) {
-          if (response.status == 404) {
-            throw new Error('amostra nao encontrada');
-          }
-          throw new Error('Erro ao buscar a posição da amostra.');
+          const errorMessage = response.status === 404 ? 'Amostra não encontrada.' : 'Erro ao buscar a posição da amostra.';
+          throw new Error(errorMessage);
         }
 
         const positionData = await response.json();
@@ -229,31 +220,22 @@
       }
     }
 
-
     async function removeSample() {
-      const sampleCode = document.getElementById('sampleCode').value;
+      const sampleCode = document.getElementById('sampleCode').value.trim();
       const resultDiv = document.getElementById('result');
 
-      console.log(sampleCode)
-
       if (!sampleCode) {
-        resultDiv.innerHTML =
-          '<p>Por favor, insira o código de barras da amostra.</p>';
+        resultDiv.innerHTML = '<p>Por favor, insira o código de barras da amostra.</p>';
         return;
       }
 
       try {
-        const response = await fetch(
-          `../v1/serum-banks/samples/${sampleCode}`,
-          {
-            method: 'DELETE'
-          }
-        );
+        const response = await fetch(`../v1/serum-banks/samples/${sampleCode}`, {
+          method: 'DELETE'
+        });
         if (!response.ok) {
-          if (response.status == 404) {
-            throw new Error('Amostra não encontrada.');
-          }
-          throw new Error('Erro ao remover a amostra.');
+          const errorMessage = response.status === 404 ? 'Amostra não encontrada.' : 'Erro ao remover a amostra.';
+          throw new Error(errorMessage);
         }
 
         resultDiv.innerHTML = `<p>Amostra ${sampleCode} removida com sucesso.</p>`;
@@ -262,19 +244,18 @@
       }
     }
 
-    function renderPositions(occupiedPosition, samples) {
+    function renderPositions(occupiedPosition, sampleCode) {
       const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = ''; // Limpa resultados anteriores
+      resultDiv.innerHTML = '';
 
-      // Adiciona o código da bandeja
       const serumBankCodeDiv = document.createElement('div');
       serumBankCodeDiv.className = 'serumBankCode';
       serumBankCodeDiv.textContent = `BANDEJA: ${occupiedPosition.serumBankCode}`;
       resultDiv.appendChild(serumBankCodeDiv);
 
-      // Adiciona a bandeja de posições
       const positionsGrid = document.createElement('div');
       positionsGrid.className = 'positions-grid';
+
       for (let i = 0; i < 100; i++) {
         const positionDiv = document.createElement('div');
         positionDiv.className = 'position';
@@ -282,8 +263,10 @@
 
         if (i === occupiedPosition.position) {
           positionDiv.classList.add('occupied');
-          positionDiv.title = samples
-          positionDiv.addEventListener('click', () => redirectPage('http://192.168.57.187/MatrixNet/app/rastreabilidade/' + samples.slice(0, -2)));
+          positionDiv.title = sampleCode;
+          positionDiv.addEventListener('click', () =>
+            window.open(`http://****/*****/app/rastreabilidade/${sampleCode.slice(0, -2)}`, '_blank')
+          );
         }
 
         positionsGrid.appendChild(positionDiv);
