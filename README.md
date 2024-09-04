@@ -87,6 +87,23 @@ To view the API documentation, access:
 ```
 http://localhost:3000/api#/
 ```
-#### Front-end example
+## Front-end Example
 
-![print](https://github.com/user-attachments/assets/65c3a756-cf86-43dd-9e0f-33a480a549ac)
+<div align="center">
+  <table>
+    <tr>
+      <td><img src="https://github.com/user-attachments/assets/aee8b9f6-c09c-4d75-b53d-4807a06b8d51" width="540px" /></td>
+      <td><img src="https://github.com/user-attachments/assets/50fb9f85-dfb7-45cb-9561-425c18cad52c" width="540px" /></td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/user-attachments/assets/bbd7a757-d1c1-4aa8-9f59-6b2e355ec1fd" width="540px" /></td>
+      <td><img src="https://github.com/user-attachments/assets/bf239660-f335-4398-81da-8873330ad422" width="540px" /></td>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/user-attachments/assets/68c974b8-baf6-441c-b522-5fc874ed36fe" width="540px" /></td>
+    </tr>
+  </table>
+</div>
+
+
+
