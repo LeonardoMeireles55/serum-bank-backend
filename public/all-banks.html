@@ -124,6 +124,27 @@
     footer a:hover {
       text-decoration: underline;
     }
+
+    @media (max-width: 600px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .positions {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      .position {
+        width: 30px;
+        height: 30px;
+        font-size: 0.6rem;
+      }
+
+      .menu {
+        padding: 0;
+        font-size: 1px;
+      }
+    }
   </style>
 </head>
 
