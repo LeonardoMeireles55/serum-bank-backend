@@ -243,8 +243,6 @@
 
         serumBankSelect.selectedIndex = getCurrentDayIndex()
 
-
-
       } catch (error) {
         document.getElementById('result').innerHTML =
           `<p>Erro: ${error.message}</p>`;
@@ -252,11 +250,17 @@
     }
 
     async function submitSample() {
+      const token = localStorage.getItem('authToken');
+
+      if (!token) {
+        window.location.href = '../v1/login';
+        return;
+      }
+
       let serumBankCode = document.getElementById('serumBankSelect').value;
       const sampleBarCode = document.getElementById('sampleBarCode').value;
       const sampleType = document.getElementById('sampleType').value;
       const resultDiv = document.getElementById('result');
-
 
       if (!serumBankCode || !sampleBarCode || !sampleType) {
         resultDiv.innerHTML = '<p>Por favor, preencha todos os campos.</p>';
@@ -276,22 +280,11 @@
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`, // Adiciona o token ao cabeçalho Authorization
             },
             body: JSON.stringify(data),
           },
         );
-
-        const samples = await fetch(
-          `../v1/serum-banks/${data.serumBankCode}/samples`,
-        );
-
-        const samplesResponse = await samples.json()
-        const samplesCodes = samplesResponse.map((sample) => {
-          const code = sample.sample.sampleCode;
-          return code.slice(0, -2); // Remove os dois últimos caracteres
-        });
-
-        document.getElementById('sampleBarCode').value = '';
 
         if (!response.ok) {
           if (response.status == 409) {
@@ -300,6 +293,23 @@
           throw new Error('Erro ao bandejar a amostra.');
         }
 
+        const samples = await fetch(
+          `../v1/serum-banks/${data.serumBankCode}/samples`,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`, // Adiciona o token ao cabeçalho Authorization para a segunda requisição
+            },
+          },
+        );
+
+        const samplesResponse = await samples.json();
+        const samplesCodes = samplesResponse.map((sample) => {
+          const code = sample.sample.sampleCode;
+          return code.slice(0, -2); // Remove os dois últimos caracteres
+        });
+
+        document.getElementById('sampleBarCode').value = '';
+
         const result = await response.json();
         resultDiv.innerHTML = `<p>Amostra bandejada com sucesso na posição ${result.position}.</p>`;
         renderPositions(result.position, data.sampleBarCode);
@@ -307,7 +317,6 @@
         resultDiv.innerHTML = `<p>Erro: ${error.message}</p>`;
       }
     }
-
     async function renderPositions(occupiedPosition, samples) {
       const positionsDiv = document.getElementById('positions');
       positionsDiv.innerHTML = ''; // Limpa posições anteriores

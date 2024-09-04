@@ -117,7 +117,6 @@ export class SerumBankController {
 
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({ type: TransactionalSerumBankDto })
-  @Public()
   @Post('transaction')
   async transactionalRoutineSerumBank(
     @Body() transactionalSerumBankDto: TransactionalSerumBankDto,

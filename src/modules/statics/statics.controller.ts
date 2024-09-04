@@ -30,6 +30,13 @@ export class StaticsController {
 
   @Public()
   @HttpCode(HttpStatus.OK)
+  @Get('login-page')
+  loginPage(@Res() res: Response) {
+    return res.sendFile(join(`${process.cwd()}/public/login.html`));
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
   @Get('all-banks')
   allBanksPage(@Res() res: Response) {
     return res.sendFile(join(`${process.cwd()}/public/all-banks.html`));
@@ -42,6 +49,16 @@ export class StaticsController {
     return res.sendFile(
       join(
         `${process.cwd()}/public/icons/lab.png`,
+      ),
+    );
+  }
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Get('logo')
+  logo(@Res() res: Response) {
+    return res.sendFile(
+      join(
+        `${process.cwd()}/public/icons/soroteca.png`,
       ),
     );
   }
