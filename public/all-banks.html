@@ -244,10 +244,10 @@
         const positionDiv = document.createElement('div');
         positionDiv.className = 'position';
         positionDiv.textContent = i;
-        if (samples[i] !== undefined) {
-          positionDiv.addEventListener('click', () => redirectPage('http://****/*****/app/rastreabilidade/' + samples[i]));
-          positionDiv.title = samples[i];
-        }
+        // if (samples[i] !== undefined) {
+        //   positionDiv.addEventListener('click', () => redirectPage('http://****/*****/app/rastreabilidade/' + samples[i]));
+        //   positionDiv.title = samples[i];
+        // }
 
         if (occupiedPositions.includes(i)) {
           positionDiv.classList.add('occupied');
