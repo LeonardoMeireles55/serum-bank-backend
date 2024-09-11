@@ -40,6 +40,7 @@ export class AppModule implements OnModuleInit {
   constructor(private migrationService: MigrationService) {}
 
   async onModuleInit() {
+    setTimeout(() => {}, 5000);
     await this.migrationService.onModuleInit();
   }
 }
