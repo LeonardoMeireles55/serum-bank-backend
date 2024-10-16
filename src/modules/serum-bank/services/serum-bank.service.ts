@@ -23,6 +23,24 @@ export class SerumBankService {
     private readonly dataSource: Database,
   ) {}
 
+  private async removeSampleAndPosition(manager, sample: Sample, samplePosition: SamplePosition): Promise<void> {
+    await manager.getRepository(SamplePosition).remove(samplePosition);
+    await manager.getRepository(Sample).remove(sample);
+
+    const serumBank = samplePosition.serumBank;
+    serumBank.availableCapacity++;
+    await manager.getRepository(SerumBank).save(serumBank);
+  }
+
+  private async removeAllSamplesAndUpdateCapacity(manager, serumBank: SerumBank, samplePositions: SamplePosition[]): Promise<void> {
+    for (const samplePosition of samplePositions) {
+      await manager.getRepository(SamplePosition).remove(samplePosition);
+      await manager.getRepository(Sample).remove(samplePosition.sample);
+      serumBank.availableCapacity++;
+    }
+    await manager.getRepository(SerumBank).save(serumBank);
+  }
+
   async removeSample(sampleCode: string): Promise<void> {
     const sample = await this.samplesRepository.findOneBy({ sampleCode });
 
@@ -42,13 +60,7 @@ export class SerumBankService {
     }
 
     return this.dataSource.getConnection().transaction(async (manager) => {
-      await manager.getRepository(SamplePosition).remove(samplePosition);
-
-      const serumBank = samplePosition.serumBank;
-      serumBank.availableCapacity++;
-      await manager.getRepository(SerumBank).save(serumBank);
-
-      await manager.getRepository(Sample).remove(sample);
+      await this.removeSampleAndPosition(manager, sample, samplePosition);
     });
   }
 
@@ -74,19 +86,7 @@ export class SerumBankService {
   
     // Inicia a transação para remover os samples e atualizar o serum bank
     return this.dataSource.getConnection().transaction(async (manager) => {
-      for (const samplePosition of samplePositions) {
-        // Remove a posição do sample
-        await manager.getRepository(SamplePosition).remove(samplePosition);
-  
-        // Remove o sample associado
-        await manager.getRepository(Sample).remove(samplePosition.sample);
-  
-        // Incrementa a capacidade disponível do serum bank
-        serumBank.availableCapacity++;
-      }
-  
-      // Atualiza o serum bank no banco de dados
-      await manager.getRepository(SerumBank).save(serumBank);
+      await this.removeAllSamplesAndUpdateCapacity(manager, serumBank, samplePositions);
     });
   }
 

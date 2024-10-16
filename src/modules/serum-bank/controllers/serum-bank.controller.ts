@@ -42,7 +42,7 @@ export class SerumBankController {
   @Get('samples')
   @ApiResponse({ type: [SamplePosition] })
   @ApiQuery({ name: 'id', type: Number, required: true })
-  async getAllSamplesPositionFromSerumBank2(
+  async getAllSamplesPositionFromSerumBankById(
     @Query('id', ParseIntPipe) id: number,
   ): Promise<SamplePosition[]> {
     return this.serumBankService.getAllSamplesFromSerumBankById(id);
