@@ -11,6 +11,7 @@ import { SamplePosition } from "../entities/samples-positions.entity";
 import { SamplesRepository } from "../repositories/samples.repository";
 import { SamplesPositionRepository } from "../repositories/samples-position.repository";
 import { PositionSampleDto } from "../dtos/position-sample.dto";
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 export class SerumBankService {
   constructor(
@@ -22,6 +23,29 @@ export class SerumBankService {
     private readonly samplesPositionsRepository: SamplesPositionRepository,
     private readonly dataSource: Database,
   ) {}
+
+  private async findSerumBanksWith7Days(): Promise<SerumBank[]> {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 5);
+
+    return this.serumBankRepository
+      .createQueryBuilder('serum_bank')
+      .where('serum_bank.updatedAt <= :sevenDaysAgo', { sevenDaysAgo })
+      .getMany();
+  }
+
+  @Cron(CronExpression.EVERY_2_HOURS)
+  async checkSerumBanksCreated7DaysAgo() {
+    const serumBanks = await this.findSerumBanksWith7Days();
+
+    if (serumBanks.length > 0) {
+      serumBanks.forEach(serumBank => {
+        if(serumBank.availableCapacity < 100) {
+          this.removeAllSamplesFromSerumBank(serumBank.serumBankCode)
+        }
+      });
+    }
+  }
 
   private async removeSampleAndPosition(manager, sample: Sample, samplePosition: SamplePosition): Promise<void> {
     await manager.getRepository(SamplePosition).remove(samplePosition);
@@ -65,11 +89,10 @@ export class SerumBankService {
   }
 
   async removeAllSamplesFromSerumBank(serumBankCode: string): Promise<void> {
-    console.log(serumBankCode)
-    // Verifica se o serum bank existe
+    try {
+
     const serumBank = await this.findSerumBankByCodeOrThrow(serumBankCode);
   
-    // Busca todas as posições de samples associadas ao serum bank
     const samplePositions = await this.samplesPositionsRepository
       .createQueryBuilder('samples_positions')
       .innerJoinAndSelect('samples_positions.sample', 'sample')
@@ -84,10 +107,13 @@ export class SerumBankService {
       throw new HttpException('No samples found in this serum bank', 404);
     }
   
-    // Inicia a transação para remover os samples e atualizar o serum bank
+
     return this.dataSource.getConnection().transaction(async (manager) => {
       await this.removeAllSamplesAndUpdateCapacity(manager, serumBank, samplePositions);
     });
+          
+  } catch(error) {
+  }
   }
 
   private async findSerumBankByCodeOrThrow(code: string): Promise<SerumBank> {
@@ -267,8 +293,6 @@ export class SerumBankService {
       select: ['id'],
       where: { id },
     });
-
-    console.log(serumBank);
 
     if (!serumBank) {
       throw new HttpException('Not found', 404);
