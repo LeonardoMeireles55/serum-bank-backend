@@ -7,8 +7,15 @@ import {
 } from 'typeorm';
 import { SampleTypeEnum } from '../enums/sample-type.enum';
 
+
 @Entity({ name: 'samples' })
 export class Sample {
+
+  constructor(sampleCode: string, sampleType: string) {
+    this.sampleCode = sampleCode;
+    this.sampleType = sampleType;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -27,4 +34,5 @@ export class Sample {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt?: Date;
+
 }

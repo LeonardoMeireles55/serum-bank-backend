@@ -12,6 +12,7 @@ import { SamplesRepository } from "../repositories/samples.repository";
 import { SamplesPositionRepository } from "../repositories/samples-position.repository";
 import { PositionSampleDto } from "../dtos/position-sample.dto";
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { EntityManager } from 'typeorm';
 
 export class SerumBankService {
   constructor(
@@ -47,7 +48,7 @@ export class SerumBankService {
     }
   }
 
-  private async removeSampleAndPosition(manager, sample: Sample, samplePosition: SamplePosition): Promise<void> {
+  private async removeSampleAndPosition(manager: EntityManager, sample: Sample, samplePosition: SamplePosition): Promise<void> {
     await manager.getRepository(SamplePosition).remove(samplePosition);
     await manager.getRepository(Sample).remove(sample);
 
@@ -56,7 +57,7 @@ export class SerumBankService {
     await manager.getRepository(SerumBank).save(serumBank);
   }
 
-  private async removeAllSamplesAndUpdateCapacity(manager, serumBank: SerumBank, samplePositions: SamplePosition[]): Promise<void> {
+  private async removeAllSamplesAndUpdateCapacity(manager: EntityManager, serumBank: SerumBank, samplePositions: SamplePosition[]): Promise<void> {
     for (const samplePosition of samplePositions) {
       await manager.getRepository(SamplePosition).remove(samplePosition);
       await manager.getRepository(Sample).remove(samplePosition.sample);
@@ -137,14 +138,13 @@ export class SerumBankService {
   private async createSample(
     sampleCode: string,
     sampleType: string,
-    manager: any,
+    manager: EntityManager,
   ): Promise<Sample> {
     if (await this.existSampleBySampleCode(sampleCode)) {
       throw new HttpException('Sample already exists', 409);
     }
-    const sample = new Sample();
-    sample.sampleCode = sampleCode;
-    sample.sampleType = sampleType;
+    const sample = new Sample(sampleCode, sampleType);
+
     return manager.getRepository(Sample).save(sample);
   }
 
@@ -152,7 +152,7 @@ export class SerumBankService {
     sample: Sample,
     serumBank: SerumBank,
     position: number,
-    manager: any,
+    manager: EntityManager,
   ): Promise<SamplePosition> {
     const samplePosition = new SamplePosition();
     samplePosition.sample = sample;
@@ -163,7 +163,7 @@ export class SerumBankService {
 
   private async decrementSerumBankCapacity(
     serumBank: SerumBank,
-    manager: any,
+    manager: EntityManager,
   ): Promise<void> {
     serumBank.availableCapacity--;
     await manager.getRepository(SerumBank).save(serumBank);
@@ -214,7 +214,7 @@ export class SerumBankService {
       })
       .getMany();
 
-    return usedPositions.map((item: any) => item.position);
+    return usedPositions.map((item: SamplePosition) => item.position);
   }
 
   async getAvailablePosition(serumBankCode: string): Promise<number> {
@@ -228,12 +228,12 @@ export class SerumBankService {
 
     const capacity = serumBank.capacity;
 
-    const usedPositions = await this.getUsedPositions(serumBankCode);
+    const usedPositions = new Set(await this.getUsedPositions(serumBankCode));
 
     const allPositions = Array.from({ length: capacity }, (_, index) => index);
 
     const availablePositions = allPositions.filter(
-      (position) => !usedPositions.includes(position),
+      (position) => !usedPositions.has(position),
     );
 
     const availablePosition =
@@ -253,11 +253,11 @@ export class SerumBankService {
 
     const capacity = serumBank.capacity;
 
-    const usedPositions = await this.getUsedPositions(serumBankCode);
+    const usedPositions = new Set(await this.getUsedPositions(serumBankCode));
 
     const allPositions = Array.from({ length: capacity }, (_, index) => index);
 
-    return allPositions.filter((position) => !usedPositions.includes(position));
+    return allPositions.filter((position) => !usedPositions.has(position));
   }
 
   async getAllSamplesFromSerumBank(code: string): Promise<SamplePosition[]> {
