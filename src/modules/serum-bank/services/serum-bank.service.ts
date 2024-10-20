@@ -11,6 +11,8 @@ import { SamplePosition } from "../entities/samples-positions.entity";
 import { SamplesRepository } from "../repositories/samples.repository";
 import { SamplesPositionRepository } from "../repositories/samples-position.repository";
 import { PositionSampleDto } from "../dtos/position-sample.dto";
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { EntityManager } from 'typeorm';
 
 export class SerumBankService {
   constructor(
@@ -23,7 +25,30 @@ export class SerumBankService {
     private readonly dataSource: Database,
   ) {}
 
-  private async removeSampleAndPosition(manager, sample: Sample, samplePosition: SamplePosition): Promise<void> {
+  private async findSerumBanksWith7Days(): Promise<SerumBank[]> {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 5);
+
+    return this.serumBankRepository
+      .createQueryBuilder('serum_bank')
+      .where('serum_bank.updatedAt <= :sevenDaysAgo', { sevenDaysAgo })
+      .getMany();
+  }
+
+  @Cron(CronExpression.EVERY_2_HOURS)
+  async checkSerumBanksCreated7DaysAgo() {
+    const serumBanks = await this.findSerumBanksWith7Days();
+
+    if (serumBanks.length > 0) {
+      serumBanks.forEach(serumBank => {
+        if(serumBank.availableCapacity < 100) {
+          this.removeAllSamplesFromSerumBank(serumBank.serumBankCode)
+        }
+      });
+    }
+  }
+
+  private async removeSampleAndPosition(manager: EntityManager, sample: Sample, samplePosition: SamplePosition): Promise<void> {
     await manager.getRepository(SamplePosition).remove(samplePosition);
     await manager.getRepository(Sample).remove(sample);
 
@@ -32,7 +57,7 @@ export class SerumBankService {
     await manager.getRepository(SerumBank).save(serumBank);
   }
 
-  private async removeAllSamplesAndUpdateCapacity(manager, serumBank: SerumBank, samplePositions: SamplePosition[]): Promise<void> {
+  private async removeAllSamplesAndUpdateCapacity(manager: EntityManager, serumBank: SerumBank, samplePositions: SamplePosition[]): Promise<void> {
     for (const samplePosition of samplePositions) {
       await manager.getRepository(SamplePosition).remove(samplePosition);
       await manager.getRepository(Sample).remove(samplePosition.sample);
@@ -65,11 +90,10 @@ export class SerumBankService {
   }
 
   async removeAllSamplesFromSerumBank(serumBankCode: string): Promise<void> {
-    console.log(serumBankCode)
-    // Verifica se o serum bank existe
+    try {
+
     const serumBank = await this.findSerumBankByCodeOrThrow(serumBankCode);
   
-    // Busca todas as posições de samples associadas ao serum bank
     const samplePositions = await this.samplesPositionsRepository
       .createQueryBuilder('samples_positions')
       .innerJoinAndSelect('samples_positions.sample', 'sample')
@@ -84,10 +108,13 @@ export class SerumBankService {
       throw new HttpException('No samples found in this serum bank', 404);
     }
   
-    // Inicia a transação para remover os samples e atualizar o serum bank
+
     return this.dataSource.getConnection().transaction(async (manager) => {
       await this.removeAllSamplesAndUpdateCapacity(manager, serumBank, samplePositions);
     });
+          
+  } catch(error) {
+  }
   }
 
   private async findSerumBankByCodeOrThrow(code: string): Promise<SerumBank> {
@@ -111,14 +138,13 @@ export class SerumBankService {
   private async createSample(
     sampleCode: string,
     sampleType: string,
-    manager: any,
+    manager: EntityManager,
   ): Promise<Sample> {
     if (await this.existSampleBySampleCode(sampleCode)) {
       throw new HttpException('Sample already exists', 409);
     }
-    const sample = new Sample();
-    sample.sampleCode = sampleCode;
-    sample.sampleType = sampleType;
+    const sample = new Sample(sampleCode, sampleType);
+
     return manager.getRepository(Sample).save(sample);
   }
 
@@ -126,7 +152,7 @@ export class SerumBankService {
     sample: Sample,
     serumBank: SerumBank,
     position: number,
-    manager: any,
+    manager: EntityManager,
   ): Promise<SamplePosition> {
     const samplePosition = new SamplePosition();
     samplePosition.sample = sample;
@@ -137,7 +163,7 @@ export class SerumBankService {
 
   private async decrementSerumBankCapacity(
     serumBank: SerumBank,
-    manager: any,
+    manager: EntityManager,
   ): Promise<void> {
     serumBank.availableCapacity--;
     await manager.getRepository(SerumBank).save(serumBank);
@@ -188,7 +214,7 @@ export class SerumBankService {
       })
       .getMany();
 
-    return usedPositions.map((item: any) => item.position);
+    return usedPositions.map((item: SamplePosition) => item.position);
   }
 
   async getAvailablePosition(serumBankCode: string): Promise<number> {
@@ -202,12 +228,12 @@ export class SerumBankService {
 
     const capacity = serumBank.capacity;
 
-    const usedPositions = await this.getUsedPositions(serumBankCode);
+    const usedPositions = new Set(await this.getUsedPositions(serumBankCode));
 
     const allPositions = Array.from({ length: capacity }, (_, index) => index);
 
     const availablePositions = allPositions.filter(
-      (position) => !usedPositions.includes(position),
+      (position) => !usedPositions.has(position),
     );
 
     const availablePosition =
@@ -227,11 +253,11 @@ export class SerumBankService {
 
     const capacity = serumBank.capacity;
 
-    const usedPositions = await this.getUsedPositions(serumBankCode);
+    const usedPositions = new Set(await this.getUsedPositions(serumBankCode));
 
     const allPositions = Array.from({ length: capacity }, (_, index) => index);
 
-    return allPositions.filter((position) => !usedPositions.includes(position));
+    return allPositions.filter((position) => !usedPositions.has(position));
   }
 
   async getAllSamplesFromSerumBank(code: string): Promise<SamplePosition[]> {
@@ -267,8 +293,6 @@ export class SerumBankService {
       select: ['id'],
       where: { id },
     });
-
-    console.log(serumBank);
 
     if (!serumBank) {
       throw new HttpException('Not found', 404);

@@ -302,6 +302,9 @@
           if (response.status == 409) {
             throw new Error('A amostra já foi bandejada.');
           }
+          if (response.status == 401) {
+            redirectPage('../v1/login');
+          }
           throw new Error('Erro ao bandejar a amostra.');
         }
 
