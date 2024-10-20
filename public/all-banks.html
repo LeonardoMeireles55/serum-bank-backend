@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="../v1/icon" type="image/x-icon" />
-  <title>SOROTECA</title>
+  <title>SOROTECA VIRTUAL</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -124,11 +124,44 @@
     footer a:hover {
       text-decoration: underline;
     }
+
+    @media (max-width: 600px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .positions {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      .position {
+        width: 30px;
+        height: 30px;
+        font-size: 0.6rem;
+      }
+
+      .menu {
+        padding: 0;
+        font-size: 1px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .position {
+        width: 30px;
+        height: 30px;
+        font-size: 0.6rem;
+      }
+
+      .menu a {
+        font-size: 0.6rem;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <h1>SOROTECA</h1>
+  <h1>SOROTECA VIRTUAL</h1>
   <div class="menu">
     <a href="../v1/all-banks">GERAL</a>
     <a href="../v1/home">SOROTECA</a>
@@ -211,10 +244,10 @@
         const positionDiv = document.createElement('div');
         positionDiv.className = 'position';
         positionDiv.textContent = i;
-        if (samples[i] !== undefined) {
-          positionDiv.addEventListener('click', () => redirectPage('http://****/MatrixNet/app/rastreabilidade/' + samples[i]));
-          positionDiv.title = samples[i];
-        }
+        // if (samples[i] !== undefined) {
+        //   positionDiv.addEventListener('click', () => redirectPage('http://****/*****/app/rastreabilidade/' + samples[i]));
+        //   positionDiv.title = samples[i];
+        // }
 
         if (occupiedPositions.includes(i)) {
           positionDiv.classList.add('occupied');

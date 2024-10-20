@@ -8,9 +8,11 @@ import { MigrationService } from './common/providers/migration.provider';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { AppConfigService } from './app-config/app-config.service';
 import { StaticsModule } from './modules/statics/statics.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     AppConfigModule,
     UsersModule,
     SerumBankModule,
@@ -40,6 +42,7 @@ export class AppModule implements OnModuleInit {
   constructor(private migrationService: MigrationService) {}
 
   async onModuleInit() {
+    setTimeout(() => {}, 5000);
     await this.migrationService.onModuleInit();
   }
 }

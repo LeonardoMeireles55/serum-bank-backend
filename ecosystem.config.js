@@ -3,8 +3,8 @@ module.exports = {
       {
         name: 'serum-bank-api',
         script: 'dist/main.js',
-        instances: '2',
-        exec_mode: 'cluster',
+        instances: '1',
+        exec_mode: 'fork',
       },
     ],
   };

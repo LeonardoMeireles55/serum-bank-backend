@@ -16,7 +16,7 @@ export const databaseProviders = [
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: config.nodeEnv === 'development' ? true : false,
         logging: config.nodeEnv === 'development' ? true : false,
-        dropSchema: config.nodeEnv === 'development' ? false : false,
+        dropSchema: config.nodeEnv === 'development' ? true : false,
         migrations: [`${__dirname}../../../migrations/{.ts,*.js}`],
         migrationsRun: false,
       });

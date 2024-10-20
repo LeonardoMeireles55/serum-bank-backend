@@ -20,7 +20,7 @@
       color: #2c3e50;
       text-align: center;
       font-size: 2rem;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
 
     .container {
@@ -147,6 +147,8 @@
       color: #3498db;
     }
 
+
+
     footer {
       text-align: center;
       padding: 10px;
@@ -162,6 +164,18 @@
 
     footer a:hover {
       text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .position {
+        width: 30px;
+        height: 30px;
+        font-size: 0.6rem;
+      }
+
+      .menu a {
+        font-size: 0.6rem;
+      }
     }
   </style>
 </head>
@@ -264,9 +278,9 @@
         if (i === occupiedPosition.position) {
           positionDiv.classList.add('occupied');
           positionDiv.title = sampleCode;
-          positionDiv.addEventListener('click', () =>
-            window.open(`http://192.168.57.187/MatrixNet/app/rastreabilidade/${sampleCode.slice(0, -2)}`, '_blank')
-          );
+          // positionDiv.addEventListener('click', () =>
+          //   window.open(`http://****/*****/app/rastreabilidade/${sampleCode.slice(0, -2)}`, '_blank')
+          // );
         }
 
         positionsGrid.appendChild(positionDiv);

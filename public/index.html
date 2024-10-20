@@ -24,7 +24,7 @@
       color: #2c3e50;
       text-align: center;
       font-size: 2rem;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
 
     .container {
@@ -130,6 +130,7 @@
       text-align: center;
       margin-bottom: 10px;
       border-radius: 8px;
+
     }
 
     .menu a {
@@ -211,8 +212,21 @@
       color: white;
     }
 
+
     .cancel-button:hover {
       background-color: #467ec7;
+    }
+
+    @media (max-width: 600px) {
+      .position {
+        width: 30px;
+        height: 30px;
+        font-size: 0.6rem;
+      }
+
+      .menu a {
+        font-size: 0.6rem;
+      }
     }
   </style>
 </head>
@@ -368,9 +382,9 @@
           positionDiv.classList.add('occupied');
         }
 
-        positionDiv.addEventListener('click', () => {
-          if (samples[i]) window.open(`http://192.168.57.187/MatrixNet/app/rastreabilidade/${samples[i].slice(0, -2)}`, '_blank');
-        });
+        // positionDiv.addEventListener('click', () => {
+        //   if (samples[i]) window.open(`http://****/*****/app/rastreabilidade/${samples[i].slice(0, -2)}`, '_blank');
+        // });
 
         resultDiv.appendChild(positionDiv);
       }
