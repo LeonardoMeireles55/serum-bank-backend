@@ -17,6 +17,7 @@ import { HandleErrors } from 'src/common/decorators/handle-errors.decorator';
 import { Public } from 'src/common/decorators/is-public.decorator';
 import { DefaultResponseDto } from 'src/common/dtos/default-response.dto';
 import { UserService } from 'src/modules/users/services/users.service';
+import { User } from 'src/common/decorators/user.decorator';
 
 @ApiTags('Auth')
 @Controller({ version: '1' })
@@ -91,7 +92,7 @@ export class AuthController {
 
   @ApiBearerAuth()
   @Get('profile')
-  getProfile(@Request() req): any {
-    return req.user;
+  getProfile(@User() req): any {
+    return req;
   }
 }

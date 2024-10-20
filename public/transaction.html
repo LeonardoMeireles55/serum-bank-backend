@@ -292,7 +292,7 @@
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`, // Adiciona o token ao cabeçalho Authorization
+              'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify(data),
           },
@@ -312,7 +312,7 @@
           `../v1/serum-banks/${data.serumBankCode}/samples`,
           {
             headers: {
-              'Authorization': `Bearer ${token}`, // Adiciona o token ao cabeçalho Authorization para a segunda requisição
+              'Authorization': `Bearer ${token}`,
             },
           },
         );
@@ -334,7 +334,7 @@
     }
     async function renderPositions(occupiedPosition, samples) {
       const positionsDiv = document.getElementById('positions');
-      positionsDiv.innerHTML = ''; // Limpa posições anteriores
+      positionsDiv.innerHTML = '';
 
       for (let i = 0; i < 100; i++) {
         const positionDiv = document.createElement('div');
@@ -350,8 +350,6 @@
         positionsDiv.appendChild(positionDiv);
       }
     }
-
-    // Carrega os bancos de soro ao carregar a página
     window.onload = loadSerumBanks;
   </script>
 </body>
