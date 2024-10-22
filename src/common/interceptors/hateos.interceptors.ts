@@ -13,63 +13,63 @@ export class HateoasInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data) => {
         const request = context.switchToHttp().getRequest();
-        const protocol = request.protocol;
-        const host = request.get('host');
-        const baseUrl = `${protocol}://${host}${request.baseUrl}`;
+        const baseUrl = this.getBaseUrl(request);
         const routePath = request.route.path;
 
         if (Array.isArray(data.response)) {
-          const paginatedResponse = data as any;
-          if (paginatedResponse.response) {
-            paginatedResponse.response = paginatedResponse.response.map(
-              (item) => {
-                const itemPath = this.getPath(routePath, item);
-                const id = item.id;
-                return {
-                  ...item,
-                  _links: {
-                    self: { href: `${baseUrl}${itemPath}/${id}` },
-                  },
-                };
-              },
-            );
-          }
-          paginatedResponse._links = {
-            self: { href: `${baseUrl}${routePath}` },
-            ...(paginatedResponse._links || {}),
-          };
-          return paginatedResponse;
+          return this.buildPaginatedResponse(baseUrl, routePath, data);
         } else {
-          const itemPath = this.getPath(routePath, data);
-          if (data.serumBankCode) {
-            return {
-              ...data,
-              _links: {
-                self: { href: `${baseUrl}${itemPath}/${data.serumBankCode}` },
-              },
-            };
-          }
-          return {
-            ...data,
-            _links: {
-              self: { href: `${baseUrl}${itemPath}` },
-            },
-          };
+          return this.buildSingleItemResponse(baseUrl, routePath, data);
         }
       }),
     );
   }
 
+  private getBaseUrl(request: any): string {
+    const protocol = request.protocol;
+    const host = request.get('host');
+    return `${protocol}://${host}${request.baseUrl}`;
+  }
+
   private getPath(routePath: string, item: any): string {
-    let path = routePath;
+    return routePath
+      .replace(':code', encodeURIComponent(item.serumBankCode || ''))
+      .replace(':id', item.id?.toString() || '');
+  }
 
-    if (path.includes(':code') && item.serumBankCode) {
-      path = path.replace(':code', encodeURIComponent(item.serumBankCode));
-    }
-    if (path.includes(':id') && item.id) {
-      path = path.replace(':id', item.id.toString());
-    }
+  private buildSelfLink(baseUrl: string, path: string, identifier?: string): { href: string } {
+    return { href: identifier ? `${baseUrl}${path}/${identifier}` : `${baseUrl}${path}` };
+  }
 
-    return path;
+  private buildPaginatedResponse(baseUrl: string, routePath: string, paginatedData: any) {
+    paginatedData.response = paginatedData.response.map((item: any) => {
+      const itemPath = this.getPath(routePath, item);
+      return {
+        ...item,
+        _links: {
+          self: this.buildSelfLink(baseUrl, itemPath, item.id),
+        },
+      };
+    });
+
+    return {
+      ...paginatedData,
+      _links: {
+        self: this.buildSelfLink(baseUrl, routePath),
+        ...(paginatedData._links || {}),
+      },
+    };
+  }
+
+  private buildSingleItemResponse(baseUrl: string, routePath: string, data: any) {
+    const itemPath = this.getPath(routePath, data);
+    const identifier = data.serumBankCode || data.id?.toString();
+
+    return {
+      ...data,
+      _links: {
+        self: this.buildSelfLink(baseUrl, itemPath, identifier),
+      },
+    };
   }
 }
