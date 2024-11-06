@@ -18,6 +18,28 @@ export class StaticsController {
   @Public()
   @Version('1')
   @HttpCode(HttpStatus.OK)
+  @Get('new-home')
+  newHomePage(@Res() res: Response) {
+    return res.sendFile(join(`${process.cwd()}/public/new-home.html`));
+  }
+  @Public()
+  @Version('1')
+  @HttpCode(HttpStatus.OK)
+  @Get('soroteca')
+  sorotecaPage(@Res() res: Response) {
+    return res.sendFile(join(`${process.cwd()}/public/soroteca.html`));
+  }
+  @Public()
+  @Version('1')
+  @HttpCode(HttpStatus.OK)
+  @Get('login-script')
+  loginScript(@Res() res: Response) {
+    return res.sendFile(join(`${process.cwd()}/public/scripts/script.js`));
+  }
+
+  @Public()
+  @Version('1')
+  @HttpCode(HttpStatus.OK)
   @Get('search')
   searchPage(@Res() res: Response) {
     return res.sendFile(join(`${process.cwd()}/public/search.html`));
@@ -66,6 +88,28 @@ export class StaticsController {
     return res.sendFile(
       join(
         `${process.cwd()}/public/icons/soroteca.png`,
+      ),
+    );
+  }
+  @Public()
+  @Version('1')
+  @HttpCode(HttpStatus.OK)
+  @Get('banner')
+  banner(@Res() res: Response) {
+    return res.sendFile(
+      join(
+        `${process.cwd()}/public/assets/banner.jpg`,
+      ),
+    );
+  }
+  @Public()
+  @Version('1')
+  @HttpCode(HttpStatus.OK)
+  @Get('soroteca-logo')
+  sorotecaLogo(@Res() res: Response) {
+    return res.sendFile(
+      join(
+        `${process.cwd()}/public/assets/soroteca.png`,
       ),
     );
   }

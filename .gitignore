@@ -57,3 +57,7 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 db/
 .db/
+SQL_LITE
+.SQL_LITE
+SQL_LITE/
+.SQL_LITE/

@@ -7,126 +7,276 @@
     <link rel="icon" href="../v1/icon" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <title>Login - SOROTECA</title>
+
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+        * {
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7fb;
-            color: #333;
-        }
-
-        .login-container {
-            width: 100%;
-            max-width: 400px;
-            padding: 40px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            position: relative;
-        }
-
-        .logo {
-            width: 300px;
-            height: auto;
-            margin-bottom: 0px;
-        }
-
-        .input-group {
-            margin-bottom: 10px;
-            text-align: left;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #34495e;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccd1d9;
-            border-radius: 6px;
+            padding: 0;
             box-sizing: border-box;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+            font-family: 'poppins', sans-serif;
+
         }
 
-        .input-group input:focus {
-            border-color: #3498db;
-            outline: none;
+        body {
+            margin: 0px;
+            width: 100vw;
+            height: 100vw;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+
+            background-color: white;
         }
 
-        .login-button {
-            width: 100%;
-            padding: 12px;
-            background-color: #3498db;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
-            color: white;
-            transition: background-color 0.3s ease;
+        .imagem-logo img {
+            width: 400px;
         }
 
-        .login-button:hover {
-            background-color: #2980b9;
+
+        .container {
+            background-color: whitesmoke;
+            padding: 10px;
+            width: 450px;
+            height: 580px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 0 20px 0 rgb(95, 127, 158);
         }
 
-        .footer-link {
-            margin-top: 20px;
-            font-size: 0.9rem;
+        form {
+            position: absolute;
+            margin-top: 80px;
+            transition: .6s;
+            width: 400px;
+            height: 450px;
         }
 
-        .footer-link a {
-            color: #3498db;
-            text-decoration: none;
-        }
-
-        .footer-link a:hover {
-            text-decoration: underline;
-        }
-
-        footer {
-            width: 100%;
+        .buttonsForm {
             margin-top: 40px;
+            position: relative;
+            border-radius: 30px;
+            box-shadow: 0 0 7px 0 rgb(65, 158, 195);
+        }
+
+        .buttonsForm button {
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            position: relative;
+            padding: 10px 29px;
+        }
+
+        .btnColor {
+            position: absolute;
+            width: 108px;
+            height: 100%;
+            background-color: rgb(92, 163, 214);
+            border-radius: 30px;
+            transition: .3s;
+        }
+
+        input[type="text1"],
+        input[type="password1"],
+        input[type="number"] {
+            border: none;
+            margin-top: 80px;
+            border-radius: 60px;
+            padding: 8px 0 8px 35px;
+            width: 100%;
+
+        }
+
+        input[type="text2"],
+        input[type="password2"],
+        input[type="password3"],
+        input[type="number"] {
+            border: none;
+            margin-top: 40px;
+            border-radius: 60px;
+            padding: 8px 0 8px 35px;
+            width: 100%;
+            margin-top: 30px;
+
+        }
+
+        button[type="submit1"] {
+            background: rgb(65, 158, 195);
+            color: white;
+            border-radius: 30px;
+            width: 100%;
+            border: none;
+            outline: none;
+            padding: 8px 0 8px 15px;
+            font-size: 15px;
+            margin-top: 80px;
+            cursor: pointer;
+        }
+
+        button[type="submit2"] {
+            background: rgb(65, 158, 195);
+            color: white;
+            border-radius: 30px;
+            width: 100%;
+            border: none;
+            outline: none;
+            padding: 8px 0 8px 15px;
+            font-size: 15px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .divCheck {
+            margin: 10px 0 0 5px;
+            width: 80%;
+            font-size: 13px;
+            padding-top: 15px;
+            margin-top: 10px;
+
+        }
+
+        .forgot-my-pass {
+            font-size: 10px;
+            color: rgb(30, 74, 150);
             text-align: center;
-            font-size: 0.8rem;
-            color: #999;
+            padding-top: 30px;
+        }
+
+        .helpblock {
+            font-size: 10px;
+            color: rgb(65, 158, 195);
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        #signin {
+            left: 25px;
+
+        }
+
+        #signup {
+            left: 450px;
+            padding-bottom: 5px;
+        }
+
+        .iEmail1 {
+            top: 80px;
+            position: absolute;
+            left: 0;
+            padding: 10px 10px;
+
+        }
+
+        .iPassword1 {
+            top: 195px;
+            position: absolute;
+            left: 0;
+            padding: 10px 10px;
+
+        }
+
+        .iNomeCompleto {
+            top: 30px;
+            position: absolute;
+            left: 0;
+            padding: 10px 10px;
+        }
+
+        .iMatricula {
+            top: 95px;
+            position: absolute;
+            left: 0;
+            padding: 10px 10px;
+        }
+
+        .iEmail2 {
+            top: 160px;
+            position: absolute;
+            left: 0;
+            padding: 10px 10px;
+        }
+
+        .iPassword2 {
+            top: 230px;
+            position: absolute;
+            left: 0;
+            padding: 10px 10px;
+        }
+
+        .iPassword3 {
+            top: 290px;
+            position: absolute;
+            left: 0;
+            padding: 10px 10px;
         }
     </style>
 </head>
 
 <body>
-    <div class="login-container">
-        <img src="../v1/logo" alt="Logo SOROTECA" class="logo" />
-        <!-- <h1>Login - SOROTECA</h1> -->
-        <div class="input-group">
-            <label for="username">Email</label>
-            <input type="text" id="username" name="username" placeholder="Digite seu email" required />
+
+    <div class="imagem-logo">
+        <img src="../v1/soroteca-logo" alt="">
+    </div>
+    <div class="container">
+
+        <div class="buttonsForm">
+            <div class="btnColor"></div>
+            <button id="btnSignin">Sign In</button>
+            <button id="btnSignup">Sign Up</button>
         </div>
 
-        <div class="input-group">
-            <label for="password">Senha</label>
-            <input type="password" id="password" name="password" placeholder="Digite sua senha" required />
-        </div>
+        <form id="signin">
+            <input id="inputEmail" type="text1" placeholder="Email" required />
+            <i class="fas fa-envelope iEmail1"></i>
+            <input id="inputSenha" type="password1" placeholder="Password" required />
+            <i class="fas fa-lock iPassword1"></i>
+            <div class="divCheck">
+                <input type="checkbox">
+                <span>Remember Password</span>
+            </div>
+            <a href="..v1/new-home">
+                <button id="submit-enviar" type="submit1">Sign In</button> <br>
+            </a>
 
-        <button class="login-button" onclick="handleLogin()">Entrar</button>
-        <div class="footer-link">
-            <p><a href="#">Esqueceu a senha?</a></p>
-        </div>
-        <footer>
-            <p>&copy; 2024 Leonardo Meireles. Todos os direitos reservados.</p>
-        </footer>
+            <div class="forgot-my-pass">
+                <a class="forgot-my-pass" href="/Recuperacao-Senha/index.html">Forgot my password</a>
+            </div>
+
+        </form>
+        <form id="signup">
+            <input id="inputNome" type="text2" placeholder="Nome Completo" required>
+            <i class="fa fa-user iNomeCompleto"></i>
+            <input id="inputMatricula" type="number" placeholder="Matricula" required>
+            <i class="fa fa-book iMatricula"></i>
+            <input id="inputEmail2" type="text2" placeholder="Email" required>
+            <i class="fas fa-envelope iEmail2 "></i>
+            <input id="inputSenha2" type="password2" placeholder="Password" required>
+            <i class="fas fa-lock iPassword2"></i>
+            <input id="inputSenha3" type="password3" placeholder="Password" required>
+            <i class="fas fa-lock iPassword3"></i>
+            <div id="passwordHelpBlock" class="helpblock">
+                Your password must be 8 to 20 characters long, contain letters and numbers,
+                and must not contain spaces, special characters, or emoji.
+            </div>
+            <div class="divCheck">
+                <input type="checkbox">
+                <span>Terms</span>
+            </div>
+
+
+            <button id="submit-cadastrar" type="submit2">Sign up</button> <br>
+
+        </form>
+
+
     </div>
 </body>
-
+<script src="../v1/login-script"></script> 
 <script>
     async function handleLogin() {
         const username = document.getElementById('username').value;
@@ -161,7 +311,7 @@
 
             alert('Login realizado com sucesso!');
 
-            window.location.href = '../v1/home';
+            window.location.href = '../v1/new-home';
         } catch (error) {
             console.error('Erro na requisição:', error);
             alert('Ocorreu um erro ao tentar realizar o login. Tente novamente.');
