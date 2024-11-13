@@ -36,6 +36,7 @@ export class StaticsController {
   loginScript(@Res() res: Response) {
     return res.sendFile(join(`${process.cwd()}/public/scripts/script.js`));
   }
+  
 
   @Public()
   @Version('1')

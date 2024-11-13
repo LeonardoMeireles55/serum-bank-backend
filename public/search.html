@@ -7,208 +7,249 @@
   <link rel="icon" href="../v1/icon" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <title>PESQUISA DE AMOSTRAS</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f5f7fa;
-      margin: 0;
-      padding: 10px;
-      color: #333;
-    }
 
-    h1 {
-      color: #2c3e50;
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'poppins', sans-serif;
+}
 
-    .container {
-      max-width: 550px;
-      margin: 0 auto;
-      background-color: #ffffff;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+header {
+  width: 100%;
+  padding: 28px 8%;
+}
 
-    .input-group {
-      margin-bottom: 15px;
-    }
+section {
+  padding: 28px 8%;
+}
 
-    .input-group label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-      color: #34495e;
-    }
+#navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    .input-group input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccd1d9;
-      border-radius: 6px;
-      box-sizing: border-box;
-      font-size: 0.9rem;
-      transition: border-color 0.3s ease;
-    }
+.nav-logo {
+  width: 250px;
+  height: 250px;
+}
 
-    .input-group input:focus {
-      border-color: #3498db;
-      outline: none;
-    }
+#nav_list {
+  display: flex;
+  list-style: none;
+  gap: 150px;
+}
 
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 10px;
-      background-color: #37639B;
-      color: #ffffff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background-color 0.3s ease;
-      margin-top: 10px;
-    }
+.nav-item a {
+  text-decoration: none;
+  color: rgb(65, 158, 195);
+  font-size: 30px;
+}
 
-    .btn:hover {
-      background-color: #467ec7;
-    }
+#banner {
+  width: 70%;
+  margin: 0px 0px 0px 200px;
+}
 
-    .result {
-      margin-top: 20px;
-    }
+#banner img {
+  max-width: 100%;
+  margin-top: 0px;
+}
 
-    .serumBankCode {
-      font-size: 1.1rem;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 15px;
-      color: #555;
-    }
+.container {
+  margin-top: 50px;
 
-    .positions-grid {
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      gap: 5px;
-    }
+  background-color: #aecfe1;
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(8, 57, 97, 0.1);
+}
 
-    .position {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      background-color: #ecf0f1;
-      border-radius: 6px;
-      font-weight: bold;
-      color: #34495e;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
+.input-group {
+  margin-bottom: 50px;
+}
 
-    .position:hover {
-      transform: translateY(-2px);
-      cursor: pointer;
-    }
+.input-group label {
+  display: block;
+  margin-bottom: 20px;
+  font-weight: 600;
+  font-size: 30px;
+  color:rgb(55, 88, 126);
+}
 
-    .occupied {
-      background-color: #e74c3c;
-      color: #ffffff;
-    }
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccd1d9;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 0.9rem;
+  transition: border-color 0.3s ease;
+}
 
-    #delete-sample {
-      background-color: #e74c3c;
-      color: #ffffff;
-    }
+.input-group input:focus {
+  border-color: #3498db;
+  outline: none;
+}
 
-    #delete-sample:hover {
-      background-color: #fc614f;
-      color: #ffffff;
-    }
+.btn , .delete-sample {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #37639B;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
 
-    .menu {
-      padding: 10px;
-      text-align: center;
-      margin-bottom: 10px;
-      border-radius: 8px;
-    }
+.btn:hover {
+  background-color: #467ec7;
+}
 
-    .menu a {
-      color: black;
-      text-decoration: none;
-      margin: 0 15px;
-      font-size: 1rem;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
+.result {
+  margin-top: 20px;
+  display: grid;
+  gap: 5px;
+}
 
-    .menu a:hover {
-      color: #3498db;
-    }
+.serumBankCode {
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 15px;
+  color: #555;
+}
 
+.positions-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 5px;
+}
 
+.position {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background-color: #ad3d3d;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #ffffff;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
 
-    footer {
-      text-align: center;
-      padding: 10px;
-      margin-top: 20px;
-      font-size: 0.8rem;
-      border-radius: 0 0 8px 8px;
-    }
+.position:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
 
-    footer a {
-      color: #3498db;
-      text-decoration: none;
-    }
+.occupied {
+  background-color: #da4141;
+  color: #ffffff;
+}
 
-    footer a:hover {
-      text-decoration: underline;
-    }
+#delete-sample {
+  background-color: #ad3d3d;
+  color: #ffffff;
+}
 
-    @media (max-width: 600px) {
-      .position {
-        width: 30px;
-        height: 30px;
-        font-size: 0.6rem;
-      }
+#delete-sample:hover {
+  background-color: #da4141;
+  color: #ffffff;
+}
 
-      .menu a {
-        font-size: 0.6rem;
-      }
-    }
-  </style>
+.menu {
+  text-align: center;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+.menu a {
+  color: black;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.menu a:hover {
+  color: #3498db;
+}
+
+    
+</style>
 </head>
 
-<body>
-  <h1>PESQUISA DE AMOSTRAS</h1>
-  <div class="menu">
-    <a href="../v1/all-banks">GERAL</a>
-    <a href="../v1/home">SOROTECA</a>
-    <a href="../v1/transaction">ALOCAÇÃO</a>
-    <a href="../v1/search">PESQUISA</a>
-  </div>
+  <body>
+    <header>
+      <nav id="navbar">
+        <img class="nav-logo" src="../v1/soroteca-logo" alt="nav_logo">
 
-  <div class="container">
-    <div class="input-group">
-      <label for="sampleCode">INSIRA O PEDIDO DA AMOSTRA:</label>
-      <input type="text" id="sampleCode" placeholder="PEDIDO" />
-    </div>
-    <button class="btn" onclick="fetchSamplePosition()">
-      <i class="fas fa-search"></i>
-    </button>
-    <button id="delete-sample" class="btn" onclick="removeSample()">
-      <i class="fas fa-trash"></i>
-    </button>
+        <ul id="nav_list">
+          <li class="nav-item ">
+            <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-chalkboard-user"></i>
+            <a href="../v1/new-home">Home</a>
+          </li>
+          <li class="nav-item ">
+            <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-vial"></i>
+            <a href="../v1/soroteca">Soroteca</a>
+          </li>
 
-    <div class="result" id="result">
-      <!-- O código da bandeja e a bandeja com posições de 0 a 99 serão exibidos aqui -->
-    </div>
-  </div>
+          <li class="nav-item ">
+            <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-eye-dropper"></i>
+            <a href="../v1/transaction">Alocação</a>
+          </li>
+          <li class="nav-item ">
+            <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-magnifying-glass"></i>
+            <a href="../v1/search">Pesquisa</a>
+          </li>
+          <li class="nav-item ">
+            <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-power-off"></i>
+            <a href="../v1/login">Login in/Logout </a>
+          </li>
 
-  <footer>
-    <p>&copy; 2024 Leonardo Meireles. Todos os direitos reservados.</p>
-  </footer>
+        </ul>
+      </nav>
+</header>
+
+  <main id="content">
+
+    <section>
+      <div class="container">
+        <div class="input-group">
+          <label for="sampleCode">Insira o Pedido da Amostra:</label>
+          <input type="text" id="sampleCode" placeholder="PEDIDO" />
+        </div>
+        <button class="btn" onclick="fetchSamplePosition()">
+          <i class="fas fa-search"></i>
+        </button>
+        <button id="delete-sample" class="btn" onclick="removeSample()">
+          <i class="fas fa-trash"></i>
+        </button>
+  
+        <div class="result" id="result">
+          <!-- O código da bandeja e a bandeja com posições de 0 a 99 serão exibidos aqui -->
+        </div>
+      </div>
+  
+    </section>
+
+   
+  </main>
+  
 
   <script>
     async function fetchSamplePosition() {
@@ -289,6 +330,6 @@
       resultDiv.appendChild(positionsGrid);
     }
   </script>
-</body>
+  </body>
 
 </html>
