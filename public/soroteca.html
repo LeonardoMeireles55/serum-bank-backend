@@ -271,7 +271,7 @@ section {
 <body>
     <header>
         <nav id="navbar">
-            <img class="nav-logo" src="/assets/soroteca.png" alt="nav_logo">
+            <img class="nav-logo" src="../v1/soroteca-logo" alt="nav_logo">
 
             <ul id="nav_list">
                 <li class="nav-item ">
@@ -337,7 +337,7 @@ section {
        
         
     </main>
-    <script >
+<script >
 
 
 function getSelectedBankCode() {
@@ -359,19 +359,26 @@ function getSelectedBankCode() {
       const { response: serumBanks } = await response.json();
       const bankSelect = document.getElementById('bankSelect');
 
+      const selectOption = document.createElement('option');
+      selectOption.value = ""; // Empty value for "selecione"
+      selectOption.textContent = "SELECIONE";
+      bankSelect.appendChild(selectOption);
+
+
       serumBanks.forEach(bank => {
-        const option = document.createElement('option');
-        option.value = bank.serumBankCode;
-        option.textContent = bank.serumBankCode;
-        bankSelect.appendChild(option);
+      const option = document.createElement('option');
+      option.value = bank.serumBankCode;
+      option.textContent = bank.serumBankCode;
+      bankSelect.appendChild(option);
       });
 
-      bankSelect.selectedIndex = getCurrentDayIndex();
       if (serumBanks.length > 0) fetchAvailablePositions();
-    } catch (error) {
+      } catch (error) {
       document.getElementById('result').innerHTML = `<p>Erro: ${error.message}</p>`;
-    }
-  }
+       }
+      }
+  
+  
 
   let selectedBankCodeForDelete;
 
@@ -392,8 +399,12 @@ function getSelectedBankCode() {
     closeModal();
 
     const url = `../v1/serum-banks/samples/${selectedBankCodeForDelete}/allSamples`;
-
+    
+    
     try {
+      const refreshButton = document.getElementById('refresh-button');
+      refreshButton.addEventListener('click', refreshOptions);
+      
       const response = await fetch(url, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -427,9 +438,9 @@ function getSelectedBankCode() {
 
       const occupiedPositions = await positionsResponse.json();
       const samples = await samplesResponse.json();
-      const samplesCodes = samples.map(sample => sample.sample.sampleCode);
+      //const samplesCodes = samples.map(sample => sample.sample.sampleCode);
 
-      renderPositions(occupiedPositions, samplesCodes);
+      renderPositions(occupiedPositions, samples);
     } catch (error) {
       resultDiv.innerHTML = `<p>Erro: ${error.message}</p>`;
     }
@@ -443,15 +454,26 @@ function getSelectedBankCode() {
       const positionDiv = document.createElement('div');
       positionDiv.className = 'position';
       positionDiv.textContent = i;
-      positionDiv.title = samples[i] || 'VAZIA';
+
+      //positionDiv.title = samples[i] || 'VAZIA';
+      const sampleInfo = samples.find(sample => sample.position === i);
+      positionDiv.title = sampleInfo ? sampleInfo.sampleCode + ' - ' + sampleInfo.additionalInfo : 'VAZIA';
 
       if (occupiedPositions.includes(i)) {
         positionDiv.classList.add('occupied');
       }
 
-      // positionDiv.addEventListener('click', () => {
-      //   if (samples[i]) window.open(`http://****/*****/app/rastreabilidade/${samples[i].slice(0, -2)}`, '_blank');
-      // });
+      positionDiv.addEventListener('click', () => {
+      resultDiv.querySelectorAll('.position').forEach(p => p.classList.remove('selected'));
+      positionDiv.classList.add('selected');
+
+      if (sampleInfo) {
+        console.log("Selected position:", i);
+        console.log("Sample information:", sampleInfo);
+      } else {
+        console.log("Position", i, "is empty.");
+      }
+    });
 
       resultDiv.appendChild(positionDiv);
     }
@@ -462,6 +484,7 @@ function getSelectedBankCode() {
   }
 
   window.onload = loadSerumBanks;
-    </script>
+
+</script>
 </body>
 </html>
