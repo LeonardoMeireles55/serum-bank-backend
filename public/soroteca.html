@@ -1,12 +1,16 @@
-<!doctype html>
-<html lang="pt-br">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="../v1/icon" type="image/x-icon" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <title>ALOCAÇÃO DE AMOSTRAS</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing page</title>
+  <link rel="stylesheet" href="/pagina-principal/style.css">
+  <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
   <style>
     /* Fonts */
@@ -93,83 +97,68 @@
       color: var(--color-primary);
     }
 
-    /* Container */
     .container {
       background-color: var(--color-white);
       margin: var(--padding-large) auto;
-      margin-top: 50px;
       max-width: 1200px;
       padding: var(--padding-large);
       border-radius: var(--border-radius);
       box-shadow: var(--box-shadow);
     }
 
-    /* Input Group */
     .input-group label {
       display: block;
-      margin-bottom: var(--padding-small);
-      font-size: var(--font-large);
+      margin-bottom: 15px;
       font-weight: 600;
-      color: var(--color-dark);
+      font-size: 20px;
+      color: #2c3e50;
     }
 
-    .input-group select,
-    .input-group input {
+    .input-group select {
       width: 100%;
-      padding: var(--padding-medium);
-      border: 1px solid var(--color-border);
-      border-radius: var(--border-radius);
-      background-color: var(--color-light);
-      font-size: var(--font-medium);
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      padding: 12px 15px;
+      border: 1px solid #e0e4e8;
+      border-radius: 8px;
+      background-color: #f8f9fa;
+      font-size: 16px;
+      transition: all 0.3s ease;
     }
 
-    .input-group select:focus,
-    .input-group input:focus {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px rgba(55, 99, 155, 0.2);
+    .input-group select:focus {
+      border-color: #3498db;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
     }
 
-    /* Buttons */
-    button {
-      width: 100%;
-      background-color: var(--color-primary);
-      border: 1px solid var(--color-border);
-      color: var(--color-dark);
-      padding: var(--padding-small) var(--padding-medium);
-      margin-top: var(--padding-medium);
-      border-radius: var(--border-radius);
+    .trash-button,
+    .refresh-button {
+      background-color: #ffffff;
+      border: 2px solid #e0e4e8;
+      color: #2c3e50;
+      padding: 10px 15px;
+      margin-top: 10px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: var(--font-large);
-      transition: background-color 0.3s ease, border-color 0.3s ease;
+      transition: all 0.3s ease;
     }
 
-    button:hover {
-      background-color: var(--color-hover);
-      border-color: var(--color-primary);
-    }
-
-    button i {
-      margin-right: 8px;
+    .trash-button:hover,
+    .refresh-button:hover {
+      background-color: #f1f3f5;
+      border-color: #3498db;
     }
 
     .trash-button i {
-      color: var(--color-error);
+      color: #e74c3c;
     }
 
     .refresh-button i {
-      color: var(--color-primary);
+      color: #3498db;
     }
 
     .result {
       display: grid;
       width: 100%;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .positions {
-      display: grid;
       grid-template-columns: repeat(10, 1fr);
       gap: 10px;
       margin-top: 20px;
@@ -180,57 +169,30 @@
       align-items: center;
       justify-content: center;
       height: 50px;
-      background-color: var(--color-primary);
-      border-radius: var(--border-radius);
+      background-color: #da4141;
+      border-radius: 6px;
       font-weight: 600;
-      color: var(--color-white);
+      color: white;
       cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     .position:hover {
+      color: white;
       transform: translateY(-3px);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
     .position.occupied {
-      background-color: var(--color-disabled);
-      color: var(--color-white);
+      background-color: #bdc3c7;
+      color: #34495e;
       cursor: not-allowed;
     }
 
-    .position.selected {
-      border: 2px solid var(--color-primary);
-    }
-
-    /* Modal */
-    #confirmationModal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: var(--color-white);
-      padding: var(--padding-large);
-      border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow);
-      text-align: center;
-    }
-
-    .modal-content h2 {
-      margin-bottom: var(--padding-medium);
-      color: var(--color-dark);
-    }
-
-    .modal-content button {
-      margin: 0 var(--padding-small);
+    #infos-banks {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #2c3e50;
     }
 
     /* Responsive Adjustments */
@@ -290,8 +252,6 @@
   </style>
 </head>
 
-</head>
-
 <body>
   <header>
     <nav id="navbar">
@@ -322,39 +282,36 @@
     </nav>
   </header>
 
-  <main>
-    <section class="section">
+  <main id="content">
+
+    <section>
+      <div id="confirmationModal" style="display: none;">
+        <div class="modal-content">
+          <h2>Confirmação</h2>
+          <p>Tem certeza de que deseja excluir todas as amostras?</p>
+          <button class="confirm-button" onclick="confirmDelete()">Sim</button>
+          <button class="cancel-button" onclick="closeModal()">Não</button>
+        </div>
+      </div>
+    </section>
+
+
+    <section>
       <div class="container">
         <div class="input-group">
-          <label for="sampleBarCode">Pedido da Amostra:</label>
-          <input type="text" id="sampleBarCode" placeholder="INSIRA O PEDIDO" />
+          <label for="bankSelect">Selecione a Bandeja:</label>
+          <select id="bankSelect" onchange="fetchAvailablePositions()"></select>
+          <button class="refresh-button" onclick="refreshOptions()">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+          <button class="trash-button" onclick="deleteAllSamples(getSelectedBankCode())">
+            <i class="fas fa-trash"></i>
+          </button>
+          <p id="infos-banks"></p>
         </div>
-
-        <div class="input-group">
-          <label for="sampleType">Tipo da Amostra:</label>
-          <select id="sampleType">
-            <option value="blood">SANGUE</option>
-            <option value="serum">SORO</option>
-            <option value="plasma">PLASMA</option>
-
-          </select>
-        </div>
-
-        <div class="input-group">
-          <label for="serumBankSelect">Selecione a Bandeija:</label>
-          <select id="serumBankSelect">
-            <!-- Opções serão carregadas aqui -->
-          </select>
-        </div>
-
-        <button title="ALOCAR" class="btn" onclick="submitSample()"><i class="fas fa-box"></i></button>
 
         <div class="result" id="result">
-          <!-- Resultado da operação será exibido aqui -->
-        </div>
-
-        <div class="positions" id="positions">
-          <!-- Posições da bandeja serão exibidas aqui -->
+          <!-- As posições serão exibidas aqui -->
         </div>
       </div>
       <footer
@@ -395,151 +352,154 @@
           </div>
         </div>
       </footer>
-
     </section>
   </main>
   <script>
 
+
+    function getSelectedBankCode() {
+      const bankSelect = document.getElementById('bankSelect');
+      return bankSelect.value;
+    }
+
     function getCurrentDayIndex() {
       const today = new Date();
       let dayOfWeek = today.getDay();
-      if (dayOfWeek != 0) {
-        dayOfWeek = dayOfWeek * 2
-      }
-      return dayOfWeek
+      return dayOfWeek !== 0 ? dayOfWeek * 2 : dayOfWeek;
     }
 
-    function redirectPage(url) {
-      window.open(url, '_blank');
-    }
-    document.getElementById('sampleBarCode').addEventListener('input', function () {
-      const sampleBarCode = this.value;
-      if (sampleBarCode.length === 11) {
-        submitSample();
-      }
-    });
     async function loadSerumBanks() {
       try {
         const response = await fetch('../v1/serum-banks');
-        if (!response.ok) {
-          throw new Error('Erro ao carregar os bancos de soro.');
-        }
+        if (!response.ok) throw new Error('Erro ao carregar os bancos de soro.');
 
-        const data = await response.json();
-        const serumBanks = data.response;
-        const serumBankSelect = document.getElementById('serumBankSelect');
+        const { response: serumBanks } = await response.json();
+        const bankSelect = document.getElementById('bankSelect');
 
-        serumBanks.forEach((bank) => {
+        const selectOption = document.createElement('option');
+        selectOption.value = ""; // Empty value for "selecione"
+        selectOption.textContent = "SELECIONE";
+        bankSelect.appendChild(selectOption);
+
+
+        serumBanks.forEach(bank => {
           const option = document.createElement('option');
           option.value = bank.serumBankCode;
           option.textContent = bank.serumBankCode;
-          serumBankSelect.appendChild(option);
+          bankSelect.appendChild(option);
         });
 
-        serumBankSelect.selectedIndex = getCurrentDayIndex()
-
+        if (serumBanks.length > 0) fetchAvailablePositions();
       } catch (error) {
-        document.getElementById('result').innerHTML =
-          `<p>Erro: ${error.message}</p>`;
+        document.getElementById('result').innerHTML = `<p>Erro: ${error.message}</p>`;
       }
     }
 
-    async function submitSample() {
-      const token = localStorage.getItem('authToken');
 
-      if (!token) {
-        window.location.href = '../v1/login';
-        return;
-      }
 
-      const serumBankCode = document.getElementById('serumBankSelect').value;
-      const sampleBarCode = document.getElementById('sampleBarCode').value;
+    let selectedBankCodeForDelete;
 
-      const sampleType = document.getElementById('sampleType').value;
+    function openModal() {
+      document.getElementById('confirmationModal').style.display = 'flex';
+    }
 
-      const resultDiv = document.getElementById('result');
+    function closeModal() {
+      document.getElementById('confirmationModal').style.display = 'none';
+    }
 
-      if (!serumBankCode || !sampleBarCode || !sampleType) {
-        resultDiv.innerHTML = '<p>Por favor, preencha todos os campos.</p>';
-        return;
-      }
+    function deleteAllSamples(serumBankCode) {
+      selectedBankCodeForDelete = serumBankCode;
+      openModal();
+    }
 
-      const data = {
-        serumBankCode,
-        sampleBarCode,
-        sampleType,
-      };
+    async function confirmDelete() {
+      closeModal();
 
-      console.log(data);
+      const url = `../v1/serum-banks/samples/${selectedBankCodeForDelete}/allSamples`;
+
 
       try {
-        const response = await fetch(
-          '../v1/serum-banks/transaction',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`, // Adiciona o token ao cabeçalho Authorization
-            },
-            body: JSON.stringify(data),
-          },
-        );
+        const refreshButton = document.getElementById('refresh-button');
+        refreshButton.addEventListener('click', refreshOptions);
 
-        if (!response.ok) {
-          if (response.status == 409) {
-            throw new Error('A amostra já foi bandejada.');
-          }
-          if (response.status == 401) {
-            redirectPage('../v1/login');
-          }
-          throw new Error('Erro ao bandejar a amostra.');
-        }
-
-        const samples = await fetch(
-          `../v1/serum-banks/${data.serumBankCode}/samples`,
-          {
-            headers: {
-              'Authorization': `Bearer ${token}`, // Adiciona o token ao cabeçalho Authorization para a segunda requisição
-            },
-          },
-        );
-
-        const samplesResponse = await samples.json();
-        const samplesCodes = samplesResponse.map((sample) => {
-          const code = sample.sample.sampleCode;
-          return code.slice(0, -2); // Remove os dois últimos caracteres
+        const response = await fetch(url, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
         });
 
-        document.getElementById('sampleBarCode');
+        if (response.status === 204) {
+          refreshOptions();
+        } else {
+          console.error(`Failed to delete all samples. Status: ${response.status}`);
+        }
+      } catch (error) {
+        console.error('Error while deleting all samples:', error);
+      }
+    }
+    async function fetchAvailablePositions() {
+      const bankCode = getSelectedBankCode();
+      const resultDiv = document.getElementById('result');
+      const infosBanks = document.getElementById('infos-banks');
 
-        const result = await response.json();
-        resultDiv.innerHTML = `<p>Amostra bandejada com sucesso na posição ${result.position}.</p>`;
-        renderPositions(result.position, data.sampleBarCode);
+      if (!bankCode) {
+        infosBanks.innerHTML = '<p>Por favor, selecione um banco de soro.</p>';
+        return;
+      }
+
+      try {
+        const [positionsResponse, samplesResponse] = await Promise.all([
+          fetch(`../v1/serum-banks/${bankCode}/available-positions`),
+          fetch(`../v1/serum-banks/${bankCode}/samples`)
+        ]);
+
+        if (!positionsResponse.ok) throw new Error('Erro ao obter as posições disponíveis.');
+
+        const occupiedPositions = await positionsResponse.json();
+        const samples = await samplesResponse.json();
+        console.log("Samples:", samples);
+        // const samplesCodes = samples.map(sample => sample.sampleCode);
+
+        renderPositions(occupiedPositions, samples);
       } catch (error) {
         resultDiv.innerHTML = `<p>Erro: ${error.message}</p>`;
       }
     }
-    async function renderPositions(occupiedPosition, samples) {
-      const positionsDiv = document.getElementById('positions');
-      positionsDiv.innerHTML = '';
+
+    function renderPositions(occupiedPositions, samples) {
+      console.log(samples);
+      const resultDiv = document.getElementById('result');
+      const infosBanks = document.getElementById('infos-banks');
+      resultDiv.innerHTML = '';
+      infosBanks.innerHTML = `<p>Posições ocupadas: ${samples.length}</p>`;
 
       for (let i = 0; i < 100; i++) {
         const positionDiv = document.createElement('div');
         positionDiv.className = 'position';
         positionDiv.textContent = i;
 
-        if (i === occupiedPosition) {
+        positionDiv.title = samples[i] || 'VAZIA';
+        const sampleInfo = samples.find(sample => sample.position === i);
+        positionDiv.title = sampleInfo ? sampleInfo.sample.sampleCode : 'VAZIA';
+
+        if (occupiedPositions.includes(i)) {
           positionDiv.classList.add('occupied');
-          positionDiv.title = samples
-          // positionDiv.addEventListener('click', () => redirectPage('http://****/*****/app/rastreabilidade/' + samples.slice(0, -2)));
         }
 
-        positionsDiv.appendChild(positionDiv);
+        positionDiv.addEventListener('click', () => {
+          resultDiv.querySelectorAll('.position').forEach(p => p.classList.remove('selected'));
+          positionDiv.classList.add('selected');
+        });
+
+        resultDiv.appendChild(positionDiv);
       }
     }
 
-    // Carrega os bancos de soro ao carregar a página
+    function refreshOptions() {
+      loadSerumBanks();
+    }
+
     window.onload = loadSerumBanks;
+
   </script>
 </body>
 

@@ -7,13 +7,22 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('Statics')
 @Controller()
 export class StaticsController {
+
   @Public()
   @Version('1')
   @HttpCode(HttpStatus.OK)
-  @Get('home')
-  homePage(@Res() res: Response) {
-    return res.sendFile(join(`${process.cwd()}/public/index.html`));
+  @Get('index')
+  sorotecaPage(@Res() res: Response) {
+    return res.sendFile(join(`${process.cwd()}/public/soroteca.html`));
   }
+  @Public()
+  @Version('1')
+  @HttpCode(HttpStatus.OK)
+  @Get('login-script')
+  loginScript(@Res() res: Response) {
+    return res.sendFile(join(`${process.cwd()}/public/scripts/script.js`));
+  }
+  
 
   @Public()
   @Version('1')
@@ -66,6 +75,28 @@ export class StaticsController {
     return res.sendFile(
       join(
         `${process.cwd()}/public/icons/soroteca.png`,
+      ),
+    );
+  }
+  @Public()
+  @Version('1')
+  @HttpCode(HttpStatus.OK)
+  @Get('banner')
+  banner(@Res() res: Response) {
+    return res.sendFile(
+      join(
+        `${process.cwd()}/public/assets/banner.jpg`,
+      ),
+    );
+  }
+  @Public()
+  @Version('1')
+  @HttpCode(HttpStatus.OK)
+  @Get('soroteca-logo')
+  sorotecaLogo(@Res() res: Response) {
+    return res.sendFile(
+      join(
+        `${process.cwd()}/public/assets/soroteca.png`,
       ),
     );
   }
