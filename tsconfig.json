@@ -1,24 +1,24 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "commonjs",                     // Mantém o uso do CommonJS
+    "target": "ES2021",                        // Alvo mais recente do ECMAScript
+    "declaration": true,                       // Gera arquivos de declaração .d.ts
+    "removeComments": true,                    // Remove comentários no código compilado
+    "emitDecoratorMetadata": true,             // Necessário para decorators do NestJS
+    "experimentalDecorators": true,            // Ativa decorators experimentais
+    "allowSyntheticDefaultImports": true,      // Permite importações padrão de módulos CommonJS
+    "sourceMap": true,                         // Gera mapas de origem para depuração
+    "outDir": "./dist",                        // Diretório de saída para arquivos compilados
+    "baseUrl": "./",                           // Base para resolução de módulos
     "paths": {
-      "src/*": ["src/*"]
+      "src/*": ["src/*"]                       // Permite o uso de aliases de caminho
     },
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "incremental": true,                       // Habilita builds incrementais
+    "skipLibCheck": true,                      // Ignora a verificação de tipos nas bibliotecas
+    "strictNullChecks": true,                  // Habilita a verificação de valores nulos
+    "noImplicitAny": true,                     // Habilita a verificação de tipos 'any'
+    "strictBindCallApply": true,               // Garante que bind, call e apply são seguros
+    "forceConsistentCasingInFileNames": true,  // Garante consistência de maiúsculas/minúsculas nos nomes dos arquivos
+    "noFallthroughCasesInSwitch": true         // Garante que não haja casos de fallthrough em switches
   }
 }
