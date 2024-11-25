@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AppConfigService } from './app-config/app-config.service';
 import { AppConfigModule } from './app-config/app-config.module';
@@ -7,6 +7,8 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import * as express from 'express';
 import { ExpressAdapter } from '@nestjs/platform-express';
+import { Handler } from 'express';
+
 
 const server = express();
 
@@ -39,4 +41,10 @@ async function bootstrap() {
 }
 bootstrap();
 
-export const handler = server;  
+export const handler: Handler = async (req, res) => {
+  const app = await NestFactory.create(AppModule);
+  await app.init();
+  
+  const express = app.getHttpAdapter().getInstance();
+  express(req, res);
+}
