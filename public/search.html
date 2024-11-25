@@ -7,41 +7,141 @@
   <link rel="icon" href="../v1/icon" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <title>PESQUISA DE AMOSTRAS</title>
+
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f5f7fa;
+    /* Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    /* General Reset */
+    * {
       margin: 0;
-      padding: 10px;
-      color: #333;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
     }
 
-    h1 {
-      color: #2c3e50;
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 20px;
+    /* Root Variables */
+    :root {
+      --color-primary: #bdc3c7;
+      --color-secondary: #aecfe1;
+      --color-light: #f4f7fa;
+      --color-dark: #2c3e50;
+      --color-white: #ffffff;
+      --color-border: #ccd1d9;
+      --color-hover: #467ec7;
+      --color-error: #da4141;
+      --color-disabled: #da4141;
+
+      --font-small: 0.875rem;
+      --font-medium: 1rem;
+      --font-large: 1.25rem;
+      --font-extra-large: 1.5rem;
+
+      --padding-small: 8px;
+      --padding-medium: 16px;
+      --padding-large: 24px;
+
+      --border-radius: 8px;
+      --box-shadow: 0 2px 5px rgba(8, 57, 97, 0.1);
     }
+
+    /* Body */
+    body {
+      background-color: var(--color-light);
+      color: var(--color-dark);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      background-color: var(--color-white);
+      padding: var(--padding-large) 8%;
+      box-shadow: var(--box-shadow);
+    }
+
+    #navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      width: 180px;
+      height: auto;
+    }
+
+    #nav_list {
+      display: flex;
+      list-style: none;
+      gap: var(--padding-large);
+    }
+
+    .nav-item a {
+      text-decoration: none;
+      color: var(--color-primary);
+      font-size: var(--font-medium);
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-item a:hover {
+      color: var(--color-hover);
+    }
+
+    .nav-item i {
+      margin-right: 8px;
+      color: var(--color-primary);
+    }
+
+    #banner {
+      width: 70%;
+      margin: 0px 0px 0px 200px;
+    }
+
+    #banner img {
+      max-width: 100%;
+      margin-top: 0px;
+    }
+
 
     .container {
-      max-width: 550px;
-      margin: 0 auto;
       background-color: #ffffff;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin: 40px auto;
+      max-width: 800px;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     }
 
     .input-group {
-      margin-bottom: 15px;
+      margin-bottom: 25px;
     }
 
     .input-group label {
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 15px;
       font-weight: 600;
-      color: #34495e;
+      font-size: 20px;
+      color: #2c3e50;
     }
+
+    .input-group select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #e0e4e8;
+      border-radius: 8px;
+      background-color: #f8f9fa;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .input-group select:focus {
+      border-color: #3498db;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    }
+
+
 
     .input-group input {
       width: 100%;
@@ -58,26 +158,32 @@
       outline: none;
     }
 
-    .btn {
-      display: block;
+    .input-group select,
+    .input-group input {
       width: 100%;
-      padding: 10px;
-      background-color: #37639B;
-      color: #ffffff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background-color 0.3s ease;
-      margin-top: 10px;
+      padding: var(--padding-medium);
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius);
+      background-color: var(--color-light);
+      font-size: var(--font-medium);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .btn:hover {
-      background-color: #467ec7;
+    .btn,
+    .delete-sample {
+      background-color: #ffffff;
+      border: 2px solid #e0e4e8;
+      color: #2c3e50;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
 
     .result {
-      margin-top: 20px;
+      margin-top: 10px;
+      display: grid;
+      gap: 5px;
     }
 
     .serumBankCode {
@@ -90,47 +196,50 @@
 
     .positions-grid {
       display: grid;
+      width: 100%;
       grid-template-columns: repeat(10, 1fr);
-      gap: 5px;
+      gap: 10px;
+      margin-top: 20px;
     }
 
     .position {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
-      background-color: #ecf0f1;
+      width: 50px;
+      height: 50px;
+      background-color: var(--color-primary);
       border-radius: 6px;
       font-weight: bold;
-      color: #34495e;
+      color: #ffffff;
       transition: background-color 0.3s ease, transform 0.3s ease;
+      cursor: pointer;
     }
 
     .position:hover {
       transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       cursor: pointer;
     }
 
     .occupied {
-      background-color: #e74c3c;
+      background-color: #da4141;
       color: #ffffff;
     }
 
     #delete-sample {
-      background-color: #e74c3c;
+      background-color: #ad3d3d;
       color: #ffffff;
     }
 
     #delete-sample:hover {
-      background-color: #fc614f;
+      background-color: #da4141;
       color: #ffffff;
     }
 
     .menu {
-      padding: 10px;
       text-align: center;
-      margin-bottom: 10px;
+      /* margin-bottom: 10px; */
       border-radius: 8px;
     }
 
@@ -147,68 +256,153 @@
       color: #3498db;
     }
 
-
-
-    footer {
-      text-align: center;
-      padding: 10px;
-      margin-top: 20px;
-      font-size: 0.8rem;
-      border-radius: 0 0 8px 8px;
+    /* Responsive Adjustments */
+    @media (max-width: 1200px) {
+      .container {
+        margin: var(--padding-large) 5%;
+      }
     }
 
-    footer a {
-      color: #3498db;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    @media (max-width: 600px) {
-      .position {
-        width: 30px;
-        height: 30px;
-        font-size: 0.6rem;
+    @media (max-width: 768px) {
+      #navbar {
+        flex-direction: column;
+        gap: 20px;
       }
 
-      .menu a {
-        font-size: 0.6rem;
+      #nav_list {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .nav-item {
+        margin-bottom: 10px;
+      }
+
+      .input-group {
+        margin-bottom: var(--padding-medium);
+      }
+
+      .positions {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      .result {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: var(--padding-medium);
+      }
+
+      .positions {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .result {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      #nav_list {
+        flex-direction: column;
+        align-items: center;
       }
     }
   </style>
 </head>
 
 <body>
-  <h1>PESQUISA DE AMOSTRAS</h1>
-  <div class="menu">
-    <a href="../v1/all-banks">GERAL</a>
-    <a href="../v1/home">SOROTECA</a>
-    <a href="../v1/transaction">ALOCAÇÃO</a>
-    <a href="../v1/search">PESQUISA</a>
-  </div>
+  <header>
+    <nav id="navbar">
+      <img class="nav-logo" src="../v1/soroteca-logo" alt="nav_logo">
 
-  <div class="container">
-    <div class="input-group">
-      <label for="sampleCode">INSIRA O PEDIDO DA AMOSTRA:</label>
-      <input type="text" id="sampleCode" placeholder="PEDIDO" />
-    </div>
-    <button class="btn" onclick="fetchSamplePosition()">
-      <i class="fas fa-search"></i>
-    </button>
-    <button id="delete-sample" class="btn" onclick="removeSample()">
-      <i class="fas fa-trash"></i>
-    </button>
+      <ul id="nav_list">
+        <li class="nav-item ">
+          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-chalkboard-user"></i>
+          <a href="../v1/index">Home</a>
+        </li>
+        <li class="nav-item ">
+          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-vial"></i>
+          <a href="../v1/index">Soroteca</a>
+        </li>
+        <li class="nav-item ">
+          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-eye-dropper"></i>
+          <a href="../v1/transaction">Alocação</a>
+        </li>
+        <li class="nav-item ">
+          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-magnifying-glass"></i>
+          <a href="../v1/search">Pesquisa</a>
+        </li>
+        <li class="nav-item ">
+          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-power-off"></i>
+          <a href="../v1/login">Login in/Logout </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
 
-    <div class="result" id="result">
-      <!-- O código da bandeja e a bandeja com posições de 0 a 99 serão exibidos aqui -->
-    </div>
-  </div>
+  <main id="content">
 
-  <footer>
-    <p>&copy; 2024 Leonardo Meireles. Todos os direitos reservados.</p>
-  </footer>
+    <section>
+      <div class="container">
+        <div class="input-group">
+          <label for="sampleCode">Insira o Pedido da Amostra:</label>
+          <input type="text" id="sampleCode" placeholder="PEDIDO" />
+        </div>
+        <button class="btn" onclick="fetchSamplePosition()">
+          <i class="fas fa-search"></i>
+        </button>
+        <button id="delete-sample" class="btn" onclick="removeSample()">
+          <i class="fas fa-trash"></i>
+        </button>
+
+        <div class="result" id="result">
+          <!-- O código da bandeja e a bandeja com posições de 0 a 99 serão exibidos aqui -->
+        </div>
+      </div>
+      <footer
+        style="margin-top: 100px;background-color: var(--color-white); padding: var(--padding-large) 8%; box-shadow: var(--box-shadow); text-align: center;">
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto;">
+          <div style="flex: 1; text-align: left;">
+            <h4 style="color: var(--color-dark); margin-bottom: var(--padding-small); font-size: var(--font-large);">
+              Soroteca
+            </h4>
+            <p style="color: var(--color-primary); font-size: var(--font-small);">Gestão eficiente de amostras
+              laboratoriais
+            </p>
+          </div>
+          <div style="flex: 1; text-align: center;">
+            <nav>
+              <ul style="list-style: none; display: flex; justify-content: center; gap: var(--padding-medium);">
+                <li><a href="../v1/index"
+                    style="text-decoration: none; color: var(--color-primary); transition: color 0.3s ease;">Home</a>
+                </li>
+                <li><a href="../v1/search"
+                    style="text-decoration: none; color: var(--color-primary); transition: color 0.3s ease;">Pesquisa</a>
+                </li>
+                <li><a href="../v1/transaction"
+                    style="text-decoration: none; color: var(--color-primary); transition: color 0.3s ease;">Alocação</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <div style="flex: 1; text-align: right;">
+            <p style="color: var(--color-primary); font-size: var(--font-small);">© 2024 Soroteca</p>
+            <div
+              style="display: flex; justify-content: flex-end; gap: var(--padding-small); margin-top: var(--padding-small);">
+              <i class="fab fa-facebook" style="color: var(--color-primary);"></i>
+              <i class="fab fa-twitter" style="color: var(--color-primary);"></i>
+              <i class="fab fa-linkedin" style="color: var(--color-primary);"></i>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </section>
+  </main>
+
 
   <script>
     async function fetchSamplePosition() {

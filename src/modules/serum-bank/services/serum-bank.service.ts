@@ -1,4 +1,4 @@
-import { HttpException, Inject } from "@nestjs/common";
+import { HttpException, Inject, Logger } from "@nestjs/common";
 import { SerumBankRepository } from "../repositories/serum-bank.repository";
 import { SerumBank } from "../entities/serum-bank.entity";
 import { CreateSerumBankDto } from "../dtos/create-serum-bank.dto";
@@ -15,6 +15,9 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { EntityManager } from 'typeorm';
 
 export class SerumBankService {
+
+  private readonly logger = new Logger(SerumBankService.name);
+  
   constructor(
     @Inject(SerumBankRepository)
     private readonly serumBankRepository: SerumBankRepository,
@@ -26,8 +29,7 @@ export class SerumBankService {
   ) {}
 
   private async findSerumBanksWith7Days(): Promise<SerumBank[]> {
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 5);
+    const sevenDaysAgo = new Date().setDate(new Date().getDate() - 7);
 
     return this.serumBankRepository
       .createQueryBuilder('serum_bank')
@@ -35,8 +37,10 @@ export class SerumBankService {
       .getMany();
   }
 
-  @Cron(CronExpression.EVERY_2_HOURS)
+  @Cron(CronExpression.EVERY_HOUR)
   async checkSerumBanksCreated7DaysAgo() {
+    
+    this.logger.log('Checking serum banks created 7 days ago');
     const serumBanks = await this.findSerumBanksWith7Days();
 
     if (serumBanks.length > 0) {
@@ -236,10 +240,8 @@ export class SerumBankService {
       (position) => !usedPositions.has(position),
     );
 
-    const availablePosition =
-      availablePositions.length > 0 ? availablePositions[0] : -1;
+    return availablePositions.length > 0 ? availablePositions[0] : -1;
 
-    return availablePosition;
   }
 
   async getAllAvailablePositions(serumBankCode: string): Promise<number[]> {
@@ -273,7 +275,7 @@ export class SerumBankService {
       throw new HttpException('Not found', 404);
     }
 
-    const samplePositions = await this.samplesPositionsRepository
+    return await this.samplesPositionsRepository
       .createQueryBuilder('samples_positions')
       .innerJoinAndSelect('samples_positions.sample', 'sample')
       .select(['sample.sampleCode', 'samples_positions.position'])
@@ -281,8 +283,6 @@ export class SerumBankService {
         serumBankId: serumBank.id,
       })
       .getMany();
-
-    return samplePositions;
   }
 
   async getAllSamplesFromSerumBankById(id: number): Promise<SamplePosition[]> {
