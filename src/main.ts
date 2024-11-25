@@ -5,9 +5,14 @@ import { AppConfigModule } from './app-config/app-config.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
+import * as express from 'express';
+import { ExpressAdapter } from '@nestjs/platform-express';
+
+const server = express();
+
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));  
   const configService = (await NestFactory.create(AppConfigModule)).get(
     AppConfigService,
   );
@@ -33,3 +38,5 @@ async function bootstrap() {
   await app.listen(configService.appPort);
 }
 bootstrap();
+
+export const handler = server;  
