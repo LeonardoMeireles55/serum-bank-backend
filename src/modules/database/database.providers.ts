@@ -1,4 +1,4 @@
-import { AppConfigService } from 'src/app-config/app-config.service';
+import { AppConfigService } from '../../app-config/app-config.service';
 import { DataSource } from 'typeorm';
 
 export const databaseProviders = [

@@ -2,8 +2,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { DataSource } from 'typeorm';
 import { Inject, UnauthorizedException } from '@nestjs/common';
-import { AppConfigService } from 'src/app-config/app-config.service';
-import { User } from 'src/modules/users/user.entity';
+import { AppConfigService } from '../../../app-config/app-config.service';
+import { User } from '../../../modules/users/user.entity';
 
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(

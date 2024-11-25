@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AppConfigModule } from 'src/app-config/app-config.module';
+import { AppConfigModule } from '../../app-config/app-config.module';
 import { DatabaseModule } from '../database/database.module';
 import { UsersModule } from '../users/user.module';
 import { SerumBankService } from './services/serum-bank.service';

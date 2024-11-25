@@ -5,10 +5,10 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { TokenJwtDto } from '../dtos/token.jwt.dto';
-import { AppConfigService } from 'src/app-config/app-config.service';
-import { CreateUserDto } from 'src/modules/users/dtos/create-user.dto';
-import { User } from 'src/modules/users/user.entity';
-import { UserService } from 'src/modules/users/services/users.service';
+import { AppConfigService } from '../../../app-config/app-config.service';
+import { CreateUserDto } from '../../../modules/users/dtos/create-user.dto';
+import { User } from '../../../modules/users/user.entity';
+import { UserService } from '../../../modules/users/services/users.service';
 
 describe('AuthService', () => {
   let service: AuthService;

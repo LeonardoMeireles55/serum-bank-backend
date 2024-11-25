@@ -11,12 +11,12 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../services/users.service';
 import { CreateUserDto } from '../dtos/create-user.dto';
-import { Public } from 'src/common/decorators/is-public.decorator';
+import { Public } from '../../../common/decorators/is-public.decorator';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { RolesGuard } from 'src/modules/authentication/guards/role.guard';
-import { DefaultResponseDto } from 'src/common/dtos/default-response.dto';
+import { RolesGuard } from '../../../modules/authentication/guards/role.guard';
+import { DefaultResponseDto } from '../../../common/dtos/default-response.dto';
 import { AccessEnum } from '../enums/acess.enum';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { Roles } from '../../../common/decorators/roles.decorator';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 
 @ApiTags('Users')

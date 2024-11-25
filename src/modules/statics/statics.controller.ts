@@ -1,6 +1,6 @@
 import { Controller, Get, HttpCode, HttpStatus, Res, Version } from '@nestjs/common';
 import { join } from 'path';
-import { Public } from 'src/common/decorators/is-public.decorator';
+import { Public } from '../../common/decorators/is-public.decorator';
 import { type Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 

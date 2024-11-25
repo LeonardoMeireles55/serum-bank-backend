@@ -11,10 +11,10 @@ import { JwtService } from '@nestjs/jwt';
 
 import * as bcrypt from 'bcrypt';
 import { TokenJwtDto } from '../dtos/token.jwt.dto';
-import { AppConfigService } from 'src/app-config/app-config.service';
+import { AppConfigService } from '../../../app-config/app-config.service';
 import { saltsOrRounds } from '../../../common/constants/salts-or-rounds.constants';
-import { TokenCache } from 'src/common/utilities/token.cache.util';
-import { UserService } from 'src/modules/users/services/users.service';
+import { TokenCache } from '../../../common/utilities/token.cache.util';
+import { UserService } from '../../../modules/users/services/users.service';
 
 @Injectable()
 export class AuthService {

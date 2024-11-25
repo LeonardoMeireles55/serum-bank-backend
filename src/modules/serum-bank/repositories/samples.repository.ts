@@ -1,4 +1,4 @@
-import { Database } from 'src/modules/database/database';
+import { Database } from '../../../modules/database/database';
 import { Repository } from 'typeorm';
 import { Sample } from '../entities/samples.entity';
 import { Injectable } from '@nestjs/common';

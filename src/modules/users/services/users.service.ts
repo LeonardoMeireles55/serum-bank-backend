@@ -7,7 +7,7 @@ import { UserRepository } from '../repositories/user.repository';
 import * as bcrypt from 'bcrypt';
 import { saltsOrRounds } from '../../../common/constants/salts-or-rounds.constants';
 import { UpdateUserDto } from '../dtos/update-user.dto';
-import { Database } from 'src/modules/database/database';
+import { Database } from '../../../modules/database/database';
 
 export class UserService {
   constructor(

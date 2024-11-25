@@ -4,7 +4,7 @@ import { SerumBank } from "../entities/serum-bank.entity";
 import { CreateSerumBankDto } from "../dtos/create-serum-bank.dto";
 import { PartialSerumBankDto } from "../dtos/partial-serum-bank.dto";
 import { UpdateSerumBankDto } from "../dtos/update-serum-bank.dto";
-import { Database } from "src/modules/database/database";
+import { Database } from "../../../modules/database/database";
 import { TransactionalSerumBankDto } from "../dtos/transactional-serum-bank.dto";
 import { Sample } from "../entities/samples.entity";
 import { SamplePosition } from "../entities/samples-positions.entity";

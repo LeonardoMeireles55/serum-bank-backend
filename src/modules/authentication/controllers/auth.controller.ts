@@ -13,11 +13,11 @@ import { LoginDto } from '../dtos/login.dto';
 import { RecoverPasswordDto } from '../dtos/recoverPassword.dto';
 import { RecoverPasswordWithTokenDto } from '../dtos/recoverPasswordWithToken.dto';
 import { AuthService } from '../services/auth.service';
-import { HandleErrors } from 'src/common/decorators/handle-errors.decorator';
-import { Public } from 'src/common/decorators/is-public.decorator';
-import { DefaultResponseDto } from 'src/common/dtos/default-response.dto';
-import { UserService } from 'src/modules/users/services/users.service';
-import { User } from 'src/common/decorators/user.decorator';
+import { HandleErrors } from '../../../common/decorators/handle-errors.decorator';
+import { Public } from '../../../common/decorators/is-public.decorator';
+import { DefaultResponseDto } from '../../../common/dtos/default-response.dto';
+import { UserService } from '../../../modules/users/services/users.service';
+import { User } from '../../../common/decorators/user.decorator';
 
 @ApiTags('Auth')
 @Controller({ version: '1' })

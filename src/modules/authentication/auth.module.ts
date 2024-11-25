@@ -8,8 +8,8 @@ import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './services/auth.service';
 import { RolesGuard } from './guards/role.guard';
 import { UsersModule } from '../users/user.module';
-import { AppConfigModule } from 'src/app-config/app-config.module';
-import { AppConfigService } from 'src/app-config/app-config.service';
+import { AppConfigModule } from '../../app-config/app-config.module';
+import { AppConfigService } from '../../app-config/app-config.service';
 import { DatabaseModule } from '../database/database.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 
