@@ -209,26 +209,35 @@
             body {
                 flex-direction: column;
                 gap: 20px;
+
             }
 
             .imagem-logo img {
-                max-width: 250px;
+                max-width: 300px;
             }
 
             .container {
                 margin: 0;
+                scale: 0.8;
                 height: 100vh;
+                padding: 10px;
+
             }
         }
 
         @media screen and (max-width: 480px) {
-            .container {
-                margin: 0;
-                height: 100vh;
-            }
 
             .imagem-logo img {
-                max-width: 100px;
+                display: none;
+            }
+
+            .container {
+                scale: 0.8;
+                padding: 10px;
+            }
+
+            button {
+                scale: 0.8;
             }
         }
     </style>
