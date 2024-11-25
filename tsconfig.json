@@ -3,6 +3,7 @@
     "module": "commonjs",                     // Mantém o uso do CommonJS
     "target": "ES2021",                        // Alvo mais recente do ECMAScript
     "declaration": true,                       // Gera arquivos de declaração .d.ts
+    "esModuleInterop": true,
     "removeComments": true,                    // Remove comentários no código compilado
     "emitDecoratorMetadata": true,             // Necessário para decorators do NestJS
     "experimentalDecorators": true,            // Ativa decorators experimentais

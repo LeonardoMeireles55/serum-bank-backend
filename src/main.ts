@@ -4,7 +4,7 @@ import { AppConfigService } from './app-config/app-config.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
-import * as express from 'express';
+import express from 'express'; // Altere a importação aqui
 import { ExpressAdapter } from '@nestjs/platform-express';
 
 const server = express();
