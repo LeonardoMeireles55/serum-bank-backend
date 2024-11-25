@@ -5,7 +5,7 @@ import { UserData } from '../user-data.entity';
 import { PartialUserDto } from '../dtos/partial-user-dto';
 import { UserRepository } from '../repositories/user.repository';
 import * as bcrypt from 'bcrypt';
-import { SALTS_OR_ROUNDS } from 'src/common/constants/salts-or-rounds.constants';
+import { saltsOrRounds } from '../../../common/constants/salts-or-rounds.constants';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { Database } from 'src/modules/database/database';
 
@@ -39,7 +39,7 @@ export class UserService {
   async createUser(createUserDto: CreateUserDto): Promise<PartialUserDto> {
     const user = new User(createUserDto);
 
-    user.password = await bcrypt.hash(user.password, SALTS_OR_ROUNDS);
+    user.password = await bcrypt.hash(user.password, saltsOrRounds);
 
     const response = await this.dataSource
       .getConnection()
@@ -73,7 +73,7 @@ export class UserService {
       throw new ConflictException('Password is the same as the current one');
     }
 
-    user.password = await bcrypt.hash(newPassword, SALTS_OR_ROUNDS);
+    user.password = await bcrypt.hash(newPassword, saltsOrRounds);
     await this.userRepository.save(user);
   }
 

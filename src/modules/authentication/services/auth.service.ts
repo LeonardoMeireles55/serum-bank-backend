@@ -12,7 +12,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { TokenJwtDto } from '../dtos/token.jwt.dto';
 import { AppConfigService } from 'src/app-config/app-config.service';
-import { SALTS_OR_ROUNDS } from 'src/common/constants/salts-or-rounds.constants';
+import { saltsOrRounds } from '../../../common/constants/salts-or-rounds.constants';
 import { TokenCache } from 'src/common/utilities/token.cache.util';
 import { UserService } from 'src/modules/users/services/users.service';
 
@@ -81,7 +81,7 @@ export class AuthService {
       throw new ConflictException('Password is the same as the current one');
     }
 
-    const hashPass = await bcrypt.hash(newPassword, SALTS_OR_ROUNDS);
+    const hashPass = await bcrypt.hash(newPassword, saltsOrRounds);
     user.password = hashPass;
     await this.userService.updateUserPassword(user.id, hashPass);
   }

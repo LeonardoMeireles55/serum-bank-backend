@@ -17,7 +17,7 @@
     "incremental": true,                       // Habilita builds incrementais
     "skipLibCheck": true,                      // Ignora a verificação de tipos nas bibliotecas
     "strictBindCallApply": true,               // Garante que bind, call e apply são seguros
-    "forceConsistentCasingInFileNames": true,  // Garante consistência de maiúsculas/minúsculas nos nomes dos arquivos
+    // "forceConsistentCasingInFileNames": true,  // Garante consistência de maiúsculas/minúsculas nos nomes dos arquivos
     "noFallthroughCasesInSwitch": true         // Garante que não haja casos de fallthrough em switches
   }
 }
