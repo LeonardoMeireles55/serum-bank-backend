@@ -10,10 +10,6 @@
       {
         "src": "/(.*)",
         "dest": "/main.js"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "dist/main.js"
       }
     ]
   }
