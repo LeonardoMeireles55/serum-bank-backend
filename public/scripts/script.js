@@ -21,7 +21,6 @@ function backToLogin() {
     formSignup.style.left = "450px"
     btnColor.style.left = "0px"
 }
-///////////////////////////////////////////
 
 const inputEmail = document.getElementById("inputEmail");
 const inputEmail2 = document.getElementById("inputEmail2");
@@ -74,16 +73,14 @@ buttonCadastrar.addEventListener("click", async (event) => {
 
 	if (isValid) {
 		let formulario = new Object();
-		formulario.userName = inputNome.value;
-		formulario.registerID = inputMatricula.value;
 		formulario.email = inputEmail2.value;
 		formulario.password = inputSenha2.value;
-		formulario.password = inputSenha3.value;
-		formulario.workShops = [];
+		formulario.phone = inputSenha3.value;
+		formulario.professionalPosition = "laboratory_analyst";
 		console.log("Formulário enviado com sucesso!" + JSON.stringify({ ...formulario }));
 
 		try {
-			const result = await fetch("http://localhost:3000/user/signup", {
+			const result = await fetch("../v1/users", {
 				method: "POST",
 				headers: {
 					Accept: "*/*",
