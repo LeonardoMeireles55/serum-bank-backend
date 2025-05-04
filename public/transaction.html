@@ -294,32 +294,7 @@
 
 <body>
   <header>
-    <nav id="navbar">
-      <img class="nav-logo" src="../v1/soroteca-logo" alt="nav_logo">
-
-      <ul id="nav_list">
-        <li class="nav-item ">
-          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-chalkboard-user"></i>
-          <a href="../v1/index">Home</a>
-        </li>
-        <li class="nav-item ">
-          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-vial"></i>
-          <a href="../v1/index">Soroteca</a>
-        </li>
-        <li class="nav-item ">
-          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-eye-dropper"></i>
-          <a href="../v1/transaction">Alocação</a>
-        </li>
-        <li class="nav-item ">
-          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-magnifying-glass"></i>
-          <a href="../v1/search">Pesquisa</a>
-        </li>
-        <li class="nav-item ">
-          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-power-off"></i>
-          <a href="../v1/login">Login in/Logout </a>
-        </li>
-      </ul>
-    </nav>
+    <div id="navbar-container"></div>
   </header>
 
   <main>
@@ -347,7 +322,7 @@
           </select>
         </div>
 
-        <button title="ALOCAR" class="btn" onclick="submitSample()"><i class="fas fa-box"></i></button>
+        <button title="ALOCAR" class="btn"><i class="fas fa-box"></i></button>
 
         <div class="result" id="result">
           <!-- Resultado da operação será exibido aqui -->
@@ -357,188 +332,15 @@
           <!-- Posições da bandeja serão exibidas aqui -->
         </div>
       </div>
-      <footer
-        style="margin-top: 100px; background-color: var(--color-white); padding: var(--padding-large) 8%; box-shadow: var(--box-shadow); text-align: center;">
-        <div
-          style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto;">
-          <div style="flex: 1; text-align: left;">
-            <h4 style="color: var(--color-dark); margin-bottom: var(--padding-small); font-size: var(--font-large);">
-              Soroteca
-            </h4>
-            <p style="color: var(--color-primary); font-size: var(--font-small);">Gestão eficiente de amostras
-              laboratoriais
-            </p>
-          </div>
-          <div style="flex: 1; text-align: center;">
-            <nav>
-              <ul style="list-style: none; display: flex; justify-content: center; gap: var(--padding-medium);">
-                <li><a href="../v1/index"
-                    style="text-decoration: none; color: var(--color-primary); transition: color 0.3s ease;">Home</a>
-                </li>
-                <li><a href="../v1/search"
-                    style="text-decoration: none; color: var(--color-primary); transition: color 0.3s ease;">Pesquisa</a>
-                </li>
-                <li><a href="../v1/transaction"
-                    style="text-decoration: none; color: var(--color-primary); transition: color 0.3s ease;">Alocação</a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-          <div style="flex: 1; text-align: right;">
-            <p style="color: var(--color-primary); font-size: var(--font-small);">© 2024 Soroteca</p>
-            <div
-              style="display: flex; justify-content: flex-end; gap: var(--padding-small); margin-top: var(--padding-small);">
-              <i class="fab fa-facebook" style="color: var(--color-primary);"></i>
-              <i class="fab fa-twitter" style="color: var(--color-primary);"></i>
-              <i class="fab fa-linkedin" style="color: var(--color-primary);"></i>
-            </div>
-          </div>
-        </div>
-      </footer>
+
     </section>
   </main>
+  <script src="/components/navbar.js"></script>
+  <script src="/scripts/transaction.js"></script>
+  <script src="/components/footer.js"></script>
   <script>
-
-    function getCurrentDayIndex() {
-      const today = new Date();
-      let dayOfWeek = today.getDay();
-      if (dayOfWeek != 0) {
-        dayOfWeek = dayOfWeek * 2
-      }
-      return dayOfWeek
-    }
-
-    function redirectPage(url) {
-      window.open(url, '_blank');
-    }
-    document.getElementById('sampleBarCode').addEventListener('input', function () {
-      const sampleBarCode = this.value;
-      if (sampleBarCode.length === 11) {
-        submitSample();
-      }
-    });
-    async function loadSerumBanks() {
-      try {
-        const response = await fetch('../v1/serum-banks');
-        if (!response.ok) {
-          throw new Error('Erro ao carregar os bancos de soro.');
-        }
-
-        const data = await response.json();
-        const serumBanks = data.response;
-        const serumBankSelect = document.getElementById('serumBankSelect');
-
-        serumBanks.forEach((bank) => {
-          const option = document.createElement('option');
-          option.value = bank.serumBankCode;
-          option.textContent = bank.serumBankCode;
-          serumBankSelect.appendChild(option);
-        });
-
-        serumBankSelect.selectedIndex = getCurrentDayIndex()
-
-      } catch (error) {
-        document.getElementById('result').innerHTML =
-          `<p>Erro: ${error.message}</p>`;
-      }
-    }
-
-    async function submitSample() {
-      const token = localStorage.getItem('authToken');
-
-      if (!token) {
-        window.location.href = '../v1/login';
-        return;
-      }
-
-      const serumBankCode = document.getElementById('serumBankSelect').value;
-      const sampleBarCode = document.getElementById('sampleBarCode').value;
-
-      const sampleType = document.getElementById('sampleType').value;
-
-      const resultDiv = document.getElementById('result');
-
-      if (!serumBankCode || !sampleBarCode || !sampleType) {
-        resultDiv.innerHTML = '<p>Por favor, preencha todos os campos.</p>';
-        return;
-      }
-
-      const data = {
-        serumBankCode,
-        sampleBarCode,
-        sampleType,
-      };
-
-      console.log(data);
-
-      try {
-        const response = await fetch(
-          '../v1/serum-banks/transaction',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`, // Adiciona o token ao cabeçalho Authorization
-            },
-            body: JSON.stringify(data),
-          },
-        );
-
-        if (!response.ok) {
-          if (response.status == 409) {
-            throw new Error('A amostra já foi bandejada.');
-          }
-          if (response.status == 401) {
-            redirectPage('../v1/login');
-          }
-          throw new Error('Erro ao bandejar a amostra.');
-        }
-
-        const samples = await fetch(
-          `../v1/serum-banks/${data.serumBankCode}/samples`,
-          {
-            headers: {
-              'Authorization': `Bearer ${token}`, // Adiciona o token ao cabeçalho Authorization para a segunda requisição
-            },
-          },
-        );
-
-        const samplesResponse = await samples.json();
-        const samplesCodes = samplesResponse.map((sample) => {
-          const code = sample.sample.sampleCode;
-          return code.slice(0, -2); // Remove os dois últimos caracteres
-        });
-
-        document.getElementById('sampleBarCode');
-
-        const result = await response.json();
-        resultDiv.innerHTML = `<p>Amostra bandejada com sucesso na posição ${result.position}.</p>`;
-        renderPositions(result.position, data.sampleBarCode);
-      } catch (error) {
-        resultDiv.innerHTML = `<p>Erro: ${error.message}</p>`;
-      }
-    }
-    async function renderPositions(occupiedPosition, samples) {
-      const positionsDiv = document.getElementById('positions');
-      positionsDiv.innerHTML = '';
-
-      for (let i = 0; i < 100; i++) {
-        const positionDiv = document.createElement('div');
-        positionDiv.className = 'position';
-        positionDiv.textContent = i;
-
-        if (i === occupiedPosition) {
-          positionDiv.classList.add('occupied');
-          positionDiv.title = samples
-          // positionDiv.addEventListener('click', () => redirectPage('http://****/*****/app/rastreabilidade/' + samples.slice(0, -2)));
-        }
-
-        positionsDiv.appendChild(positionDiv);
-      }
-    }
-
-    // Carrega os bancos de soro ao carregar a página
-    window.onload = loadSerumBanks;
+    renderNavbar("navbar-container");
+    renderFooter("footer-container");
   </script>
 </body>
 

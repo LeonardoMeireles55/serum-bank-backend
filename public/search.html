@@ -59,6 +59,7 @@
       box-shadow: var(--box-shadow);
     }
 
+    /* Navbar Styles */
     #navbar {
       display: flex;
       justify-content: space-between;
@@ -76,9 +77,14 @@
       gap: var(--padding-large);
     }
 
+    .nav-item {
+      display: flex;
+      align-items: center;
+    }
+
     .nav-item a {
       text-decoration: none;
-      color: var(--color-primary);
+      color: var(--color-dark);
       font-size: var(--font-medium);
       font-weight: 500;
       transition: color 0.3s ease;
@@ -90,7 +96,6 @@
 
     .nav-item i {
       margin-right: 8px;
-      color: var(--color-primary);
     }
 
     #banner {
@@ -239,21 +244,7 @@
 
     .menu {
       text-align: center;
-      /* margin-bottom: 10px; */
       border-radius: 8px;
-    }
-
-    .menu a {
-      color: black;
-      text-decoration: none;
-      margin: 0 15px;
-      font-size: 1rem;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-
-    .menu a:hover {
-      color: #3498db;
     }
 
     /* Responsive Adjustments */
@@ -315,32 +306,7 @@
 
 <body>
   <header>
-    <nav id="navbar">
-      <img class="nav-logo" src="../v1/soroteca-logo" alt="nav_logo">
-
-      <ul id="nav_list">
-        <li class="nav-item ">
-          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-chalkboard-user"></i>
-          <a href="../v1/index">Home</a>
-        </li>
-        <li class="nav-item ">
-          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-vial"></i>
-          <a href="../v1/index">Soroteca</a>
-        </li>
-        <li class="nav-item ">
-          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-eye-dropper"></i>
-          <a href="../v1/transaction">Alocação</a>
-        </li>
-        <li class="nav-item ">
-          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-magnifying-glass"></i>
-          <a href="../v1/search">Pesquisa</a>
-        </li>
-        <li class="nav-item ">
-          <i style="color: rgb(55, 88, 126);font-size: 20px;" ; class="fa-solid fa-power-off"></i>
-          <a href="../v1/login">Login in/Logout </a>
-        </li>
-      </ul>
-    </nav>
+    <div id="navbar-container"></div>
   </header>
 
   <main id="content">
@@ -362,127 +328,16 @@
           <!-- O código da bandeja e a bandeja com posições de 0 a 99 serão exibidos aqui -->
         </div>
       </div>
-      <footer
-        style="margin-top: 100px; background-color: var(--color-white); padding: var(--padding-large) 8%; box-shadow: var(--box-shadow); text-align: center;">
-        <div
-          style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto;">
-          <div style="flex: 1; text-align: left;">
-            <h4 style="color: var(--color-dark); margin-bottom: var(--padding-small); font-size: var(--font-large);">
-              Soroteca
-            </h4>
-            <p style="color: var(--color-primary); font-size: var(--font-small);">Gestão eficiente de amostras
-              laboratoriais
-            </p>
-          </div>
-          <div style="flex: 1; text-align: center;">
-            <nav>
-              <ul style="list-style: none; display: flex; justify-content: center; gap: var(--padding-medium);">
-                <li><a href="../v1/index"
-                    style="text-decoration: none; color: var(--color-primary); transition: color 0.3s ease;">Home</a>
-                </li>
-                <li><a href="../v1/search"
-                    style="text-decoration: none; color: var(--color-primary); transition: color 0.3s ease;">Pesquisa</a>
-                </li>
-                <li><a href="../v1/transaction"
-                    style="text-decoration: none; color: var(--color-primary); transition: color 0.3s ease;">Alocação</a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-          <div style="flex: 1; text-align: right;">
-            <p style="color: var(--color-primary); font-size: var(--font-small);">© 2024 Soroteca</p>
-            <div
-              style="display: flex; justify-content: flex-end; gap: var(--padding-small); margin-top: var(--padding-small);">
-              <i class="fab fa-facebook" style="color: var(--color-primary);"></i>
-              <i class="fab fa-twitter" style="color: var(--color-primary);"></i>
-              <i class="fab fa-linkedin" style="color: var(--color-primary);"></i>
-            </div>
-          </div>
-        </div>
-      </footer>
+
     </section>
-  </main>
+    <div id="footer-container"></div>
+      <script src="/scripts/search.js"></script>
 
-
-  <script>
-    async function fetchSamplePosition() {
-      const sampleCode = document.getElementById('sampleCode').value.trim();
-      const resultDiv = document.getElementById('result');
-
-      if (!sampleCode) {
-        resultDiv.innerHTML = '<p>Por favor, insira o código de barras da amostra.</p>';
-        return;
-      }
-
-      try {
-        const response = await fetch(`../v1/serum-banks/samples/${sampleCode}/position`);
-        if (!response.ok) {
-          const errorMessage = response.status === 404 ? 'Amostra não encontrada.' : 'Erro ao buscar a posição da amostra.';
-          throw new Error(errorMessage);
-        }
-
-        const positionData = await response.json();
-        renderPositions(positionData, sampleCode);
-      } catch (error) {
-        resultDiv.innerHTML = `<p>Erro: ${error.message}</p>`;
-      }
-    }
-
-    async function removeSample() {
-      const sampleCode = document.getElementById('sampleCode').value.trim();
-      const resultDiv = document.getElementById('result');
-
-      if (!sampleCode) {
-        resultDiv.innerHTML = '<p>Por favor, insira o código de barras da amostra.</p>';
-        return;
-      }
-
-      try {
-        const response = await fetch(`../v1/serum-banks/samples/${sampleCode}`, {
-          method: 'DELETE'
-        });
-        if (!response.ok) {
-          const errorMessage = response.status === 404 ? 'Amostra não encontrada.' : 'Erro ao remover a amostra.';
-          throw new Error(errorMessage);
-        }
-
-        resultDiv.innerHTML = `<p>Amostra ${sampleCode} removida com sucesso.</p>`;
-      } catch (error) {
-        resultDiv.innerHTML = `<p>Erro: ${error.message}</p>`;
-      }
-    }
-
-    function renderPositions(occupiedPosition, sampleCode) {
-      const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = '';
-
-      const serumBankCodeDiv = document.createElement('div');
-      serumBankCodeDiv.className = 'serumBankCode';
-      serumBankCodeDiv.textContent = `BANDEJA: ${occupiedPosition.serumBankCode}`;
-      resultDiv.appendChild(serumBankCodeDiv);
-
-      const positionsGrid = document.createElement('div');
-      positionsGrid.className = 'positions-grid';
-
-      for (let i = 0; i < 100; i++) {
-        const positionDiv = document.createElement('div');
-        positionDiv.className = 'position';
-        positionDiv.textContent = i;
-
-        if (i === occupiedPosition.position) {
-          positionDiv.classList.add('occupied');
-          positionDiv.title = sampleCode;
-          // positionDiv.addEventListener('click', () =>
-          //   window.open(`http://****/*****/app/rastreabilidade/${sampleCode.slice(0, -2)}`, '_blank')
-          // );
-        }
-
-        positionsGrid.appendChild(positionDiv);
-      }
-
-      resultDiv.appendChild(positionsGrid);
-    }
-  </script>
+    <script src="/components/navbar.js"></script>
+    <script src="/components/footer.js"></script>
+    <script>
+      renderNavbar("navbar-container");
+      renderFooter("footer-container");
+    </script>
 </body>
-
 </html>

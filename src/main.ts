@@ -1,17 +1,21 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { AppConfigService } from './app-config/app-config.service';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
-import express from 'express';
-import { ExpressAdapter } from '@nestjs/platform-express';
-
-const server = express();
+import { ValidationPipe, VersioningType } from '@nestjs/common'
+import { NestFactory } from '@nestjs/core'
+import { NestExpressApplication } from '@nestjs/platform-express'; // Import NestExpressApplication
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { join } from 'path'; // Import join
+import { AppConfigService } from './app-config/app-config.service'
+import { AppModule } from './app.module'
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+  // Use NestExpressApplication for static assets
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(AppConfigService);
+
+  // Serve static files from the 'public' directory
+  app.useStaticAssets(join(__dirname, '..', 'public'), {
+    prefix: '/', // Serve files directly from the root (e.g., /scripts/login.js)
+  });
 
   app.enableCors();
   app.useGlobalFilters(new AllExceptionsFilter());

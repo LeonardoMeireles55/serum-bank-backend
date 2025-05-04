@@ -6,60 +6,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="../v1/icon" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <title>Login - SOROTECA</title>
+    <title>SOROTECA LOGIN</title>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: rgb(65, 158, 195);
+            --primary-color-light: rgb(92, 163, 214);
+            --background-color: white;
+            --container-background: whitesmoke;
+            --text-color: #333;
+            --placeholder-color: #999;
+            --white-color: white;
+            --border-radius-lg: 30px;
+            --border-radius-md: 10px;
+            --box-shadow-light: 0 0 7px 0 rgba(65, 158, 195, 0.5);
+            --box-shadow-dark: 0 0 20px 0 rgba(95, 127, 158, 0.7);
+            --input-height: 40px;
+            --transition-speed: 0.3s;
+        }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'poppins', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin-top: 10px;
-            gap: 200px;
-            flex-direction: row;
-            background-color: white;
+            min-height: 100vh;
+            padding: 20px;
+            gap: 5%;
+            background-color: var(--background-color);
+        }
+
+        .imagem-logo {
+            flex: 1;
+            max-width: 500px;
+            text-align: center;
         }
 
         .imagem-logo img {
-            width: 500px;
+            max-width: 100%;
+            height: auto;
         }
 
         .container {
-            background-color: whitesmoke;
-            width: 450px;
-            height: 580px;
-            margin-bottom: 80px;
+            background-color: var(--container-background);
+            width: 100%;
+            max-width: 450px;
+            min-height: 700px; /* Increased min-height to fit signup form */
             display: flex;
             flex-direction: column;
             align-items: center;
             position: relative;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 0 20px 0 rgb(95, 127, 158);
+            overflow: hidden; /* Keep for sliding animation */
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--box-shadow-dark);
+            padding: 20px; /* Keep general padding */
         }
 
         form {
             position: absolute;
-            margin-top: 80px;
-            transition: .6s;
-            width: 400px;
-            height: 450px;
+            top: 100px;
+            transition: left var(--transition-speed) ease-in-out;
+            width: calc(100% - 40px);
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .buttonsForm {
-            margin-top: 40px;
+            margin-top: 20px;
             position: relative;
-            border-radius: 30px;
-            box-shadow: 0 0 7px 0 rgb(65, 158, 195);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--box-shadow-light);
+            display: inline-flex;
+            overflow: hidden;
         }
 
         .buttonsForm button {
@@ -67,230 +95,282 @@
             background-color: transparent;
             border: none;
             position: relative;
-            padding: 10px 29px;
+            padding: 10px 25px;
+            color: var(--primary-color);
+            font-weight: 500;
+            z-index: 1;
+            transition: color var(--transition-speed);
+        }
+
+        .buttonsForm button.active {
+            color: var(--white-color);
         }
 
         .btnColor {
             position: absolute;
-            width: 108px;
+            top: 0;
+            left: 0;
             height: 100%;
-            background-color: rgb(92, 163, 214);
-            border-radius: 30px;
-            transition: .3s;
+            width: 50%;
+            background-color: var(--primary-color-light);
+            border-radius: var(--border-radius-lg);
+            transition: left var(--transition-speed) ease-in-out;
+            z-index: 0;
         }
 
-        input[type="text1"],
-        input[type="password1"],
-        input[type="number"] {
-            border: none;
-            margin-top: 80px;
-            border-radius: 60px;
-            padding: 8px 0 8px 35px;
+        .input-group {
+            position: relative;
             width: 100%;
-
         }
 
-        input[type="text2"],
-        input[type="password2"],
-        input[type="password3"],
-        input[type="number"] {
-            border: none;
-            margin-top: 40px;
-            border-radius: 60px;
-            padding: 8px 0 8px 35px;
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        select {
+            border: 1px solid #ccc;
+            border-radius: var(--border-radius-lg);
+            padding: 0 15px 0 40px;
             width: 100%;
-            margin-top: 30px;
-
+            height: var(--input-height);
+            background-color: var(--white-color);
+            color: var(--text-color);
+            font-size: 0.95rem;
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
 
-        button[type="submit1"] {
-            background: rgb(65, 158, 195);
-            color: white;
-            border-radius: 30px;
+        input::placeholder,
+        select option[value=""] {
+            color: var(--placeholder-color);
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(65, 158, 195, 0.5);
+        }
+
+        select {
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 40px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+
+        button[type="submit"] {
+            background: var(--primary-color);
+            color: var(--white-color);
+            border-radius: var(--border-radius-lg);
             width: 100%;
             border: none;
             outline: none;
-            padding: 8px 0 8px 15px;
-            font-size: 15px;
-            margin-top: 80px;
+            padding: 10px 15px;
+            font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
-        }
-
-        button[type="submit2"] {
-            background: rgb(65, 158, 195);
-            color: white;
-            border-radius: 30px;
-            width: 100%;
-            border: none;
-            outline: none;
-            padding: 8px 0 8px 15px;
-            font-size: 15px;
+            transition: background-color var(--transition-speed);
+            height: var(--input-height);
             margin-top: 10px;
-            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background: var(--primary-color-light);
+        }
+
+        button[type="submit"]:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
 
         .divCheck {
-            margin: 10px 0 0 5px;
-            width: 80%;
-            font-size: 13px;
-            padding-top: 15px;
-            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            margin-top: 5px;
+        }
 
+        .divCheck input[type="checkbox"] {
+            width: auto;
+            height: auto;
+            accent-color: var(--primary-color);
         }
 
         .helpblock {
-            font-size: 10px;
-            color: rgb(65, 158, 195);
+            font-size: 0.8rem;
+            color: var(--primary-color);
             text-align: center;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
         #signin {
-            left: 25px;
+            left: 20px;
         }
 
         #signup {
-            left: 450px;
-            padding-bottom: 5px;
-        }
-
-        .iEmail1 {
-            top: 80px;
-            position: absolute;
-            left: 0;
-            padding: 10px 10px;
-
-        }
-
-        .iPassword1 {
-            top: 195px;
-            position: absolute;
-            left: 0;
-            padding: 10px 10px;
-
-        }
-
-        .iNomeCompleto {
-            top: 30px;
-            position: absolute;
-            left: 0;
-            padding: 10px 10px;
-        }
-
-        .iMatricula {
-            top: 95px;
-            position: absolute;
-            left: 0;
-            padding: 10px 10px;
-        }
-
-        .iEmail2 {
-            top: 160px;
-            position: absolute;
-            left: 0;
-            padding: 10px 10px;
-        }
-
-        .iPassword2 {
-            top: 230px;
-            position: absolute;
-            left: 0;
-            padding: 10px 10px;
-        }
-
-        .iPassword3 {
-            top: 290px;
-            position: absolute;
-            left: 0;
-            padding: 10px 10px;
+            left: calc(100% + 20px);
         }
 
         @media screen and (max-width: 768px) {
             body {
                 flex-direction: column;
-                gap: 20px;
-
+                gap: 30px;
+                justify-content: flex-start;
+                padding-top: 50px;
             }
 
-            .imagem-logo img {
+            .imagem-logo {
                 max-width: 300px;
+                flex: none;
             }
 
             .container {
-                margin: 0;
-                scale: 0.8;
-                height: 100vh;
-                padding: 10px;
+                width: 90%;
+                margin-bottom: 30px;
+                min-height: auto; /* Allow height to adjust on mobile */
+                height: auto;
+                padding-bottom: 30px; /* Keep mobile padding */
+            }
 
+            form {
+                position: static;
+                margin-top: 20px;
+                width: 100%;
+                height: auto;
+            }
+
+            #signin,
+            #signup {
+                left: 0 !important;
+                display: none;
+            }
+
+            #signin.active-form,
+            #signup.active-form {
+                display: flex;
+            }
+
+            .buttonsForm {
+                margin-top: 30px;
             }
         }
 
         @media screen and (max-width: 480px) {
-
-            .imagem-logo img {
+            .imagem-logo {
                 display: none;
             }
 
             .container {
-                scale: 0.8;
-                padding: 10px;
+                width: 100%;
+                box-shadow: none;
+                padding: 15px;
             }
 
-            button {
-                scale: 0.8;
+            .buttonsForm button {
+                padding: 8px 20px;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="imagem-logo">
-        <img src="../v1/soroteca-logo" alt="">
-    </div>
-    <div class="container">
-        <div class="buttonsForm">
-            <div class="btnColor"></div>
-            <button id="btnSignin">Sign In</button>
-            <button id="btnSignup">Sign Up</button>
+    <header>
+        <div id="navbar-container"></div>
+    </header>
+
+    <main>
+        <div class="imagem-logo">
+            <img src="../v1/soroteca-logo" alt="Soroteca Logo">
         </div>
+        <div class="container">
+            <div class="buttonsForm">
+                <div class="btnColor"></div>
+                <button id="btnSignin" class="active">Sign In</button>
+                <button id="btnSignup">Sign Up</button>
+            </div>
 
-        <form id="signin">
-            <input id="inputEmail" type="text1" placeholder="Email" required />
-            <i class="fas fa-envelope iEmail1"></i>
-            <input id="inputSenha" type="password1" placeholder="Password" required />
-            <i class="fas fa-lock iPassword1"></i>
-            <div class="divCheck">
-                <input type="checkbox">
-                <span>Remember Password</span>
-            </div>
-            <a href="..v1/index">
-                <button id="submit-enviar" type="submit1">Sign In</button> <br>
-            </a>
+            <form id="signin" class="active-form">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input id="inputEmail" type="email" placeholder="Email" required />
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input id="inputSenha" type="password" placeholder="Password" required />
+                </div>
+                <div class="divCheck">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe">Remember Password</label>
+                </div>
+                <button id="submit-enviar" type="submit">Sign In</button>
+            </form>
 
-        </form>
-        <form id="signup">
-            <input id="inputNome" type="text2" placeholder="Nome Completo" required>
-            <i class="fa fa-user iNomeCompleto"></i>
-            <input id="inputMatricula" type="number" placeholder="Matricula" required>
-            <i class="fa fa-book iMatricula"></i>
-            <input id="inputEmail2" type="text2" placeholder="Email" required>
-            <i class="fas fa-envelope iEmail2 "></i>
-            <input id="inputSenha2" type="password2" placeholder="Password" required>
-            <i class="fas fa-lock iPassword2"></i>
-            <input id="inputSenha3" type="password3" placeholder="Password" required>
-            <i class="fas fa-lock iPassword3"></i>
-            <div id="passwordHelpBlock" class="helpblock">
-                Your password must be 8 to 20 characters long, contain letters and numbers,
-                and must not contain spaces, special characters, or emoji.
-            </div>
-            <div class="divCheck">
-                <input type="checkbox">
-                <span>Terms</span>
-            </div>
-            <button id="submit-cadastrar" type="submit2">Sign up</button> <br>
-        </form>
-    </div>
+            <form id="signup">
+                <div class="input-group">
+                    <i class="fa fa-user"></i>
+                    <input id="inputNome" type="text" placeholder="Nome Completo" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa fa-book"></i>
+                    <input id="inputMatricula" type="number" placeholder="Matricula" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input id="inputEmail2" type="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-phone"></i>
+                    <input id="inputTelefone" type="text" placeholder="Telefone (somente números)" required pattern="\d+">
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <select id="inputCargo" required>
+                        <option value="" disabled selected>Selecione o Cargo</option>
+                        <option value="laboratory_analyst">Analista de Laboratório</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input id="inputSenha2" type="password" placeholder="Password" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input id="inputSenha3" type="password" placeholder="Confirm Password" required>
+                </div>
+                <div id="passwordHelpBlock" class="helpblock">
+                    Sua senha deve ter 8-20 caracteres, letras e números, sem espaços/símbolos.
+                </div>
+                <div class="divCheck">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">Aceito os Termos</label>
+                </div>
+                <button id="submit-cadastrar" type="submit">Sign up</button>
+            </form>
+        </div>
+    </main>
+
+    <script src="/components/navbar.js"></script>
+    <script src="/scripts/login.js"></script>
+    <script src="/components/footer.js"></script>
+    <script>
+        renderNavbar("navbar-container");
+        renderFooter("footer-container");
+    </script>
 </body>
-<script src="../v1/login-script"></script>
 
 </html>

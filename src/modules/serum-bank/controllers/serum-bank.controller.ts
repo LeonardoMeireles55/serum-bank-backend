@@ -13,21 +13,21 @@ import {
   Query,
   UseGuards,
   UseInterceptors,
-} from '@nestjs/common';
-import { CreateSerumBankDto } from '../dtos/create-serum-bank.dto';
-import { SerumBank } from '../entities/serum-bank.entity';
-import { SerumBankService } from '../services/serum-bank.service';
-import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RolesGuard } from '../../../modules/authentication/guards/role.guard';
-import { Public } from '../../../common/decorators/is-public.decorator';
-import { PartialSerumBankDto } from '../dtos/partial-serum-bank.dto';
-import { FullSerumBankDto } from '../dtos/full-serum-bank.dto';
-import { DefaultPaginationResponseDto } from '../../../common/dtos/default-pagination-response.dto';
-import { UpdateSerumBankDto } from '../dtos/update-serum-bank.dto';
-import { TransactionalSerumBankDto } from '../dtos/transactional-serum-bank.dto';
-import { SamplePosition } from '../entities/samples-positions.entity';
-import { PositionSampleDto } from '../dtos/position-sample.dto';
-import { HateoasInterceptor } from '../../../common/interceptors/hateos.interceptors';
+} from '@nestjs/common'
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Public } from '../../../common/decorators/is-public.decorator'
+import { DefaultPaginationResponseDto } from '../../../common/dtos/default-pagination-response.dto'
+import { HateoasInterceptor } from '../../../common/interceptors/hateos.interceptors'
+import { RolesGuard } from '../../../modules/authentication/guards/role.guard'
+import { CreateSerumBankDto } from '../dtos/create-serum-bank.dto'
+import { FullSerumBankDto } from '../dtos/full-serum-bank.dto'
+import { PartialSerumBankDto } from '../dtos/partial-serum-bank.dto'
+import { PositionSampleDto } from '../dtos/position-sample.dto'
+import { TransactionalSerumBankDto } from '../dtos/transactional-serum-bank.dto'
+import { UpdateSerumBankDto } from '../dtos/update-serum-bank.dto'
+import { SamplePosition } from '../entities/samples-positions.entity'
+import { SerumBank } from '../entities/serum-bank.entity'
+import { SerumBankService } from '../services/serum-bank.service'
 
 @ApiTags('Serum Banks')
 @ApiBearerAuth()

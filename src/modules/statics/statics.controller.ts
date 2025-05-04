@@ -1,8 +1,8 @@
-import { Controller, Get, HttpCode, HttpStatus, Res, Version } from '@nestjs/common';
-import { join } from 'path';
-import { Public } from '../../common/decorators/is-public.decorator';
-import { type Response } from 'express';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Get, HttpCode, HttpStatus, Res, Version } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
+import { type Response } from 'express'
+import { join } from 'path'
+import { Public } from '../../common/decorators/is-public.decorator'
 
 @ApiTags('Statics')
 @Controller()
@@ -15,14 +15,6 @@ export class StaticsController {
   sorotecaPage(@Res() res: Response) {
     return res.sendFile(join(`${process.cwd()}/public/soroteca.html`));
   }
-  @Public()
-  @Version('1')
-  @HttpCode(HttpStatus.OK)
-  @Get('login-script')
-  loginScript(@Res() res: Response) {
-    return res.sendFile(join(`${process.cwd()}/public/scripts/script.js`));
-  }
-  
 
   @Public()
   @Version('1')
