@@ -30,6 +30,7 @@
         * {
             margin: 0;
             padding: 0;
+            width: 100%;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
@@ -39,8 +40,6 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
-            gap: 5%;
             background-color: var(--background-color);
         }
 
@@ -50,10 +49,6 @@
             text-align: center;
         }
 
-        .imagem-logo img {
-            max-width: 100%;
-            height: auto;
-        }
 
         .container {
             background-color: var(--container-background);
@@ -62,6 +57,7 @@
             min-height: 700px; /* Increased min-height to fit signup form */
             display: flex;
             flex-direction: column;
+            justify-content: start;
             align-items: center;
             position: relative;
             overflow: hidden; /* Keep for sliding animation */
@@ -289,13 +285,13 @@
 
 <body>
     <header>
-        <div id="navbar-container"></div>
+            <div class="imagem-logo">
+                <img src="../v1/soroteca-logo" alt="Soroteca Logo">
+            </div>
     </header>
 
     <main>
-        <div class="imagem-logo">
-            <img src="../v1/soroteca-logo" alt="Soroteca Logo">
-        </div>
+
         <div class="container">
             <div class="buttonsForm">
                 <div class="btnColor"></div>
@@ -364,13 +360,8 @@
         </div>
     </main>
 
-    <script src="/components/navbar.js"></script>
     <script src="/scripts/login.js"></script>
-    <script src="/components/footer.js"></script>
-    <script>
-        renderNavbar("navbar-container");
-        renderFooter("footer-container");
-    </script>
+
 </body>
 
 </html>
